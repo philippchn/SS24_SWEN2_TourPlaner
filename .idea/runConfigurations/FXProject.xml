@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="FXProject" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="org.technikum.tourplaner.MainView" />
+    <option name="MAIN_CLASS_NAME" value="org.technikum.tourplaner.MainApplication" />
     <module name="TourPlaner" />
     <method v="2">
       <option name="Make" enabled="true" />

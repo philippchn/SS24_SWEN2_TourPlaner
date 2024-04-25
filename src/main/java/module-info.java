@@ -7,4 +7,6 @@ module org.technikum.tourplaner {
 
     opens org.technikum.tourplaner to javafx.fxml;
     exports org.technikum.tourplaner;
+    exports org.technikum.tourplaner.controller;
+    opens org.technikum.tourplaner.controller to javafx.fxml;
 }
