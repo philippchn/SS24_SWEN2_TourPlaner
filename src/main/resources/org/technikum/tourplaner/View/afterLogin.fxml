@@ -9,11 +9,11 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.technikum.tourplaner.controller.AfterLoginController">
    <center>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" styleClass="anchor" stylesheets="@css/style.css" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" styleClass="anchor" stylesheets="@../css/style.css" BorderPane.alignment="CENTER">
          <children>
             <ImageView fitHeight="227.0" fitWidth="237.0" layoutX="285.0" layoutY="77.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@img/logo.png" />
+                  <Image url="@../img/logo.png" />
                </image>
             </ImageView>
             <Button fx:id="logOutButton" layoutX="229.0" layoutY="336.0" mnemonicParsing="false" onAction="#logOut" prefHeight="42.0" prefWidth="112.0" style="-fx-background-color: orange;" text="Log Out">
