@@ -2,6 +2,7 @@ package org.technikum.tourplaner.viewmodels;
 
 import org.technikum.tourplaner.models.MainModel;
 
+@Deprecated
 public class MainViewModel {
     private final MainModel mainModel;
 

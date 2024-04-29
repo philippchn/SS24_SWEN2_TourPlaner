@@ -8,10 +8,10 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import org.technikum.tourplaner.MainApplication;
 import org.technikum.tourplaner.viewmodels.LoginViewModel;
-import org.technikum.tourplaner.viewmodels.MainViewModel;
 
 import java.io.IOException;
 
+@Deprecated
 public class mainWindowController {
     MainApplication mainApp = new MainApplication();
     private final LoginViewModel loginViewModel = new LoginViewModel();

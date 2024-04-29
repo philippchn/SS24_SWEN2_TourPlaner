@@ -2,6 +2,7 @@ package org.technikum.tourplaner.viewmodels;
 
 import org.technikum.tourplaner.models.UserModel;
 
+@Deprecated
 public class LoginViewModel {
     private final UserModel userModel;
 

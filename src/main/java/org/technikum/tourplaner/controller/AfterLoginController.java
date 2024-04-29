@@ -7,6 +7,7 @@ import org.technikum.tourplaner.MainApplication;
 
 import java.io.IOException;
 
+@Deprecated
 public class AfterLoginController {
 
     MainApplication m = new MainApplication();
