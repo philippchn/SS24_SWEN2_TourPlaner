@@ -18,11 +18,10 @@ public class MainApplication extends Application {
     public void start(Stage stage) {
         try {
             stg = stage;
-            FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("mainWindow.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource(EViews.mainWindow.getFileName()));
             Scene scene = new Scene(fxmlLoader.load());
-            stage.setTitle("LogInDemo!");
+            stage.setTitle("TourPlanner");
 
-            // Guard against potential NullPointerException
             Image favicon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("img/favicon.png")));
             stage.getIcons().add(favicon);
 
@@ -30,7 +29,7 @@ public class MainApplication extends Application {
             stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace(); // Handle or log the exception as necessary
+            e.printStackTrace(); // Replace with log4j
         }
     }
 
@@ -38,7 +37,7 @@ public class MainApplication extends Application {
         try {
             stg.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxml))));
         } catch (IOException e) {
-            e.printStackTrace(); // Handle or log the exception as necessary
+            e.printStackTrace(); // Replace with log4j
         }
     }
 
