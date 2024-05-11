@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
@@ -10,11 +9,6 @@
       <Region prefHeight="42.0" prefWidth="600.0" />
       <fx:include source="searchBar.fxml" />
       <Region prefHeight="42.0" prefWidth="600.0" />
-      <HBox prefHeight="369.0" prefWidth="600.0">
-         <children>
-            <fx:include source="tourList.fxml" />
-            <fx:include source="tourLogs.fxml" />
-         </children>
-      </HBox>
+      <fx:include source="tourSubView.fxml" />
    </children>
 </VBox>

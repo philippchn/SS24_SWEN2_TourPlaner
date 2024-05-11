@@ -4,6 +4,7 @@ public enum EViews {
     mainView("mainView.fxml"),
     searchBar("searchBar.fxml"),
     menuBar("menuBar.fxml"),
+    tourSubView("tourSubView.fxml"),
     tourList("tourList.fxml"),
     tourLogs("tourLogs.fxml");
 
@@ -14,8 +15,13 @@ public enum EViews {
         this.fileName = fileName;
     }
 
-    String getFileName()
+    String getFilePath()
     {
         return "View/" + fileName;
+    }
+
+    String getFileName()
+    {
+        return fileName;
     }
 }
