@@ -18,7 +18,7 @@ public class MainApplication extends Application {
     public void start(Stage stage) {
         try {
             stg = stage;
-            FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource(EViews.mainWindow.getFileName()));
+            FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource(EViews.mainView.getFileName()));
             Scene scene = new Scene(fxmlLoader.load());
             stage.setTitle("TourPlanner");
 
@@ -26,7 +26,6 @@ public class MainApplication extends Application {
             stage.getIcons().add(favicon);
 
             stage.setScene(scene);
-            stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace(); // Replace with log4j

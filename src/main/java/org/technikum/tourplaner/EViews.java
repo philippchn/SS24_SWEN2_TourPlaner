@@ -1,7 +1,11 @@
 package org.technikum.tourplaner;
 
 public enum EViews {
-    mainWindow("mainUi.fxml");
+    mainView("mainView.fxml"),
+    searchBar("searchBar.fxml"),
+    menuBar("menuBar.fxml"),
+    tourList("tourList.fxml"),
+    tourLogs("tourLogs.fxml");
 
     private final String fileName;
 
