@@ -15,12 +15,12 @@ public enum EViews {
         this.fileName = fileName;
     }
 
-    String getFilePath()
+    public String getFilePath()
     {
         return "View/" + fileName;
     }
 
-    String getFileName()
+    public String getFileName()
     {
         return fileName;
     }

@@ -2,11 +2,8 @@ package org.technikum.tourplaner.controller;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import org.technikum.tourplaner.entity.Tour;
 import org.technikum.tourplaner.repository.TourRepo;
@@ -15,6 +12,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TourListController {
+    @FXML
+    private VBox rootVbox;
 
     @FXML
     private TabPane tabPane;
@@ -55,10 +54,8 @@ public class TourListController {
     @FXML
     private void initialize() {
         bindProperties();
-        // Add event handler to the save button
         saveButton.setOnAction(event -> saveTour());
-        statusMessageLabel.setText("Create new tour:");
-        statusMessageLabel.setTextFill(Color.BLACK);
+        tourListView.setOnMouseClicked(event -> clickElement());
     }
 
     private void saveTour() {
@@ -81,43 +78,40 @@ public class TourListController {
 
             // Add the saved tour to the list in the "Tours" tab
             tourListView.getItems().add(newTour);
-
         }
     }
 
     private boolean isValidInput() {
-        boolean isValidInput = true;
-        String newStatusMessage = "";
-
-        // Check for empty input
-        if (nameTextField.getText().trim().isEmpty()) {
-            newStatusMessage = "'Tour Name' must not be empty";
-            isValidInput = false;
-        } else if (fromTextField.getText().trim().isEmpty()) {
-            newStatusMessage = "'Origin' must not be empty";
-            isValidInput = false;
-        } else if (toTextField.getText().trim().isEmpty()) {
-            newStatusMessage = "'Destination' must not be empty";
-            isValidInput = false;
-        }
-
-        if (isValidInput) {
-            Pattern pattern = Pattern.compile("^[a-zA-ZäÄöÖüÜ]+$");
-            Matcher validateFrom = pattern.matcher(fromTextField.getText().trim());
-            Matcher validateTo = pattern.matcher(toTextField.getText().trim());
-
-            if (!(validateFrom.matches() && validateTo.matches())) {
-                newStatusMessage = "Origin and destination must not contain numbers or special characters";
-                isValidInput = false;
-            }
-        }
-
-        if (!isValidInput) {
+        if (nameTextField.getText() == null || nameTextField.getText().isBlank()) {
             statusMessageLabel.setTextFill(Color.RED);
-            statusMessageLabel.setText(newStatusMessage);
+            statusMessageLabel.setText("'Tour Name' must not be empty");
+            return false;
+        } else if (fromTextField.getText() == null || fromTextField.getText().isBlank()) {
+            statusMessageLabel.setTextFill(Color.RED);
+            statusMessageLabel.setText("'From' must not be empty");
+            return false;
+        } else if (toTextField.getText() == null || toTextField.getText().isBlank()) {
+            statusMessageLabel.setTextFill(Color.RED);
+            statusMessageLabel.setText("'To' must not be empty");
+            return false;
+        } else if (transportTypeTextField.getText() == null || transportTypeTextField.getText().isBlank()) {
+            statusMessageLabel.setTextFill(Color.RED);
+            statusMessageLabel.setText("'Transport type' must not be empty");
+            return false;
         }
 
-        return isValidInput;
+        Pattern pattern = Pattern.compile("^[a-zA-ZäÄöÖüÜ]+$");
+        Matcher validateFrom = pattern.matcher(fromTextField.getText().trim());
+        Matcher validateTo = pattern.matcher(toTextField.getText().trim());
+
+        if (!(validateFrom.matches() && validateTo.matches())) {
+            statusMessageLabel.setTextFill(Color.RED);
+            statusMessageLabel.setText("From and To must not contain numbers or special characters");
+            return false;
+        }
+
+        statusMessageLabel.setTextFill(Color.BLACK);
+        return true;
     }
 
     private void clearFields() {
@@ -126,7 +120,12 @@ public class TourListController {
         fromTextField.clear();
         toTextField.clear();
         transportTypeTextField.clear();
-        statusMessageLabel.setText(""); // Clear error message
+        statusMessageLabel.setText("Create new tour:"); // Clear error message
+    }
+
+    // TODO
+    private void clickElement() {
+        System.out.println(tourListView.getSelectionModel().getSelectedItem());
     }
 
     private void bindProperties() {
