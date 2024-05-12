@@ -83,20 +83,16 @@ public class TourListController {
 
     private boolean isValidInput() {
         if (nameTextField.getText() == null || nameTextField.getText().isBlank()) {
-            statusMessageLabel.setTextFill(Color.RED);
-            statusMessageLabel.setText("'Tour Name' must not be empty");
+            setErrorMessage(nameTextField);
             return false;
         } else if (fromTextField.getText() == null || fromTextField.getText().isBlank()) {
-            statusMessageLabel.setTextFill(Color.RED);
-            statusMessageLabel.setText("'From' must not be empty");
+            setErrorMessage(fromTextField);
             return false;
         } else if (toTextField.getText() == null || toTextField.getText().isBlank()) {
-            statusMessageLabel.setTextFill(Color.RED);
-            statusMessageLabel.setText("'To' must not be empty");
+            setErrorMessage(toTextField);
             return false;
         } else if (transportTypeTextField.getText() == null || transportTypeTextField.getText().isBlank()) {
-            statusMessageLabel.setTextFill(Color.RED);
-            statusMessageLabel.setText("'Transport type' must not be empty");
+            setErrorMessage(transportTypeTextField);
             return false;
         }
 
@@ -112,6 +108,12 @@ public class TourListController {
 
         statusMessageLabel.setTextFill(Color.BLACK);
         return true;
+    }
+
+    private void setErrorMessage(TextField missingTextField)
+    {
+        statusMessageLabel.setTextFill(Color.RED);
+        statusMessageLabel.setText(missingTextField.getPromptText() + " must not be empty");
     }
 
     private void clearFields() {
