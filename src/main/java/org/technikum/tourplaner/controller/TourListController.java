@@ -5,8 +5,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import org.technikum.tourplaner.entity.Tour;
-import org.technikum.tourplaner.repository.TourRepo;
+import org.technikum.tourplaner.models.TourModel;
+import org.technikum.tourplaner.viewmodels.TourListViewModel;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,28 +40,32 @@ public class TourListController {
     private Label statusMessageLabel;
 
     @FXML
-    private ListView<Tour> tourListView; // Add ListView for tours
+    private ListView<TourModel> tourListView;
 
-    private Tour currentTour = new Tour(); // Currently edited tour
     private final SimpleStringProperty nameProperty = new SimpleStringProperty();
     private final SimpleStringProperty descriptionProperty = new SimpleStringProperty();
     private final SimpleStringProperty fromProperty = new SimpleStringProperty();
     private final SimpleStringProperty toProperty = new SimpleStringProperty();
     private final SimpleStringProperty transportTypeProperty = new SimpleStringProperty();
 
-    private TourRepo tourRepo = new TourRepo();
+    private final TourListViewModel tourListViewModel;
+
+    public TourListController() {
+        this.tourListViewModel = new TourListViewModel();
+    }
 
     @FXML
     private void initialize() {
         bindProperties();
         saveButton.setOnAction(event -> saveTour());
         tourListView.setOnMouseClicked(event -> clickElement());
+
+        tourListView.setItems(tourListViewModel.getTours());
     }
 
     private void saveTour() {
         if (isValidInput()) {
-
-            Tour newTour = new Tour(
+            TourModel newTour = new TourModel(
                     nameTextField.getText().trim(),
                     descriptionTextField.getText().trim(),
                     fromTextField.getText().trim(),
@@ -70,14 +74,10 @@ public class TourListController {
             );
 
             statusMessageLabel.setText("processing Request....");
-            tourRepo.saveTour(newTour);
+            tourListViewModel.addTour(newTour);
             statusMessageLabel.setText("Request processed");
 
-            // Clear input fields after saving
-            clearFields();
-
-            // Add the saved tour to the list in the "Tours" tab
-            tourListView.getItems().add(newTour);
+            clearInputFields();
         }
     }
 
@@ -116,7 +116,7 @@ public class TourListController {
         statusMessageLabel.setText(missingTextField.getPromptText() + " must not be empty");
     }
 
-    private void clearFields() {
+    private void clearInputFields() {
         nameTextField.clear();
         descriptionTextField.clear();
         fromTextField.clear();
