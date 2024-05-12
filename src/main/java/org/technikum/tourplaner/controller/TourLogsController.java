@@ -5,6 +5,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import org.technikum.tourplaner.models.TourLogModel;
 import org.technikum.tourplaner.models.TourModel;
 import org.technikum.tourplaner.viewmodels.TourLogViewModel;
@@ -14,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 public class TourLogsController {
+    @FXML
+    private Text infoText;
     @FXML
     private Label currentlySelectedTourLabel;
     @FXML
@@ -87,7 +91,7 @@ public class TourLogsController {
     private void addTourLog() {
         System.out.println("Adding new tour log...");
         TourModel selectedTour = tourViewModel.selectedTourModelProperty().get();
-        if(selectedTour != null) {
+        if(selectedTour != null && isValidInput()) {
             TourLogModel tourLogModel = getTourLogModelFromGUI();
 
             selectedTour.addTourLog(String.valueOf(selectedTourProperty), tourLogModel);
@@ -110,6 +114,38 @@ public class TourLogsController {
         String rating = ratingTextField.getText();
 
         return new TourLogModel(date, comment, difficulty, totalDistance, totalTime, rating);
+    }
+
+    private boolean isValidInput() {
+        if (dateTextField.getText() == null || dateTextField.getText().isBlank()) {
+            setErrorMessage(dateTextField);
+            return false;
+        } else if (commentTextField.getText() == null || commentTextField.getText().isBlank()) {
+            setErrorMessage(commentTextField);
+            return false;
+        } else if (difficultyTextField.getText() == null || difficultyTextField.getText().isBlank()) {
+            setErrorMessage(difficultyTextField);
+            return false;
+        } else if (totalDistanceTextField.getText() == null || totalDistanceTextField.getText().isBlank()) {
+            setErrorMessage(totalDistanceTextField);
+            return false;
+        }
+        else if (totalTimeTextField.getText() == null || totalTimeTextField.getText().isBlank()) {
+            setErrorMessage(totalTimeTextField);
+            return false;
+        } else if (ratingTextField.getText() == null || ratingTextField.getText().isBlank()) {
+            setErrorMessage(ratingTextField);
+            return false;
+        }
+
+        infoText.setFill(Color.BLACK);
+        return true;
+    }
+
+    private void setErrorMessage(TextField missingTextField)
+    {
+        infoText.setFill(Color.RED);
+        infoText.setText(missingTextField.getPromptText() + " must not be empty");
     }
 
     private void clearTextFields() {
