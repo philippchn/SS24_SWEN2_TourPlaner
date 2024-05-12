@@ -1,5 +1,6 @@
 package org.technikum.tourplaner.models;
 
+import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import lombok.Getter;
@@ -21,7 +22,7 @@ public class TourModel {
     @Getter @Setter
     private StringProperty restimatedTime;
     @Getter @Setter
-    private StringProperty routeInformation; // an image with the tour map
+    private StringProperty routeInformation;
 
     public TourModel(String name, String tourDescription, String from, String to, String transportType)
     {

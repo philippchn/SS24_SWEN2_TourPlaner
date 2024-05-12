@@ -6,7 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import org.technikum.tourplaner.models.TourModel;
-import org.technikum.tourplaner.viewmodels.TourListViewModel;
+import org.technikum.tourplaner.viewmodels.TourViewModel;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,31 +14,22 @@ import java.util.regex.Pattern;
 public class TourListController {
     @FXML
     private VBox rootVbox;
-
     @FXML
     private TabPane tabPane;
-
     @FXML
     private TextField nameTextField;
-
     @FXML
     private TextField descriptionTextField;
-
     @FXML
     private TextField fromTextField;
-
     @FXML
     private TextField toTextField;
-
     @FXML
     private TextField transportTypeTextField;
-
     @FXML
     private Button saveButton;
-
     @FXML
     private Label statusMessageLabel;
-
     @FXML
     private ListView<TourModel> tourListView;
 
@@ -48,19 +39,28 @@ public class TourListController {
     private final SimpleStringProperty toProperty = new SimpleStringProperty();
     private final SimpleStringProperty transportTypeProperty = new SimpleStringProperty();
 
-    private final TourListViewModel tourListViewModel;
+    private final TourViewModel tourViewModel;
 
-    public TourListController() {
-        this.tourListViewModel = new TourListViewModel();
+    public TourListController(TourViewModel tourViewModel) {
+        this.tourViewModel = tourViewModel;
     }
 
     @FXML
     private void initialize() {
         bindProperties();
+
         saveButton.setOnAction(event -> saveTour());
         tourListView.setOnMouseClicked(event -> clickElement());
 
-        tourListView.setItems(tourListViewModel.getTours());
+        tourListView.setItems(tourViewModel.getTours());
+    }
+
+    private void bindProperties() {
+        nameTextField.textProperty().bindBidirectional(nameProperty);
+        descriptionTextField.textProperty().bindBidirectional(descriptionProperty);
+        fromTextField.textProperty().bindBidirectional(fromProperty);
+        toTextField.textProperty().bindBidirectional(toProperty);
+        transportTypeTextField.textProperty().bindBidirectional(transportTypeProperty);
     }
 
     private void saveTour() {
@@ -73,9 +73,7 @@ public class TourListController {
                     transportTypeTextField.getText().trim()
             );
 
-            statusMessageLabel.setText("processing Request....");
-            tourListViewModel.addTour(newTour);
-            statusMessageLabel.setText("Request processed");
+            tourViewModel.addTour(newTour);
 
             clearInputFields();
         }
@@ -122,19 +120,13 @@ public class TourListController {
         fromTextField.clear();
         toTextField.clear();
         transportTypeTextField.clear();
-        statusMessageLabel.setText("Create new tour:"); // Clear error message
+        statusMessageLabel.setText("Create new tour:");
     }
 
-    // TODO
     private void clickElement() {
-        System.out.println(tourListView.getSelectionModel().getSelectedItem());
-    }
-
-    private void bindProperties() {
-        nameTextField.textProperty().bindBidirectional(nameProperty);
-        descriptionTextField.textProperty().bindBidirectional(descriptionProperty);
-        fromTextField.textProperty().bindBidirectional(fromProperty);
-        toTextField.textProperty().bindBidirectional(toProperty);
-        transportTypeTextField.textProperty().bindBidirectional(transportTypeProperty);
+        if (tourListView.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
+        tourViewModel.setSelectedTourModel(tourListView.getSelectionModel().getSelectedItem());
     }
 }

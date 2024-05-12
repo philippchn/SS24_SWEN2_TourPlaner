@@ -2,9 +2,5 @@
 
 <?import javafx.scene.layout.HBox?>
 
-<HBox prefHeight="433.0" prefWidth="730.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <fx:include source="tourList.fxml" HBox.hgrow="ALWAYS" />
-      <fx:include source="tourLogs.fxml" HBox.hgrow="ALWAYS" />
-   </children>
-</HBox>
+
+<HBox fx:id="subView" prefHeight="433.0" prefWidth="730.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" />

@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<VBox id="root" prefHeight="459.0" prefWidth="451.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.technikum.tourplaner.controller.TourLogsController">
+<VBox id="root" prefHeight="459.0" prefWidth="451.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <TabPane prefHeight="255.0" prefWidth="451.0" tabClosingPolicy="UNAVAILABLE">
          <tabs>
@@ -38,7 +38,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TableView centerShape="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="156.0" prefWidth="384.0">
+                        <TableView fx:id="logsTable" centerShape="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="156.0" prefWidth="384.0">
                            <columns>
                               <TableColumn prefWidth="75.0" text="Date" />
                               <TableColumn prefWidth="75.0" text="Duration" />
@@ -83,6 +83,7 @@
             </Tab>
         </tabs>
       </TabPane>
-      <Label fx:id="currentlySelectedTour" text="Please select a tour" />
+      <Label text="Currently selected tour:" />
+      <Label fx:id="currentlySelectedTourLabel" />
    </children>
 </VBox>
