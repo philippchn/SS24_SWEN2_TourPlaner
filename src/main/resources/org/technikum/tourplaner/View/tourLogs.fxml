@@ -58,14 +58,14 @@
                      <children>
                         <VBox prefHeight="240.0" prefWidth="443.0">
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Create new tour log" textAlignment="CENTER" wrappingWidth="450.697265625" />
-                              <TextField alignment="TOP_CENTER" promptText="Date" />
-                              <TextField alignment="TOP_CENTER" promptText="Comment" />
-                              <TextField alignment="TOP_CENTER" layoutX="10.0" layoutY="35.0" promptText="Difficulty" />
-                              <TextField alignment="TOP_CENTER" layoutX="10.0" layoutY="60.0" promptText="Total distance" />
-                              <TextField alignment="TOP_CENTER" layoutX="10.0" layoutY="60.0" promptText="Total time" />
-                              <TextField alignment="TOP_CENTER" layoutX="10.0" layoutY="127.0" promptText="Rating" />
-                              <Button alignment="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="522.0" text="Save" textAlignment="CENTER" />
+                              <Text fx:id="infoText" strokeType="OUTSIDE" strokeWidth="0.0" text="Create new tour log" textAlignment="CENTER" wrappingWidth="450.697265625" />
+                               <TextField fx:id="dateTextField" alignment="TOP_CENTER" promptText="Date" />
+                               <TextField fx:id="commentTextField" alignment="TOP_CENTER" promptText="Comment" />
+                               <TextField fx:id="difficultyTextField" alignment="TOP_CENTER" layoutX="10.0" layoutY="35.0" promptText="Difficulty" />
+                               <TextField fx:id="totalDistanceTextField" alignment="TOP_CENTER" layoutX="10.0" layoutY="60.0" promptText="Total distance" />
+                               <TextField fx:id="totalTimeTextField" alignment="TOP_CENTER" layoutX="10.0" layoutY="60.0" promptText="Total time" />
+                               <TextField fx:id="ratingTextField" alignment="TOP_CENTER" layoutX="10.0" layoutY="127.0" promptText="Rating" />
+                               <Button fx:id="saveButton" alignment="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="522.0" text="Save" textAlignment="CENTER" />
                            </children>
                         </VBox>
                      </children></AnchorPane>

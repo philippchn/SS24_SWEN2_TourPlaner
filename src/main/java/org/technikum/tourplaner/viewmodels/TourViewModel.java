@@ -4,16 +4,15 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import lombok.Getter;
 import org.technikum.tourplaner.models.TourModel;
 
+import java.util.Map;
+
 public class TourViewModel {
+    @Getter
     private ObservableList<TourModel> tours = FXCollections.observableArrayList();
     private ObjectProperty<TourModel> selectedTourModel = new SimpleObjectProperty<>();
-
-    public ObservableList<TourModel> getTours()
-    {
-        return tours;
-    }
 
     public void addTour(TourModel tour) {
         tours.add(tour);
