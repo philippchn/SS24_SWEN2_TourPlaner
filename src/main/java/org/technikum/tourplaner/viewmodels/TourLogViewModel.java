@@ -7,12 +7,9 @@ import org.technikum.tourplaner.models.TourLogModel;
 
 @Getter
 public class TourLogViewModel {
-
     private final ObservableList<TourLogModel> tourLogModelList = FXCollections.observableArrayList();
-
 
     public void addTourLogModel(TourLogModel tourLogModel) {
         tourLogModelList.add(tourLogModel);
     }
-
 }

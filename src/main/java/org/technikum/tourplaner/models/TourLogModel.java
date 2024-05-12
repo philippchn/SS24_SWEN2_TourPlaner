@@ -8,17 +8,17 @@ import lombok.Setter;
 @Getter
 public class TourLogModel {
     @Setter
-    private StringProperty date = new SimpleStringProperty("");
+    private StringProperty date;
     @Setter
-    private StringProperty comment = new SimpleStringProperty("");
+    private StringProperty comment;
     @Setter
-    private StringProperty difficulty = new SimpleStringProperty("");;
+    private StringProperty difficulty;
     @Setter
-    private StringProperty totalDistance = new SimpleStringProperty("");;
+    private StringProperty totalDistance;;
     @Setter
-    private StringProperty totalTime = new SimpleStringProperty("");
+    private StringProperty totalTime;
     @Setter
-    private StringProperty rating = new SimpleStringProperty("");
+    private StringProperty rating;
 
     public TourLogModel(String date, String comment, String difficulty, String totalDistance, String totalTime, String rating) {
         this.date = new SimpleStringProperty(date);
@@ -28,6 +28,4 @@ public class TourLogModel {
         this.totalTime = new SimpleStringProperty(totalTime);
         this.rating = new SimpleStringProperty(rating);
     }
-
-
 }

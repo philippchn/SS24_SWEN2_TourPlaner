@@ -30,5 +30,4 @@ public class TourViewModel {
     public ObjectProperty<TourModel> selectedTourModelProperty() {
         return selectedTourModel;
     }
-
 }

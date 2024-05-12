@@ -1,7 +1,6 @@
 package org.technikum.tourplaner.controller;
 
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -41,22 +40,15 @@ public class TourLogsController {
     private final SimpleStringProperty totalDistanceProperty = new SimpleStringProperty();
     private final SimpleStringProperty totalTimeProperty = new SimpleStringProperty();
     private final SimpleStringProperty ratingProperty = new SimpleStringProperty();
-
-
     private final SimpleStringProperty selectedTourProperty = new SimpleStringProperty();
 
     private final TourViewModel tourViewModel;
+    private TourLogViewModel tourLogViewModel;
 
     public TourLogsController(TourViewModel tourViewModel)
     {
         this.tourViewModel = tourViewModel;
-    }
-
-    private TourLogViewModel tourLogViewModel = new TourLogViewModel();
-
-    public TourLogsController(TourViewModel tourViewModel, TourLogViewModel tourLogViewModel) {
-        this.tourViewModel = tourViewModel;
-        this.tourLogViewModel = tourLogViewModel;
+        this.tourLogViewModel = new TourLogViewModel();
     }
 
     @FXML
@@ -77,8 +69,6 @@ public class TourLogsController {
         ratingTextField.textProperty().bindBidirectional(ratingProperty);
     }
 
-
-
     private void addListener() {
         tourViewModel.selectedTourModelProperty().addListener(new ChangeListener<>() {
             @Override
@@ -98,26 +88,28 @@ public class TourLogsController {
         System.out.println("Adding new tour log...");
         TourModel selectedTour = tourViewModel.selectedTourModelProperty().get();
         if(selectedTour != null) {
-            String date = dateTextField.getText();
-            String comment = commentTextField.getText();
-            String difficulty = difficultyTextField.getText();
-            String totalDistance = totalDistanceTextField.getText();
-            String totalTime = totalTimeTextField.getText();
-            String rating = ratingTextField.getText();
+            TourLogModel tourLogModel = getTourLogModelFromGUI();
 
-            // Create a new TourLogModel
-            TourLogModel newTourLogModel = new TourLogModel(date, comment, difficulty, totalDistance, totalTime, rating);
-
-            // Add the new tour log to the tour model and view model
-            selectedTour.addTourLog(String.valueOf(selectedTourProperty), newTourLogModel);
-            tourLogViewModel.getTourLogModelList().add(newTourLogModel);
+            selectedTour.addTourLog(String.valueOf(selectedTourProperty), tourLogModel);
+            tourLogViewModel.getTourLogModelList().add(tourLogModel);
 
             clearTextFields();
-            //System.out.println(selectedTour.getTourLogsMap());
 
             logsTable.getItems().clear();
             populateLogsTable(selectedTour);
         }
+    }
+
+    private TourLogModel getTourLogModelFromGUI()
+    {
+        String date = dateTextField.getText();
+        String comment = commentTextField.getText();
+        String difficulty = difficultyTextField.getText();
+        String totalDistance = totalDistanceTextField.getText();
+        String totalTime = totalTimeTextField.getText();
+        String rating = ratingTextField.getText();
+
+        return new TourLogModel(date, comment, difficulty, totalDistance, totalTime, rating);
     }
 
     private void clearTextFields() {
@@ -144,7 +136,6 @@ public class TourLogsController {
     }
 
     private void setupColumns() {
-        // Set cell value factories for each column to display data from TourLogModel
         TableColumn<TourLogModel, String> dateColumn = (TableColumn<TourLogModel, String>) logsTable.getColumns().get(0);
         dateColumn.setCellValueFactory(cellData -> cellData.getValue().getDate());
 

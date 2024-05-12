@@ -13,19 +13,19 @@ import java.util.Map;
 
 public class TourModel {
     @Getter @Setter
-    private StringProperty name = new SimpleStringProperty("");
+    private StringProperty name;
     @Getter @Setter
-    private StringProperty tourDescription = new SimpleStringProperty("");
+    private StringProperty tourDescription;
     @Getter @Setter
-    private StringProperty from = new SimpleStringProperty("");;
+    private StringProperty from;
     @Getter @Setter
-    private StringProperty to = new SimpleStringProperty("");;
+    private StringProperty to;
     @Getter @Setter
-    private StringProperty transportType = new SimpleStringProperty("");
+    private StringProperty transportType;
     @Getter @Setter
     private StringProperty distance;
     @Getter @Setter
-    private StringProperty restimatedTime;
+    private StringProperty estimatedTime;
     @Getter @Setter
     private StringProperty routeInformation;
     @Getter
@@ -33,11 +33,11 @@ public class TourModel {
 
     public TourModel(String name, String tourDescription, String from, String to, String transportType)
     {
-        this.name.set(name);
-        this.tourDescription.set(tourDescription);
-        this.from.set(from);
-        this.to.set(to);
-        this.transportType.set(transportType);
+        this.name = new SimpleStringProperty(name);
+        this.tourDescription = new SimpleStringProperty(tourDescription);
+        this.from = new SimpleStringProperty(from);
+        this.to = new SimpleStringProperty(to);
+        this.transportType = new SimpleStringProperty(transportType);
     }
 
     @Override
