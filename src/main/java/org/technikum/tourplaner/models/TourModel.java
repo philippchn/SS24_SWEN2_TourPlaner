@@ -6,6 +6,11 @@ import javafx.beans.property.StringProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class TourModel {
     @Getter @Setter
     private StringProperty name = new SimpleStringProperty("");
@@ -23,6 +28,8 @@ public class TourModel {
     private StringProperty restimatedTime;
     @Getter @Setter
     private StringProperty routeInformation;
+    @Getter
+    private Map<String, List<TourLogModel>> tourLogsMap = new HashMap<>();
 
     public TourModel(String name, String tourDescription, String from, String to, String transportType)
     {
@@ -37,5 +44,10 @@ public class TourModel {
     public String toString()
     {
         return this.name.getValue();
+    }
+
+    public void addTourLog(String tourName, TourLogModel tourLog) {
+        List<TourLogModel> logs = tourLogsMap.computeIfAbsent(tourName, k -> new ArrayList<>());
+        logs.add(tourLog);
     }
 }
