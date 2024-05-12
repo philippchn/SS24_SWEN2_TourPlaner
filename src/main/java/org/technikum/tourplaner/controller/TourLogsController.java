@@ -87,6 +87,8 @@ public class TourLogsController {
                 System.out.println("Changed");
                 selectedTourProperty.set(newValue.toString());
                 logsTable.getItems().clear();
+                TourModel selectedTour = tourViewModel.selectedTourModelProperty().get();
+                populateLogsTable(selectedTour);
             }
         });
     }
@@ -110,11 +112,9 @@ public class TourLogsController {
             selectedTour.addTourLog(String.valueOf(selectedTourProperty), newTourLogModel);
             tourLogViewModel.getTourLogModelList().add(newTourLogModel);
 
-            // Clear the text fields
             clearTextFields();
-            // Print the updated tour logs map and repopulate the logs table
-            System.out.println(selectedTour.getTourLogsMap());
-            //setupColumns();
+            //System.out.println(selectedTour.getTourLogsMap());
+
             logsTable.getItems().clear();
             populateLogsTable(selectedTour);
         }
@@ -143,7 +143,6 @@ public class TourLogsController {
         }
     }
 
-
     private void setupColumns() {
         // Set cell value factories for each column to display data from TourLogModel
         TableColumn<TourLogModel, String> dateColumn = (TableColumn<TourLogModel, String>) logsTable.getColumns().get(0);
@@ -155,4 +154,5 @@ public class TourLogsController {
         TableColumn<TourLogModel, String> distanceColumn = (TableColumn<TourLogModel, String>) logsTable.getColumns().get(2);
         distanceColumn.setCellValueFactory(cellData -> cellData.getValue().getTotalDistance());
     }
+
 }
