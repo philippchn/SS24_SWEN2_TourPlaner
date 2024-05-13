@@ -30,4 +30,9 @@ public class TourViewModel {
     public ObjectProperty<TourModel> selectedTourModelProperty() {
         return selectedTourModel;
     }
+
+    public void deleteTour(TourModel tour) {
+        tours.remove(tour);
+    }
+
 }

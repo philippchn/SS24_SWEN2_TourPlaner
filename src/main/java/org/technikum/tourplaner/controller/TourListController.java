@@ -32,6 +32,10 @@ public class TourListController {
     private Label statusMessageLabel;
     @FXML
     private ListView<TourModel> tourListView;
+    @FXML
+    private Button deleteButton;
+    @FXML
+    private Button modifyButton;
 
     private final SimpleStringProperty nameProperty = new SimpleStringProperty();
     private final SimpleStringProperty descriptionProperty = new SimpleStringProperty();
@@ -51,7 +55,7 @@ public class TourListController {
 
         saveButton.setOnAction(event -> saveTour());
         tourListView.setOnMouseClicked(event -> clickElement());
-
+        deleteButton.setOnAction(event -> deleteTour());
         tourListView.setItems(tourViewModel.getTours());
     }
 
@@ -128,5 +132,12 @@ public class TourListController {
             return;
         }
         tourViewModel.setSelectedTourModel(tourListView.getSelectionModel().getSelectedItem());
+    }
+
+    private void deleteTour() {
+        TourModel selectedTour = tourListView.getSelectionModel().getSelectedItem();
+        if (selectedTour != null) {
+            tourViewModel.deleteTour(selectedTour);
+        }
     }
 }
