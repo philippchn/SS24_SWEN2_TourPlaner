@@ -58,7 +58,7 @@
                      <children>
                         <VBox prefHeight="240.0" prefWidth="443.0">
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Create new tour log" textAlignment="CENTER" wrappingWidth="450.697265625" />
+                              <Text fx:id="infoText" strokeType="OUTSIDE" strokeWidth="0.0" text="Create new tour log" textAlignment="CENTER" wrappingWidth="450.697265625" />
                                <TextField fx:id="dateTextField" alignment="TOP_CENTER" promptText="Date" />
                                <TextField fx:id="commentTextField" alignment="TOP_CENTER" promptText="Comment" />
                                <TextField fx:id="difficultyTextField" alignment="TOP_CENTER" layoutX="10.0" layoutY="35.0" promptText="Difficulty" />
