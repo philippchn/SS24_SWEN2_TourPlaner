@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="org.technikum.tourplaner.controller.ModifyTourPopupController">
+    <children>
+        <Label text="Modify Tour" />
+        <TextField fx:id="nameTextField" promptText="Name" />
+        <TextField fx:id="descriptionTextField" promptText="Description" />
+        <TextField fx:id="fromTextField" promptText="From" />
+        <TextField fx:id="toTextField" promptText="To" />
+        <TextField fx:id="transportTypeTextField" promptText="Transport Type" />
+        <Button fx:id="saveButton" text="Save" />
+    </children>
+</VBox>
