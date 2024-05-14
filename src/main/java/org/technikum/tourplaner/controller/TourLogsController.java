@@ -201,6 +201,9 @@ public class TourLogsController {
     private void clickElement()
     {
         TourLogModel selectedTourLogModel = logsTable.getSelectionModel().getSelectedItem();
+        if (selectedTourLogModel == null){
+            return;
+        }
         detailViewDate.setText(selectedTourLogModel.getDate().get());
         detailViewComment.setText(selectedTourLogModel.getComment().get());
         detailViewDifficulty.setText(selectedTourLogModel.getDifficulty().get());
