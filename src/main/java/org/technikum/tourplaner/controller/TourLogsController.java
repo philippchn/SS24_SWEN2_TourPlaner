@@ -4,14 +4,20 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import org.technikum.tourplaner.models.TourLogModel;
 import org.technikum.tourplaner.models.TourModel;
 import org.technikum.tourplaner.viewmodels.TourLogViewModel;
 import org.technikum.tourplaner.viewmodels.TourViewModel;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -46,6 +52,10 @@ public class TourLogsController {
     private Text detailViewTotalTime;
     @FXML
     private Text detailViewRating;
+    @FXML
+    private Button deleteButton;
+    @FXML
+    private Button modifyButton;
 
     private final SimpleStringProperty dateProperty = new SimpleStringProperty();
     private final SimpleStringProperty commentProperty = new SimpleStringProperty();
@@ -71,6 +81,9 @@ public class TourLogsController {
         setupColumns();
         saveButton.setOnAction(event -> addTourLog());
         logsTable.setOnMouseClicked(event -> clickElement());
+        deleteButton.setOnAction(event -> deleteTourLog());
+        modifyButton.setOnAction(event -> openModifyTourLogPopup()); // Add action handler for modify button
+
     }
 
     private void setupColumns() {
@@ -210,5 +223,50 @@ public class TourLogsController {
         detailViewTotalDistance.setText("Total distance: " + selectedTourLogModel.getTotalDistance().get());;
         detailViewTotalTime.setText("Total time: " + selectedTourLogModel.getTotalTime().get());;
         detailViewRating.setText("Rating: " + selectedTourLogModel.getRating().get());;
+    }
+
+    private void deleteTourLog() {
+        TourLogModel selectedTourLog = logsTable.getSelectionModel().getSelectedItem();
+        if (selectedTourLog != null) {
+            TourModel selectedTour = tourViewModel.selectedTourModelProperty().get();
+            if (selectedTour != null) {
+                //selectedTour.removeTourLog(selectedTourLog); not implemented yet
+                tourLogViewModel.getTourLogModelList().remove(selectedTourLog);
+
+                logsTable.getItems().remove(selectedTourLog);
+                clearDetailView();
+            }
+        }
+    }
+
+    private void openModifyTourLogPopup() {
+        TourLogModel selectedTourLog = logsTable.getSelectionModel().getSelectedItem();
+        if (selectedTourLog != null) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/technikum/tourplaner/View/modifyTourLogsPopup.fxml"));
+                Parent root = loader.load();
+
+                ModifyTourLogsPopupController controller = loader.getController();
+                Stage stage = new Stage();
+                stage.initModality(Modality.APPLICATION_MODAL);
+                controller.initData(selectedTourLog, stage, tourLogViewModel);
+
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.showAndWait();
+                logsTable.refresh();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void clearDetailView() {
+        detailViewDate.setText("Date: ");
+        detailViewComment.setText("Comment: ");
+        detailViewDifficulty.setText("Difficulty: ");
+        detailViewTotalDistance.setText("Total distance: ");
+        detailViewTotalTime.setText("Total time: ");
+        detailViewRating.setText("Rating: ");
     }
 }

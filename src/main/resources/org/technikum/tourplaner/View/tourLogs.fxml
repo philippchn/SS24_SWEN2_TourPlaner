@@ -42,23 +42,26 @@
                             <children>
                                 <VBox prefHeight="264.0" prefWidth="600.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
                                     <children>
-                                        <TableView fx:id="logsTable" centerShape="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="156.0" prefWidth="384.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                                        <TableView fx:id="logsTable" centerShape="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="200.0" prefWidth="600.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
                                             <columns>
-                                                <TableColumn prefWidth="75.0" text="Date" />
-                                                <TableColumn prefWidth="75.0" text="Duration" />
-                                                <TableColumn prefWidth="75.0" text="Distance" />
+                                                <TableColumn fx:id="dateColumn" prefWidth="100.0" text="Date" />
+                                                <TableColumn fx:id="durationColumn" prefWidth="100.0" text="Duration" />
+                                                <TableColumn fx:id="distanceColumn" prefWidth="100.0" text="Distance" />
                                             </columns>
-                                 <columnResizePolicy>
-                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                 </columnResizePolicy>
                                         </TableView>
-                                        <VBox prefHeight="160.0" prefWidth="451.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                                        <HBox spacing="10.0" alignment="CENTER" prefHeight="50.0" prefWidth="600.0">
                                             <children>
-                                                <Accordion prefHeight="126.0" prefWidth="451.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                                                <Button fx:id="modifyButton" text="Modify Tour Log" />
+                                                <Button fx:id="deleteButton" text="Delete Tour Log" />
+                                            </children>
+                                        </HBox>
+                                        <VBox prefHeight="160.0" prefWidth="600.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                                            <children>
+                                                <Accordion prefHeight="126.0" prefWidth="600.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
                                                     <panes>
                                                         <TitledPane animated="false" text="Detail View" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
                                                             <content>
-                                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="74.0" prefWidth="449.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="74.0" prefWidth="600.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
                                                                     <children>
                                                                         <VBox prefHeight="101.0" prefWidth="100.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
                                                                             <children>
@@ -66,8 +69,8 @@
                                                                                 <Text fx:id="detailViewComment" strokeType="OUTSIDE" strokeWidth="0.0" text="Comment:" />
                                                                                 <Text fx:id="detailViewDifficulty" strokeType="OUTSIDE" strokeWidth="0.0" text="Difficulty:" />
                                                                                 <Text fx:id="detailViewTotalDistance" strokeType="OUTSIDE" strokeWidth="0.0" text="Total distance:" />
-                                                                                <Text fx:id="detailViewTotalTime" layoutX="10.0" layoutY="74.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total time:" />
-                                                                                <Text fx:id="detailViewRating" layoutX="10.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rating:" />
+                                                                                <Text fx:id="detailViewTotalTime" strokeType="OUTSIDE" strokeWidth="0.0" text="Total time:" />
+                                                                                <Text fx:id="detailViewRating" strokeType="OUTSIDE" strokeWidth="0.0" text="Rating:" />
                                                                             </children>
                                                                         </VBox>
                                                                     </children>
@@ -100,7 +103,8 @@
                                         <Button fx:id="saveButton" alignment="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="620.0" text="Save" textAlignment="CENTER" />
                                     </children>
                                 </VBox>
-                            </children></AnchorPane>
+                            </children>
+                        </AnchorPane>
                     </content>
                 </Tab>
                 <Tab text="-">
