@@ -204,11 +204,11 @@ public class TourLogsController {
         if (selectedTourLogModel == null){
             return;
         }
-        detailViewDate.setText(selectedTourLogModel.getDate().get());
-        detailViewComment.setText(selectedTourLogModel.getComment().get());
-        detailViewDifficulty.setText(selectedTourLogModel.getDifficulty().get());
-        detailViewTotalDistance.setText(selectedTourLogModel.getTotalDistance().get());;
-        detailViewTotalTime.setText(selectedTourLogModel.getTotalTime().get());;
-        detailViewRating.setText(selectedTourLogModel.getRating().get());;
+        detailViewDate.setText("Date: " + selectedTourLogModel.getDate().get());
+        detailViewComment.setText("Comment: " + selectedTourLogModel.getComment().get());
+        detailViewDifficulty.setText("Difficulty: " + selectedTourLogModel.getDifficulty().get());
+        detailViewTotalDistance.setText("Total distance: " + selectedTourLogModel.getTotalDistance().get());;
+        detailViewTotalTime.setText("Total time: " + selectedTourLogModel.getTotalTime().get());;
+        detailViewRating.setText("Rating: " + selectedTourLogModel.getRating().get());;
     }
 }
