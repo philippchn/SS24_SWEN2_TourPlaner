@@ -8,9 +8,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.technikum.tourplaner.EViews;
 import org.technikum.tourplaner.models.TourModel;
 import org.technikum.tourplaner.viewmodels.TourViewModel;
 
@@ -39,6 +39,22 @@ public class TourListController {
     private Label statusMessageLabel;
     @FXML
     private ListView<TourModel> tourListView;
+    @FXML
+    private Text detailViewName;
+    @FXML
+    private Text detailViewDescription;
+    @FXML
+    private Text detailViewFrom;
+    @FXML
+    private Text detailViewTo;
+    @FXML
+    private Text detailViewTransportType;
+    @FXML
+    private Text detailViewDistance;
+    @FXML
+    private Text detailViewEstimatedTime;
+    @FXML
+    private Text detailViewRouteInformation;
     @FXML
     private Button deleteButton;
     @FXML
@@ -140,6 +156,19 @@ public class TourListController {
             return;
         }
         tourViewModel.setSelectedTourModel(tourListView.getSelectionModel().getSelectedItem());
+        setDetailView(tourListView.getSelectionModel().getSelectedItem());
+    }
+
+    private void setDetailView(TourModel selectedItem)
+    {
+        detailViewName.setText("Name: " + selectedItem.getName().get());
+        detailViewDescription.setText("Description: " + selectedItem.getTourDescription().get());
+        detailViewFrom.setText("From: " + selectedItem.getFrom().get());
+        detailViewTo.setText("To: " + selectedItem.getTo().get());
+        detailViewTransportType.setText("Transport type: " + selectedItem.getTransportType().get());
+//        detailViewDistance.setText("Distance: " + selectedItem.getDistance().get()); // TODO NOT YET IMPLEMENTED
+//        detailViewEstimatedTime.setText("Estimated time: " + selectedItem.getEstimatedTime().get());
+//        detailViewRouteInformation.setText("Route information: " + selectedItem.getRouteInformation().get());
     }
 
     private void deleteTour() {

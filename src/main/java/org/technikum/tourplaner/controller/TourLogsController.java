@@ -19,12 +19,9 @@ public class TourLogsController {
     @FXML
     private Text infoText;
     @FXML
-    private Label currentlySelectedTourLabel;
-    @FXML
     private TableView<TourLogModel> logsTable;
     @FXML
     private Button saveButton;
-
     @FXML
     private TextField dateTextField;
     @FXML
@@ -37,6 +34,18 @@ public class TourLogsController {
     private TextField totalTimeTextField;
     @FXML
     private TextField ratingTextField;
+    @FXML
+    private Text detailViewDate;
+    @FXML
+    private Text detailViewComment;
+    @FXML
+    private Text detailViewDifficulty;
+    @FXML
+    private Text detailViewTotalDistance;
+    @FXML
+    private Text detailViewTotalTime;
+    @FXML
+    private Text detailViewRating;
 
     private final SimpleStringProperty dateProperty = new SimpleStringProperty();
     private final SimpleStringProperty commentProperty = new SimpleStringProperty();
@@ -61,10 +70,21 @@ public class TourLogsController {
         addListener();
         setupColumns();
         saveButton.setOnAction(event -> addTourLog());
+        logsTable.setOnMouseClicked(event -> clickElement());
+    }
+
+    private void setupColumns() {
+        TableColumn<TourLogModel, String> dateColumn = (TableColumn<TourLogModel, String>) logsTable.getColumns().get(0);
+        dateColumn.setCellValueFactory(cellData -> cellData.getValue().getDate());
+
+        TableColumn<TourLogModel, String> durationColumn = (TableColumn<TourLogModel, String>) logsTable.getColumns().get(1);
+        durationColumn.setCellValueFactory(cellData -> cellData.getValue().getTotalTime());
+
+        TableColumn<TourLogModel, String> distanceColumn = (TableColumn<TourLogModel, String>) logsTable.getColumns().get(2);
+        distanceColumn.setCellValueFactory(cellData -> cellData.getValue().getTotalDistance());
     }
 
     private void bindProperties() {
-        currentlySelectedTourLabel.textProperty().bindBidirectional(selectedTourProperty);
         dateTextField.textProperty().bindBidirectional(dateProperty);
         commentTextField.textProperty().bindBidirectional(commentProperty);
         difficultyTextField.textProperty().bindBidirectional(difficultyProperty);
@@ -91,7 +111,13 @@ public class TourLogsController {
     private void addTourLog() {
         System.out.println("Adding new tour log...");
         TourModel selectedTour = tourViewModel.selectedTourModelProperty().get();
-        if(selectedTour != null && isValidInput()) {
+        if (selectedTour == null)
+        {
+            infoText.setFill(Color.RED);
+            infoText.setText("Please select a tour!");
+            return;
+        }
+        if(isValidInput()) {
             TourLogModel tourLogModel = getTourLogModelFromGUI();
 
             selectedTour.addTourLog(String.valueOf(selectedTourProperty), tourLogModel);
@@ -101,6 +127,7 @@ public class TourLogsController {
 
             logsTable.getItems().clear();
             populateLogsTable(selectedTour);
+            infoText.setText("Create new tour log");
         }
     }
 
@@ -171,15 +198,17 @@ public class TourLogsController {
         }
     }
 
-    private void setupColumns() {
-        TableColumn<TourLogModel, String> dateColumn = (TableColumn<TourLogModel, String>) logsTable.getColumns().get(0);
-        dateColumn.setCellValueFactory(cellData -> cellData.getValue().getDate());
-
-        TableColumn<TourLogModel, String> durationColumn = (TableColumn<TourLogModel, String>) logsTable.getColumns().get(1);
-        durationColumn.setCellValueFactory(cellData -> cellData.getValue().getTotalTime());
-
-        TableColumn<TourLogModel, String> distanceColumn = (TableColumn<TourLogModel, String>) logsTable.getColumns().get(2);
-        distanceColumn.setCellValueFactory(cellData -> cellData.getValue().getTotalDistance());
+    private void clickElement()
+    {
+        TourLogModel selectedTourLogModel = logsTable.getSelectionModel().getSelectedItem();
+        if (selectedTourLogModel == null){
+            return;
+        }
+        detailViewDate.setText("Date: " + selectedTourLogModel.getDate().get());
+        detailViewComment.setText("Comment: " + selectedTourLogModel.getComment().get());
+        detailViewDifficulty.setText("Difficulty: " + selectedTourLogModel.getDifficulty().get());
+        detailViewTotalDistance.setText("Total distance: " + selectedTourLogModel.getTotalDistance().get());;
+        detailViewTotalTime.setText("Total time: " + selectedTourLogModel.getTotalTime().get());;
+        detailViewRating.setText("Rating: " + selectedTourLogModel.getRating().get());;
     }
-
 }
