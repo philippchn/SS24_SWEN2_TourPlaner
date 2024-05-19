@@ -15,34 +15,34 @@
 
 <VBox id="root" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="561.0" prefWidth="600.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <TabPane prefHeight="255.0" prefWidth="451.0" tabClosingPolicy="UNAVAILABLE" HBox.hgrow="ALWAYS">
+        <TabPane prefHeight="255.0" prefWidth="451.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
             <tabs>
                 <Tab text="General">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" VBox.vgrow="ALWAYS"/>
                     </content>
                 </Tab>
                 <Tab text="Route">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" VBox.vgrow="ALWAYS"/>
                     </content>
                 </Tab>
                 <Tab text="Misc">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" VBox.vgrow="ALWAYS"/>
                     </content>
                 </Tab>
             </tabs>
         </TabPane>
-        <TabPane prefHeight="291.0" prefWidth="451.0" tabClosingPolicy="UNAVAILABLE" HBox.hgrow="ALWAYS">
+        <TabPane prefHeight="291.0" prefWidth="451.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
             <tabs>
                 <Tab text="Tour Logs">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                             <children>
-                                <VBox prefHeight="264.0" prefWidth="600.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                                <VBox prefHeight="264.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
                                     <children>
-                                        <TableView fx:id="logsTable" centerShape="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="200.0" prefWidth="600.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                                        <TableView fx:id="logsTable" centerShape="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="200.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
                                             <columns>
                                                 <TableColumn fx:id="dateColumn" prefWidth="100.0" text="Date" />
                                                 <TableColumn fx:id="durationColumn" prefWidth="100.0" text="Duration" />
@@ -55,15 +55,15 @@
                                                 <Button fx:id="deleteButton" text="Delete Tour Log" />
                                             </children>
                                         </HBox>
-                                        <VBox prefHeight="160.0" prefWidth="600.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                                        <VBox prefHeight="160.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
                                             <children>
-                                                <Accordion prefHeight="126.0" prefWidth="600.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                                                <Accordion prefHeight="126.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
                                                     <panes>
-                                                        <TitledPane animated="false" text="Detail View" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                                                        <TitledPane animated="false" text="Detail View" VBox.vgrow="ALWAYS">
                                                             <content>
-                                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="74.0" prefWidth="600.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                                                                <AnchorPane prefHeight="74.0"  VBox.vgrow="ALWAYS">
                                                                     <children>
-                                                                        <VBox prefHeight="101.0" prefWidth="100.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                                                                        <VBox prefHeight="101.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
                                                                             <children>
                                                                                 <Text fx:id="detailViewDate" strokeType="OUTSIDE" strokeWidth="0.0" text="Date:" />
                                                                                 <Text fx:id="detailViewComment" strokeType="OUTSIDE" strokeWidth="0.0" text="Comment:" />
@@ -89,9 +89,9 @@
                 </Tab>
                 <Tab text="Create Tour Log">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                             <children>
-                                <VBox prefHeight="240.0" prefWidth="370.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                                <VBox prefHeight="240.0" prefWidth="370.0" VBox.vgrow="ALWAYS">
                                     <children>
                                         <Text fx:id="infoText" strokeType="OUTSIDE" strokeWidth="0.0" text="Create new tour log" textAlignment="CENTER" wrappingWidth="450.697265625" />
                                         <TextField fx:id="dateTextField" alignment="TOP_CENTER" promptText="Date" />
@@ -109,12 +109,12 @@
                 </Tab>
                 <Tab text="-">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" VBox.vgrow="ALWAYS"/>
                     </content>
                 </Tab>
                 <Tab text="...">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" VBox.vgrow="ALWAYS"/>
                     </content>
                 </Tab>
             </tabs>
