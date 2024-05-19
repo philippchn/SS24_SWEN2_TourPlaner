@@ -1,48 +1,212 @@
 package org.technikum.tourplaner.viewmodels;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import lombok.Getter;
+import org.technikum.tourplaner.EViews;
+import org.technikum.tourplaner.MainApplication;
+import org.technikum.tourplaner.controller.ModifyTourPopupController;
 import org.technikum.tourplaner.models.TourModel;
 
-import java.util.Map;
+import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TourViewModel {
     @Getter
     private ObservableList<TourModel> tours = FXCollections.observableArrayList();
-    private ObjectProperty<TourModel> selectedTourModel = new SimpleObjectProperty<>();
+    private ObjectProperty<TourModel> selectedTourModelProperty = new SimpleObjectProperty<>();
 
-    public void addTour(TourModel tour) {
-        tours.add(tour);
-    }
-
-    public TourModel getSelectedTourModel() {
-        return selectedTourModel.get();
-    }
-
-    public void setSelectedTourModel(TourModel tour) {
-        this.selectedTourModel.set(tour);
-        System.out.println("Selected: " + selectedTourModel.getValue() + " from list");
-    }
+    private final SimpleStringProperty nameProperty = new SimpleStringProperty();
+    private final SimpleStringProperty descriptionProperty = new SimpleStringProperty();
+    private final SimpleStringProperty fromProperty = new SimpleStringProperty();
+    private final SimpleStringProperty toProperty = new SimpleStringProperty();
+    private final SimpleStringProperty transportTypeProperty = new SimpleStringProperty();
+    private final SimpleStringProperty statusMessageProperty = new SimpleStringProperty();
+    private final SimpleStringProperty detailViewNameProperty = new SimpleStringProperty("Name:");
+    private final SimpleStringProperty detailViewDescriptionProperty = new SimpleStringProperty("Description:");
+    private final SimpleStringProperty detailViewFromProperty = new SimpleStringProperty("From:");
+    private final SimpleStringProperty detailViewToProperty = new SimpleStringProperty("To:");
+    private final SimpleStringProperty detailViewTransportTypeProperty = new SimpleStringProperty("Transport type:");
+    private final ObjectProperty<Image> detailViewMapImageProperty = new SimpleObjectProperty<>();
 
     public ObjectProperty<TourModel> selectedTourModelProperty() {
-        return selectedTourModel;
+        return selectedTourModelProperty;
     }
 
-    public void deleteTour(TourModel tour) {
-        tours.remove(tour);
+    public StringProperty nameProperty() {
+        return nameProperty;
     }
 
-    public void updateTour(TourModel updatedTour) {
+    public StringProperty descriptionProperty() {
+        return descriptionProperty;
+    }
+
+    public StringProperty fromProperty() {
+        return fromProperty;
+    }
+
+    public StringProperty toProperty() {
+        return toProperty;
+    }
+
+    public StringProperty statusMessageProperty() {
+        return statusMessageProperty;
+    }
+
+    public StringProperty transportTypeProperty() {
+        return transportTypeProperty;
+    }
+
+    public StringProperty detailViewNameProperty() {
+        return detailViewNameProperty;
+    }
+
+    public StringProperty detailViewDescriptionProperty() {
+        return detailViewDescriptionProperty;
+    }
+
+    public StringProperty detailViewFromProperty() {
+        return detailViewFromProperty;
+    }
+
+    public StringProperty detailViewToProperty() {
+        return detailViewToProperty;
+    }
+
+    public StringProperty detailViewTransportTypeProperty() {
+        return detailViewTransportTypeProperty;
+    }
+
+    public ObjectProperty<Image> detailViewMapImageProperty() {
+        return detailViewMapImageProperty;
+    }
+    public void addTour() {
+        if (isValidInput()) {
+            TourModel newTour = new TourModel(
+                    nameProperty.get().trim(),
+                    descriptionProperty.get().trim(),
+                    fromProperty.get().trim(),
+                    toProperty.get().trim(),
+                    transportTypeProperty.get().trim()
+            );
+
+            tours.add(newTour);
+            clearInputFields();
+        }
+    }
+
+    private boolean isValidInput() {
+        if (nameProperty.get() == null || nameProperty.get().isBlank()) {
+            setErrorMessage("Name");
+            return false;
+        } else if (fromProperty.get() == null || fromProperty.get().isBlank()) {
+            setErrorMessage("From");
+            return false;
+        } else if (toProperty.get() == null || toProperty.get().isBlank()) {
+            setErrorMessage("To");
+            return false;
+        } else if (transportTypeProperty.get() == null || transportTypeProperty.get().isBlank()) {
+            setErrorMessage("Transport type");
+            return false;
+        }
+
+        Pattern pattern = Pattern.compile("^[a-zA-ZäÄöÖüÜ]+$");
+        Matcher validateFrom = pattern.matcher(fromProperty.get().trim());
+        Matcher validateTo = pattern.matcher(toProperty.get().trim());
+
+        if (!(validateFrom.matches() && validateTo.matches())) {
+//            statusMessageProperty.setTextFill(Color.RED); // TODO FIND A WAY TO COLOR THE TEXT
+            statusMessageProperty().set("From and To must not contain numbers or special characters");
+            return false;
+        }
+
+//        statusMessageLabel.setTextFill(Color.BLACK);
+        return true;
+    }
+
+    private void setErrorMessage(String missingTextField) {
+//        statusMessageProperty.setTextFill(Color.RED);
+        statusMessageProperty.set(missingTextField + " must not be empty");
+    }
+
+    private void clearInputFields() {
+        nameProperty.set("");
+        descriptionProperty.set("");
+        fromProperty.set("");
+        toProperty.set("");
+        transportTypeProperty.set("");
+        statusMessageProperty.set("Create new tour:");
+    }
+
+    public void setCurrentlyClickedTour()
+    {
+        if (selectedTourModelProperty.get() == null){
+            return;
+        }
+        System.out.println("Selected: " + selectedTourModelProperty.get() + " from list");
+        setDetailView(selectedTourModelProperty.get());
+    }
+
+    private void setDetailView(TourModel selectedItem)
+    {
+        if (selectedItem == null) {
+            return;
+        }
+        detailViewNameProperty.set("Name: " + selectedItem.getName().get());
+        detailViewDescriptionProperty.set("Description: " + selectedItem.getTourDescription().get());
+        detailViewFromProperty.set("From: " + selectedItem.getFrom().get());
+        detailViewToProperty.set("To: " + selectedItem.getTo().get());
+        detailViewTransportTypeProperty.set("Transport type: " + selectedItem.getTransportType().get());
+//        detailViewDistance.setText("Distance: " + selectedItem.getDistance().get()); // TODO NOT YET IMPLEMENTED
+//        detailViewEstimatedTime.setText("Estimated time: " + selectedItem.getEstimatedTime().get());
+//        detailViewRouteInformation.setText("Route information: " + selectedItem.getRouteInformation().get());
+        detailViewMapImageProperty.set(new Image(getClass().getResource("/org/technikum/tourplaner/img/mapPlaceholder.jpg").toExternalForm()));
+    }
+
+    public void deleteTour() {
+        if (selectedTourModelProperty.get() != null) {
+            tours.remove(selectedTourModelProperty.get());
+        }
+    }
+
+    public void updateTour() {
+        TourModel selectedTour = selectedTourModelProperty.get();
+        if (selectedTour != null) {
+            try {
+                FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource(EViews.modifyTourPopup.getFilePath()));
+                Parent root = loader.load();
+
+                ModifyTourPopupController controller = loader.getController();
+                Stage stage = new Stage();
+                stage.initModality(Modality.APPLICATION_MODAL);
+                controller.initData(selectedTour, stage, this);
+
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.showAndWait();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        updateDisplayedTourList(selectedTour);
+        setDetailView(selectedTour);
+    }
+
+    private void updateDisplayedTourList(TourModel selectedTour)
+    {
         for (int i = 0; i < tours.size(); i++) {
-            if (tours.get(i).getName().equals(updatedTour.getName())) {
-                tours.set(i, updatedTour);
+            if (tours.get(i).getName().equals(selectedTour.getName())) {
+                tours.set(i, selectedTour);
                 break;
             }
         }
     }
-
-
 }

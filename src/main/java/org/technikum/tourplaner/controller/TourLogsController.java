@@ -70,8 +70,7 @@ public class TourLogsController {
     private final TourViewModel tourViewModel;
     private TourLogViewModel tourLogViewModel;
 
-    public TourLogsController(TourViewModel tourViewModel)
-    {
+    public TourLogsController(TourViewModel tourViewModel) {
         this.tourViewModel = tourViewModel;
         this.tourLogViewModel = new TourLogViewModel();
     }
@@ -112,11 +111,11 @@ public class TourLogsController {
             @Override
             public void changed(ObservableValue<? extends TourModel> observableValue, TourModel oldValue, TourModel newValue)
             {
-                System.out.println("Changed");
-                selectedTourProperty.set(newValue.toString());
+                if (newValue == null){
+                    return;
+                }
                 logsTable.getItems().clear();
-                TourModel selectedTour = tourViewModel.selectedTourModelProperty().get();
-                populateLogsTable(selectedTour);
+                populateLogsTable(newValue);
             }
         });
     }
