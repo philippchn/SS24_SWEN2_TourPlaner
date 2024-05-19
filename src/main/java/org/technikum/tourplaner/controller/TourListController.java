@@ -6,6 +6,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -59,6 +61,8 @@ public class TourListController {
     private Button deleteButton;
     @FXML
     private Button modifyButton;
+    @FXML
+    private ImageView mapImageView;
 
     private final SimpleStringProperty nameProperty = new SimpleStringProperty();
     private final SimpleStringProperty descriptionProperty = new SimpleStringProperty();
@@ -169,6 +173,7 @@ public class TourListController {
 //        detailViewDistance.setText("Distance: " + selectedItem.getDistance().get()); // TODO NOT YET IMPLEMENTED
 //        detailViewEstimatedTime.setText("Estimated time: " + selectedItem.getEstimatedTime().get());
 //        detailViewRouteInformation.setText("Route information: " + selectedItem.getRouteInformation().get());
+        mapImageView.setImage(new Image(getClass().getResource("/org/technikum/tourplaner/img/mapPlaceholder.jpg").toExternalForm()));
     }
 
     private void deleteTour() {
