@@ -13,6 +13,7 @@ import lombok.Getter;
 import org.technikum.tourplaner.EViews;
 import org.technikum.tourplaner.MainApplication;
 import org.technikum.tourplaner.controller.ModifyTourPopupController;
+import org.technikum.tourplaner.models.TourLogModel;
 import org.technikum.tourplaner.models.TourModel;
 
 import java.io.IOException;
@@ -22,7 +23,8 @@ import java.util.regex.Pattern;
 public class TourViewModel {
     @Getter
     private ObservableList<TourModel> tours = FXCollections.observableArrayList();
-    private ObjectProperty<TourModel> selectedTourModelProperty = new SimpleObjectProperty<>();
+    private final ObjectProperty<TourModel> selectedTourModelProperty = new SimpleObjectProperty<>();
+    private final ObjectProperty<TourLogModel> selectedTourLogModelProperty = new SimpleObjectProperty<>();
 
     private final SimpleStringProperty nameProperty = new SimpleStringProperty();
     private final SimpleStringProperty descriptionProperty = new SimpleStringProperty();
@@ -39,6 +41,10 @@ public class TourViewModel {
 
     public ObjectProperty<TourModel> selectedTourModelProperty() {
         return selectedTourModelProperty;
+    }
+
+    public ObjectProperty<TourLogModel> selectedTourLogModelProperty() {
+        return selectedTourLogModelProperty;
     }
 
     public StringProperty nameProperty() {
@@ -88,6 +94,15 @@ public class TourViewModel {
     public ObjectProperty<Image> detailViewMapImageProperty() {
         return detailViewMapImageProperty;
     }
+
+    public TourModel getSelectedTourModel() {
+        return selectedTourModelProperty.get();
+    }
+
+    public TourLogModel getSelectedTourLogModel() {
+        return selectedTourLogModelProperty.get();
+    }
+
     public void addTour() {
         if (isValidInput()) {
             TourModel newTour = new TourModel(
@@ -123,17 +138,14 @@ public class TourViewModel {
         Matcher validateTo = pattern.matcher(toProperty.get().trim());
 
         if (!(validateFrom.matches() && validateTo.matches())) {
-//            statusMessageProperty.setTextFill(Color.RED); // TODO FIND A WAY TO COLOR THE TEXT
             statusMessageProperty().set("From and To must not contain numbers or special characters");
             return false;
         }
 
-//        statusMessageLabel.setTextFill(Color.BLACK);
         return true;
     }
 
     private void setErrorMessage(String missingTextField) {
-//        statusMessageProperty.setTextFill(Color.RED);
         statusMessageProperty.set(missingTextField + " must not be empty");
     }
 
@@ -146,17 +158,15 @@ public class TourViewModel {
         statusMessageProperty.set("Create new tour:");
     }
 
-    public void setCurrentlyClickedTour()
-    {
-        if (selectedTourModelProperty.get() == null){
+    public void setCurrentlyClickedTour() {
+        if (selectedTourModelProperty.get() == null) {
             return;
         }
         System.out.println("Selected: " + selectedTourModelProperty.get() + " from list");
         setDetailView(selectedTourModelProperty.get());
     }
 
-    private void setDetailView(TourModel selectedItem)
-    {
+    private void setDetailView(TourModel selectedItem) {
         if (selectedItem == null) {
             return;
         }
@@ -165,9 +175,6 @@ public class TourViewModel {
         detailViewFromProperty.set("From: " + selectedItem.getFrom().get());
         detailViewToProperty.set("To: " + selectedItem.getTo().get());
         detailViewTransportTypeProperty.set("Transport type: " + selectedItem.getTransportType().get());
-//        detailViewDistance.setText("Distance: " + selectedItem.getDistance().get()); // TODO NOT YET IMPLEMENTED
-//        detailViewEstimatedTime.setText("Estimated time: " + selectedItem.getEstimatedTime().get());
-//        detailViewRouteInformation.setText("Route information: " + selectedItem.getRouteInformation().get());
         detailViewMapImageProperty.set(new Image(getClass().getResource("/org/technikum/tourplaner/img/mapPlaceholder.jpg").toExternalForm()));
     }
 
@@ -200,8 +207,7 @@ public class TourViewModel {
         setDetailView(selectedTour);
     }
 
-    private void updateDisplayedTourList(TourModel selectedTour)
-    {
+    private void updateDisplayedTourList(TourModel selectedTour) {
         for (int i = 0; i < tours.size(); i++) {
             if (tours.get(i).getName().equals(selectedTour.getName())) {
                 tours.set(i, selectedTour);
