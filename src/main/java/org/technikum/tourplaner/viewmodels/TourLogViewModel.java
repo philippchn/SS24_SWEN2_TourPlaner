@@ -172,6 +172,7 @@ public class TourLogViewModel {
             clearDetailView();
         }
 
+        /*
         System.out.println("\nTour logs list after deletion:");
         tourLogModelList.forEach(log -> {
             System.out.println("Date: " + log.getDate().get());
@@ -180,8 +181,7 @@ public class TourLogViewModel {
             System.out.println("Total Distance: " + log.getTotalDistance().get());
             System.out.println("Total Time: " + log.getTotalTime().get());
             System.out.println("Rating: " + log.getRating().get() + "\n");
-        });
-
+        });*/
 
     }
 
