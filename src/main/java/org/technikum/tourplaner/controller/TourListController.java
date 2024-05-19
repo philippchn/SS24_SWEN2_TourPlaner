@@ -13,6 +13,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.technikum.tourplaner.EViews;
+import org.technikum.tourplaner.MainApplication;
 import org.technikum.tourplaner.models.TourModel;
 import org.technikum.tourplaner.viewmodels.TourViewModel;
 
@@ -187,7 +189,7 @@ public class TourListController {
         TourModel selectedTour = tourListView.getSelectionModel().getSelectedItem();
         if (selectedTour != null) {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/technikum/tourplaner/View/modifyTourPopup.fxml"));
+                FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource(EViews.modifyTourPopup.getFilePath()));
                 Parent root = loader.load();
 
                 ModifyTourPopupController controller = loader.getController();
@@ -203,5 +205,4 @@ public class TourListController {
             }
         }
     }
-
 }
