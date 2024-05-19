@@ -62,7 +62,6 @@ public class TourLogsController {
         tourLogViewModel.initializeLogsTableColumns(logsTable);
     }
 
-
     private void bindProperties() {
         dateTextField.textProperty().bindBidirectional(tourLogViewModel.dateProperty());
         commentTextField.textProperty().bindBidirectional(tourLogViewModel.commentProperty());
@@ -81,5 +80,4 @@ public class TourLogsController {
 
         tourLogViewModel.getSelectedTourLogModelProperty().bind(logsTable.getSelectionModel().selectedItemProperty());
     }
-
 }

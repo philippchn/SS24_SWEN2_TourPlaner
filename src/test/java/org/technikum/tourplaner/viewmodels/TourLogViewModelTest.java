@@ -30,16 +30,15 @@ public class TourLogViewModelTest {
     @Test
     public void testInitialization() {
         TourLogViewModel tourLogViewModel = new TourLogViewModel(tourViewModel);
+
         assertEquals(tourViewModel, tourLogViewModel.getTourViewModel());
         assertEquals(0, tourLogViewModel.getTourLogs().size());
     }
 
-
     @Test
     public void testSelectTourLog() {
-        TourViewModel tourViewModel = new TourViewModel(/* pass necessary parameters */);
+        TourViewModel tourViewModel = new TourViewModel();
         TourLogViewModel tourLogViewModel = new TourLogViewModel(tourViewModel);
-
         TourLogModel tourLogModel = new TourLogModel("testdate", "testcomment", "testdifficulty", "testtotalDistance", "testtotaltTotaltime", "testRating");
         tourLogViewModel.getTourLogs().add(tourLogModel);
 
@@ -58,27 +57,23 @@ public class TourLogViewModelTest {
     public void testAddTourLog() {
         TourLogViewModel tourLogViewModel = new TourLogViewModel(tourViewModel);
         TourLogModel tourLogModel = new TourLogModel("2024-05-20", "Great tour!", "Medium", "10 km", "2 hours", "4");
+
         tourLogViewModel.getTourLogs().add(tourLogModel);
 
-        // Assert that the size of the tour logs list is 1
         assertEquals(1, tourLogViewModel.getTourLogs().size());
     }
 
     @Test
     public void testDeleteTourLog() {
         TourLogViewModel tourLogViewModel = new TourLogViewModel(tourViewModel);
-
         TourLogModel tourLogModelToDelete = new TourLogModel("2024-05-20", "LogtoDelete", "Medium", "10 km", "2 hours", "4");
         TourLogModel anotherTourLogModel = new TourLogModel("2024-05-21", "LogtoKeep", "Easy", "5 km", "1 hour", "5");
 
         tourLogViewModel.getTourLogs().addAll(tourLogModelToDelete, anotherTourLogModel);
-
         tourLogViewModel.setSelectedTourLogModel(tourLogModelToDelete);
         tourLogViewModel.deleteTourLog();
 
         assertFalse(tourLogViewModel.getTourLogs().contains(tourLogModelToDelete));
-
         assertTrue(tourLogViewModel.getTourLogs().contains(anotherTourLogModel));
     }
-
 }
