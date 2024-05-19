@@ -47,7 +47,6 @@ public class ModifyTourLogsPopupController {
         this.selectedTourLog = selectedTourLog;
         this.stage = stage;
         this.tourLogViewModel = tourLogViewModel;
-
     }
 
     private void bindProperties() {
@@ -61,7 +60,6 @@ public class ModifyTourLogsPopupController {
 
     @FXML
     private void saveTourLog() {
-        // Update the selected tour log with modified data
         selectedTourLog.setDate(dateProperty);
         selectedTourLog.setComment(commentProperty);
         selectedTourLog.setDifficulty(difficultyProperty);

@@ -22,22 +22,22 @@
          <tabs>
             <Tab text="Tours">
                <content>
-                  <AnchorPane prefHeight="201.0" prefWidth="219.0" VBox.vgrow="ALWAYS">
+                  <AnchorPane prefHeight="532.0" prefWidth="240.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <ToolBar layoutY="-3.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <ToolBar layoutY="-3.0" prefHeight="35.0" prefWidth="250.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <Button fx:id="deleteButton" mnemonicParsing="false" text="Delete Tour" />
                            <Button fx:id="modifyButton" mnemonicParsing="false" text="Modify Tour" />
                         </ToolBar>
-                        <ListView fx:id="tourListView" prefHeight="201.0" prefWidth="515.0" />
-                        <VBox layoutY="200.0" prefHeight="171.0" prefWidth="515.0" VBox.vgrow="ALWAYS">
+                        <ListView fx:id="tourListView" layoutY="36.0" prefHeight="165.0" prefWidth="250.0" />
+                        <VBox layoutY="200.0" prefHeight="171.0" prefWidth="250.0" VBox.vgrow="ALWAYS">
                            <children>
                               <Accordion prefHeight="271.0" prefWidth="515.0" VBox.vgrow="ALWAYS">
                                  <panes>
-                                    <TitledPane animated="false" prefHeight="253.0" prefWidth="515.0" text="Detail View">
+                                    <TitledPane animated="false" prefHeight="292.0" prefWidth="250.0" text="Detail View">
                                        <content>
-                                          <AnchorPane VBox.vgrow="ALWAYS">
+                                          <AnchorPane prefHeight="285.0" prefWidth="248.0" VBox.vgrow="ALWAYS">
                                              <children>
-                                                <VBox layoutX="5.0" layoutY="3.0" prefHeight="164.0" prefWidth="189.0" AnchorPane.leftAnchor="-5.0" AnchorPane.rightAnchor="64.0" AnchorPane.topAnchor="-7.0">
+                                                <VBox layoutX="15.0" layoutY="13.0" prefHeight="279.0" prefWidth="169.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="64.0" AnchorPane.topAnchor="3.0">
                                                    <children>
                                                       <Text fx:id="detailViewName" strokeType="OUTSIDE" strokeWidth="0.0" text="Name:" />
                                                       <Text fx:id="detailViewDescription" strokeType="OUTSIDE" strokeWidth="0.0" text="Description:" />
@@ -88,11 +88,6 @@
                         </VBox>
                      </children>
                   </AnchorPane>
-               </content>
-            </Tab>
-            <Tab text="...">
-               <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                </content>
             </Tab>
          </tabs>

@@ -12,6 +12,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.technikum.tourplaner.EViews;
+import org.technikum.tourplaner.MainApplication;
 import org.technikum.tourplaner.models.TourLogModel;
 import org.technikum.tourplaner.models.TourModel;
 import org.technikum.tourplaner.viewmodels.TourLogViewModel;
@@ -82,8 +84,7 @@ public class TourLogsController {
         saveButton.setOnAction(event -> addTourLog());
         logsTable.setOnMouseClicked(event -> clickElement());
         deleteButton.setOnAction(event -> deleteTourLog());
-        modifyButton.setOnAction(event -> openModifyTourLogPopup()); // Add action handler for modify button
-
+        modifyButton.setOnAction(event -> openModifyTourLogPopup());
     }
 
     private void setupColumns() {
@@ -144,8 +145,7 @@ public class TourLogsController {
         }
     }
 
-    private TourLogModel getTourLogModelFromGUI()
-    {
+    private TourLogModel getTourLogModelFromGUI() {
         String date = dateTextField.getText();
         String comment = commentTextField.getText();
         String difficulty = difficultyTextField.getText();
@@ -182,8 +182,7 @@ public class TourLogsController {
         return true;
     }
 
-    private void setErrorMessage(TextField missingTextField)
-    {
+    private void setErrorMessage(TextField missingTextField) {
         infoText.setFill(Color.RED);
         infoText.setText(missingTextField.getPromptText() + " must not be empty");
     }
@@ -211,8 +210,7 @@ public class TourLogsController {
         }
     }
 
-    private void clickElement()
-    {
+    private void clickElement() {
         TourLogModel selectedTourLogModel = logsTable.getSelectionModel().getSelectedItem();
         if (selectedTourLogModel == null){
             return;
@@ -230,7 +228,6 @@ public class TourLogsController {
         if (selectedTourLog != null) {
             TourModel selectedTour = tourViewModel.selectedTourModelProperty().get();
             if (selectedTour != null) {
-                //selectedTour.removeTourLog(selectedTourLog); not implemented yet
                 tourLogViewModel.getTourLogModelList().remove(selectedTourLog);
 
                 logsTable.getItems().remove(selectedTourLog);
@@ -243,7 +240,7 @@ public class TourLogsController {
         TourLogModel selectedTourLog = logsTable.getSelectionModel().getSelectedItem();
         if (selectedTourLog != null) {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/technikum/tourplaner/View/modifyTourLogsPopup.fxml"));
+                FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource(EViews.modifyTourLogPopup.getFilePath()));
                 Parent root = loader.load();
 
                 ModifyTourLogsPopupController controller = loader.getController();

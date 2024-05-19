@@ -13,23 +13,23 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<VBox id="root" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="561.0" prefWidth="600.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<VBox id="root" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="561.0" prefWidth="550.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <TabPane prefHeight="255.0" prefWidth="451.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
             <tabs>
                 <Tab text="General">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" VBox.vgrow="ALWAYS"/>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                     </content>
                 </Tab>
                 <Tab text="Route">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" VBox.vgrow="ALWAYS"/>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                     </content>
                 </Tab>
                 <Tab text="Misc">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" VBox.vgrow="ALWAYS"/>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                     </content>
                 </Tab>
             </tabs>
@@ -49,7 +49,7 @@
                                                 <TableColumn fx:id="distanceColumn" prefWidth="100.0" text="Distance" />
                                             </columns>
                                         </TableView>
-                                        <HBox spacing="10.0" alignment="CENTER" prefHeight="50.0" prefWidth="600.0">
+                                        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="600.0" spacing="10.0">
                                             <children>
                                                 <Button fx:id="modifyButton" text="Modify Tour Log" />
                                                 <Button fx:id="deleteButton" text="Delete Tour Log" />
@@ -61,7 +61,7 @@
                                                     <panes>
                                                         <TitledPane animated="false" text="Detail View" VBox.vgrow="ALWAYS">
                                                             <content>
-                                                                <AnchorPane prefHeight="74.0"  VBox.vgrow="ALWAYS">
+                                                                <AnchorPane prefHeight="74.0" VBox.vgrow="ALWAYS">
                                                                     <children>
                                                                         <VBox prefHeight="101.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
                                                                             <children>
@@ -109,12 +109,12 @@
                 </Tab>
                 <Tab text="-">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" VBox.vgrow="ALWAYS"/>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                     </content>
                 </Tab>
                 <Tab text="...">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" VBox.vgrow="ALWAYS"/>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                     </content>
                 </Tab>
             </tabs>

@@ -86,7 +86,7 @@ public class TourListController {
         tourListView.setOnMouseClicked(event -> clickElement());
         deleteButton.setOnAction(event -> deleteTour());
         tourListView.setItems(tourViewModel.getTours());
-        modifyButton.setOnAction(event -> openModifyTourPopup()); // Add action handler for modify button
+        modifyButton.setOnAction(event -> openModifyTourPopup());
 
     }
 

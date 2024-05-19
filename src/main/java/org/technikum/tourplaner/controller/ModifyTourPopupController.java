@@ -54,10 +54,8 @@ public class ModifyTourPopupController {
         transportTypeTextField.textProperty().bindBidirectional(transportTypeProperty);
     }
 
-
     @FXML
     private void saveTour() {
-        // Update the selected tour with modified data
         selectedTour.setName(nameProperty);
         selectedTour.setTourDescription(descriptionProperty);
         selectedTour.setFrom(fromProperty);
@@ -66,7 +64,6 @@ public class ModifyTourPopupController {
 
         tourViewModel.updateTour(selectedTour);
 
-        // Close the pop-up window
         stage.close();
     }
 }
