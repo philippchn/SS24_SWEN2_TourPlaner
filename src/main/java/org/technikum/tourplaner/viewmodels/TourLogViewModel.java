@@ -24,7 +24,9 @@ import org.technikum.tourplaner.models.TourModel;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
+
 
 @Getter
 public class TourLogViewModel {
@@ -165,12 +167,22 @@ public class TourLogViewModel {
 
     public void deleteTourLog() {
         TourLogModel selectedTourLog = selectedTourLogModelProperty.get();
-        TourModel selectedTour = tourViewModel.getSelectedTourModel();
-        if (selectedTourLog != null && selectedTour != null) {
-            selectedTour.getTourLogsMap().values().forEach(list -> list.remove(selectedTourLog));
+        if (selectedTourLog != null) {
             tourLogModelList.remove(selectedTourLog);
             clearDetailView();
         }
+
+        System.out.println("\nTour logs list after deletion:");
+        tourLogModelList.forEach(log -> {
+            System.out.println("Date: " + log.getDate().get());
+            System.out.println("Comment: " + log.getComment().get());
+            System.out.println("Difficulty: " + log.getDifficulty().get());
+            System.out.println("Total Distance: " + log.getTotalDistance().get());
+            System.out.println("Total Time: " + log.getTotalTime().get());
+            System.out.println("Rating: " + log.getRating().get() + "\n");
+        });
+
+
     }
 
     public void openModifyTourLogPopup(TableView<TourLogModel> logsTable) {
