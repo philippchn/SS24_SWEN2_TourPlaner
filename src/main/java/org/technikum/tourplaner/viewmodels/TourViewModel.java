@@ -30,4 +30,19 @@ public class TourViewModel {
     public ObjectProperty<TourModel> selectedTourModelProperty() {
         return selectedTourModel;
     }
+
+    public void deleteTour(TourModel tour) {
+        tours.remove(tour);
+    }
+
+    public void updateTour(TourModel updatedTour) {
+        for (int i = 0; i < tours.size(); i++) {
+            if (tours.get(i).getName().equals(updatedTour.getName())) {
+                tours.set(i, updatedTour);
+                break;
+            }
+        }
+    }
+
+
 }

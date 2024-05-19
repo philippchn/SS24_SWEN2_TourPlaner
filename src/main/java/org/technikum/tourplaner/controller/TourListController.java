@@ -2,13 +2,23 @@ package org.technikum.tourplaner.controller;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import org.technikum.tourplaner.EViews;
+import org.technikum.tourplaner.MainApplication;
 import org.technikum.tourplaner.models.TourModel;
 import org.technikum.tourplaner.viewmodels.TourViewModel;
 
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -49,6 +59,12 @@ public class TourListController {
     private Text detailViewEstimatedTime;
     @FXML
     private Text detailViewRouteInformation;
+    @FXML
+    private Button deleteButton;
+    @FXML
+    private Button modifyButton;
+    @FXML
+    private ImageView mapImageView;
 
     private final SimpleStringProperty nameProperty = new SimpleStringProperty();
     private final SimpleStringProperty descriptionProperty = new SimpleStringProperty();
@@ -68,8 +84,10 @@ public class TourListController {
 
         saveButton.setOnAction(event -> saveTour());
         tourListView.setOnMouseClicked(event -> clickElement());
-
+        deleteButton.setOnAction(event -> deleteTour());
         tourListView.setItems(tourViewModel.getTours());
+        modifyButton.setOnAction(event -> openModifyTourPopup());
+
     }
 
     private void bindProperties() {
@@ -125,8 +143,7 @@ public class TourListController {
         return true;
     }
 
-    private void setErrorMessage(TextField missingTextField)
-    {
+    private void setErrorMessage(TextField missingTextField) {
         statusMessageLabel.setTextFill(Color.RED);
         statusMessageLabel.setText(missingTextField.getPromptText() + " must not be empty");
     }
@@ -158,5 +175,34 @@ public class TourListController {
 //        detailViewDistance.setText("Distance: " + selectedItem.getDistance().get()); // TODO NOT YET IMPLEMENTED
 //        detailViewEstimatedTime.setText("Estimated time: " + selectedItem.getEstimatedTime().get());
 //        detailViewRouteInformation.setText("Route information: " + selectedItem.getRouteInformation().get());
+        mapImageView.setImage(new Image(getClass().getResource("/org/technikum/tourplaner/img/mapPlaceholder.jpg").toExternalForm()));
+    }
+
+    private void deleteTour() {
+        TourModel selectedTour = tourListView.getSelectionModel().getSelectedItem();
+        if (selectedTour != null) {
+            tourViewModel.deleteTour(selectedTour);
+        }
+    }
+
+    private void openModifyTourPopup() {
+        TourModel selectedTour = tourListView.getSelectionModel().getSelectedItem();
+        if (selectedTour != null) {
+            try {
+                FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource(EViews.modifyTourPopup.getFilePath()));
+                Parent root = loader.load();
+
+                ModifyTourPopupController controller = loader.getController();
+                Stage stage = new Stage();
+                stage.initModality(Modality.APPLICATION_MODAL);
+                controller.initData(selectedTour, stage, tourViewModel);
+
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.showAndWait();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

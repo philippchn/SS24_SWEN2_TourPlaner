@@ -6,7 +6,9 @@ public enum EViews {
     menuBar("menuBar.fxml"),
     tourSubView("tourSubView.fxml"),
     tourList("tourList.fxml"),
-    tourLogs("tourLogs.fxml");
+    tourLogs("tourLogs.fxml"),
+    modifyTourPopup("modifyTourPopup.fxml"),
+    modifyTourLogPopup("modifyTourLogsPopup.fxml");
 
     private final String fileName;
 
