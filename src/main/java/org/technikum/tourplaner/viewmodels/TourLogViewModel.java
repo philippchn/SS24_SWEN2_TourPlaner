@@ -24,7 +24,6 @@ import org.technikum.tourplaner.models.TourModel;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -137,15 +136,24 @@ public class TourLogViewModel {
     }
 
     public void addTourLog() {
-        if (isValidInput()) {
-            TourLogModel tourLogModel = createTourLogModel();
-            TourModel selectedTour = tourViewModel.getSelectedTourModel();
-            selectedTour.addTourLog(selectedTour.getName().get(), tourLogModel);
-            tourLogModelList.add(tourLogModel);
-            clearTextFields();
-        } else {
-            showErrorMessage("Please fill out all fields.");
+        if (selectedTourLogModelProperty.get() == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Please create/select a tour first");
+            alert.showAndWait();
+            return;
         }
+
+        if (!isValidInput()) {
+            return;
+        }
+
+        TourLogModel tourLogModel = createTourLogModel();
+        TourModel selectedTour = tourViewModel.getSelectedTourModel();
+        selectedTour.addTourLog(selectedTour.getName().get(), tourLogModel);
+        tourLogModelList.add(tourLogModel);
+        clearTextFields();
     }
 
     public void selectTourLog() {
@@ -182,7 +190,6 @@ public class TourLogViewModel {
             System.out.println("Total Time: " + log.getTotalTime().get());
             System.out.println("Rating: " + log.getRating().get() + "\n");
         });*/
-
     }
 
     public void openModifyTourLogPopup(TableView<TourLogModel> logsTable) {
@@ -208,12 +215,26 @@ public class TourLogViewModel {
     }
 
     private boolean isValidInput() {
-        return !(dateProperty.get() == null || dateProperty.get().isBlank() ||
-                commentProperty.get() == null || commentProperty.get().isBlank() ||
-                difficultyProperty.get() == null || difficultyProperty.get().isBlank() ||
-                totalDistanceProperty.get() == null || totalDistanceProperty.get().isBlank() ||
-                totalTimeProperty.get() == null || totalTimeProperty.get().isBlank() ||
-                ratingProperty.get() == null || ratingProperty.get().isBlank());
+        if (dateProperty.get() == null || dateProperty.get().isBlank()) {
+            showErrorMessage("Date");
+            return false;
+        } else if (commentProperty.get() == null || commentProperty.get().isBlank()) {
+            showErrorMessage("Comment");
+            return false;
+        } else if(difficultyProperty.get() == null || difficultyProperty.get().isBlank()) {
+            showErrorMessage("Difficulty");
+            return false;
+        } else if(totalDistanceProperty.get() == null || totalDistanceProperty.get().isBlank()) {
+            showErrorMessage("Total distance");
+            return false;
+        } else if(totalTimeProperty.get() == null || totalTimeProperty.get().isBlank()) {
+            showErrorMessage("Total time");
+            return false;
+        } else if(ratingProperty.get() == null || ratingProperty.get().isBlank()) {
+            showErrorMessage("Rating");
+            return false;
+        }
+        return true;
     }
 
     private TourLogModel createTourLogModel() {
@@ -221,11 +242,11 @@ public class TourLogViewModel {
                 totalDistanceProperty.get(), totalTimeProperty.get(), ratingProperty.get());
     }
 
-    private void showErrorMessage(String message) {
+    private void showErrorMessage(String missingTextField) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(null);
-        alert.setContentText(message);
+        alert.setContentText(missingTextField + " must not be empty");
         alert.showAndWait();
     }
 

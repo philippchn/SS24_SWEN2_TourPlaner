@@ -70,7 +70,6 @@ public class TourLogsController {
         totalTimeTextField.textProperty().bindBidirectional(tourLogViewModel.totalTimeProperty());
         ratingTextField.textProperty().bindBidirectional(tourLogViewModel.ratingProperty());
 
-        // Remove bidirectional binding for detail view properties
         detailViewDate.textProperty().bind(tourLogViewModel.detailViewDateProperty());
         detailViewComment.textProperty().bind(tourLogViewModel.detailViewCommentProperty());
         detailViewDifficulty.textProperty().bind(tourLogViewModel.detailViewDifficultyProperty());

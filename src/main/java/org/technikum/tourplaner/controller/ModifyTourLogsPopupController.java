@@ -10,7 +10,6 @@ import org.technikum.tourplaner.models.TourLogModel;
 import org.technikum.tourplaner.viewmodels.TourLogViewModel;
 
 public class ModifyTourLogsPopupController {
-
     @FXML
     private TextField dateTextField;
     @FXML

@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -120,16 +121,16 @@ public class TourViewModel {
 
     private boolean isValidInput() {
         if (nameProperty.get() == null || nameProperty.get().isBlank()) {
-            setErrorMessage("Name");
+            showErrorMessage("Name");
             return false;
         } else if (fromProperty.get() == null || fromProperty.get().isBlank()) {
-            setErrorMessage("From");
+            showErrorMessage("From");
             return false;
         } else if (toProperty.get() == null || toProperty.get().isBlank()) {
-            setErrorMessage("To");
+            showErrorMessage("To");
             return false;
         } else if (transportTypeProperty.get() == null || transportTypeProperty.get().isBlank()) {
-            setErrorMessage("Transport type");
+            showErrorMessage("Transport type");
             return false;
         }
 
@@ -145,8 +146,12 @@ public class TourViewModel {
         return true;
     }
 
-    private void setErrorMessage(String missingTextField) {
-        statusMessageProperty.set(missingTextField + " must not be empty");
+    private void showErrorMessage(String missingTextField) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(missingTextField + " must not be empty");
+        alert.showAndWait();
     }
 
     private void clearInputFields() {

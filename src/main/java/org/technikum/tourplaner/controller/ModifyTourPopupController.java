@@ -10,7 +10,6 @@ import org.technikum.tourplaner.models.TourModel;
 import org.technikum.tourplaner.viewmodels.TourViewModel;
 
 public class ModifyTourPopupController {
-
     @FXML
     private TextField nameTextField;
     @FXML

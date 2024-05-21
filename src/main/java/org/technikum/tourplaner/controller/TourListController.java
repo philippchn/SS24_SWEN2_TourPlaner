@@ -75,7 +75,6 @@ public class TourListController {
         fromTextField.textProperty().bindBidirectional(tourViewModel.fromProperty());
         toTextField.textProperty().bindBidirectional(tourViewModel.toProperty());
         transportTypeTextField.textProperty().bindBidirectional(tourViewModel.transportTypeProperty());
-        statusMessageLabel.textProperty().bindBidirectional(tourViewModel.statusMessageProperty());
         detailViewName.textProperty().bindBidirectional(tourViewModel.detailViewNameProperty());
         detailViewDescription.textProperty().bindBidirectional(tourViewModel.detailViewDescriptionProperty());
         detailViewFrom.textProperty().bindBidirectional(tourViewModel.detailViewFromProperty());
