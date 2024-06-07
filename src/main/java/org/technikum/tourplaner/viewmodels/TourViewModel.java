@@ -16,12 +16,15 @@ import org.technikum.tourplaner.MainApplication;
 import org.technikum.tourplaner.controller.ModifyTourPopupController;
 import org.technikum.tourplaner.models.TourLogModel;
 import org.technikum.tourplaner.models.TourModel;
+import org.technikum.tourplaner.repositories.TourRepository;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TourViewModel {
+    private final TourRepository tourRepository;
+
     @Getter
     private ObservableList<TourModel> tours = FXCollections.observableArrayList();
     private final ObjectProperty<TourModel> selectedTourModelProperty = new SimpleObjectProperty<>();
@@ -104,6 +107,10 @@ public class TourViewModel {
         return selectedTourLogModelProperty.get();
     }
 
+    public TourViewModel(TourRepository tourRepository) {
+        this.tourRepository = tourRepository;
+    }
+
     public void addTour() {
         if (isValidInput()) {
             TourModel newTour = new TourModel(
@@ -115,6 +122,7 @@ public class TourViewModel {
             );
 
             tours.add(newTour);
+            tourRepository.save(newTour);
             clearInputFields();
         }
     }
@@ -163,7 +171,8 @@ public class TourViewModel {
         statusMessageProperty.set("Create new tour:");
     }
 
-    public void setCurrentlyClickedTour() {
+    public void setCurrentlyClickedTour(TourModel tourModel) {
+        selectedTourModelProperty.set(tourModel);
         if (selectedTourModelProperty.get() == null) {
             return;
         }
@@ -175,11 +184,11 @@ public class TourViewModel {
         if (selectedItem == null) {
             return;
         }
-        detailViewNameProperty.set("Name: " + selectedItem.getName().get());
-        detailViewDescriptionProperty.set("Description: " + selectedItem.getTourDescription().get());
-        detailViewFromProperty.set("From: " + selectedItem.getFrom().get());
-        detailViewToProperty.set("To: " + selectedItem.getTo().get());
-        detailViewTransportTypeProperty.set("Transport type: " + selectedItem.getTransportType().get());
+        detailViewNameProperty.set("Name: " + selectedItem.getName());
+        detailViewDescriptionProperty.set("Description: " + selectedItem.getTourDescription());
+        detailViewFromProperty.set("From: " + selectedItem.getFrom());
+        detailViewToProperty.set("To: " + selectedItem.getTo());
+        detailViewTransportTypeProperty.set("Transport type: " + selectedItem.getTransportType());
         detailViewMapImageProperty.set(new Image(getClass().getResource("/org/technikum/tourplaner/img/mapPlaceholder.jpg").toExternalForm()));
     }
 

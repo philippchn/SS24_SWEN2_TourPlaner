@@ -20,6 +20,7 @@ import org.technikum.tourplaner.MainApplication;
 import org.technikum.tourplaner.controller.ModifyTourLogsPopupController;
 import org.technikum.tourplaner.models.TourLogModel;
 import org.technikum.tourplaner.models.TourModel;
+import org.technikum.tourplaner.repositories.TourLogRepository;
 
 import java.io.IOException;
 import java.util.List;
@@ -29,6 +30,8 @@ import java.util.stream.Collectors;
 
 @Getter
 public class TourLogViewModel {
+    private final TourLogRepository tourLogRepository;
+
     private final TourViewModel tourViewModel;
     private final ObservableList<TourLogModel> tourLogModelList = FXCollections.observableArrayList();
     private final ObjectProperty<TourModel> selectedTourModelProperty = new SimpleObjectProperty<>();
@@ -48,7 +51,8 @@ public class TourLogViewModel {
     private final SimpleStringProperty detailViewTotalTimeProperty = new SimpleStringProperty("Total time: ");
     private final SimpleStringProperty detailViewRatingProperty = new SimpleStringProperty("Rating: ");
 
-    public TourLogViewModel(TourViewModel tourViewModel) {
+    public TourLogViewModel(TourLogRepository tourLogRepository, TourViewModel tourViewModel) {
+        this.tourLogRepository = tourLogRepository;
         this.tourViewModel = tourViewModel;
         tourViewModel.selectedTourModelProperty().addListener((observable, oldValue, newValue) -> loadTourLogs(newValue));
     }
@@ -105,16 +109,15 @@ public class TourLogViewModel {
         selectedTourLogModelProperty.set(tourLogModel);
     }
 
-
     public void initializeLogsTableColumns(TableView<TourLogModel> logsTable) {
         TableColumn<TourLogModel, String> dateColumn = new TableColumn<>("Date");
-        dateColumn.setCellValueFactory(cellData -> cellData.getValue().getDate());
+        dateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDate()));
 
         TableColumn<TourLogModel, String> durationColumn = new TableColumn<>("Duration");
-        durationColumn.setCellValueFactory(cellData -> cellData.getValue().getTotalTime());
+        durationColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTotalTime()));
 
         TableColumn<TourLogModel, String> distanceColumn = new TableColumn<>("Distance");
-        distanceColumn.setCellValueFactory(cellData -> cellData.getValue().getTotalDistance());
+        distanceColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTotalDistance()));
 
         logsTable.getColumns().setAll(dateColumn, durationColumn, distanceColumn);
     }
@@ -136,7 +139,19 @@ public class TourLogViewModel {
     }
 
     public void addTourLog() {
-        if (selectedTourLogModelProperty.get() == null) {
+        TourLogModel tourLogModel = new TourLogModel(
+                dateProperty.get(),
+                commentProperty.get(),
+                difficultyProperty.get(),
+                totalDistanceProperty.get(),
+                totalTimeProperty.get(),
+                ratingProperty.get(),
+                tourViewModel.getSelectedTourModel().getId()
+        );
+
+        TourModel selectedTour = tourViewModel.getSelectedTourModel();
+
+        if (selectedTour == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);
@@ -149,10 +164,9 @@ public class TourLogViewModel {
             return;
         }
 
-        TourLogModel tourLogModel = createTourLogModel();
-        TourModel selectedTour = tourViewModel.getSelectedTourModel();
-        selectedTour.addTourLog(selectedTour.getName().get(), tourLogModel);
+        selectedTour.addTourLog(selectedTour.getName(), tourLogModel);
         tourLogModelList.add(tourLogModel);
+        tourLogRepository.save(tourLogModel);
         clearTextFields();
     }
 
@@ -179,17 +193,6 @@ public class TourLogViewModel {
             tourLogModelList.remove(selectedTourLog);
             clearDetailView();
         }
-
-        /*
-        System.out.println("\nTour logs list after deletion:");
-        tourLogModelList.forEach(log -> {
-            System.out.println("Date: " + log.getDate().get());
-            System.out.println("Comment: " + log.getComment().get());
-            System.out.println("Difficulty: " + log.getDifficulty().get());
-            System.out.println("Total Distance: " + log.getTotalDistance().get());
-            System.out.println("Total Time: " + log.getTotalTime().get());
-            System.out.println("Rating: " + log.getRating().get() + "\n");
-        });*/
     }
 
     public void openModifyTourLogPopup(TableView<TourLogModel> logsTable) {
@@ -237,11 +240,6 @@ public class TourLogViewModel {
         return true;
     }
 
-    private TourLogModel createTourLogModel() {
-        return new TourLogModel(dateProperty.get(), commentProperty.get(), difficultyProperty.get(),
-                totalDistanceProperty.get(), totalTimeProperty.get(), ratingProperty.get());
-    }
-
     private void showErrorMessage(String missingTextField) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -251,12 +249,12 @@ public class TourLogViewModel {
     }
 
     private void updateDetailView(TourLogModel selectedTourLogModel) {
-        detailViewDateProperty.set("Date: " + selectedTourLogModel.getDate().get());
-        detailViewCommentProperty.set("Comment: " + selectedTourLogModel.getComment().get());
-        detailViewDifficultyProperty.set("Difficulty: " + selectedTourLogModel.getDifficulty().get());
-        detailViewTotalDistanceProperty.set("Total distance: " + selectedTourLogModel.getTotalDistance().get());
-        detailViewTotalTimeProperty.set("Total time: " + selectedTourLogModel.getTotalTime().get());
-        detailViewRatingProperty.set("Rating: " + selectedTourLogModel.getRating().get());
+        detailViewDateProperty.set("Date: " + selectedTourLogModel.getDate());
+        detailViewCommentProperty.set("Comment: " + selectedTourLogModel.getComment());
+        detailViewDifficultyProperty.set("Difficulty: " + selectedTourLogModel.getDifficulty());
+        detailViewTotalDistanceProperty.set("Total distance: " + selectedTourLogModel.getTotalDistance());
+        detailViewTotalTimeProperty.set("Total time: " + selectedTourLogModel.getTotalTime());
+        detailViewRatingProperty.set("Rating: " + selectedTourLogModel.getRating());
     }
 
     private void clearDetailView() {

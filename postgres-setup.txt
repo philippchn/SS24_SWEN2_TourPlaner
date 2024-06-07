@@ -1,0 +1,7 @@
+docker run -d --name postgresdb -e POSTGRES_USER=pguser -e POSTGRES_PASSWORD=pgpassword -p 5432:5432 -v pgdata:/var/lib/postgresql/data postgres
+
+docker exec -it postgresdb bash
+
+psql -U pguser
+
+CREATE DATABASE db_tourplanner;
