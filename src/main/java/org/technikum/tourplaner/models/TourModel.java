@@ -49,12 +49,15 @@ public class TourModel {
 
     }
 
-    public TourModel(String name, String tourDescription, String from, String to, String transportType) {
+    public TourModel(String name, String tourDescription, String from, String to, String transportType, String distance, String estimatedTime, String routeInformation) {
         this.name = name;
         this.tourDescription = tourDescription;
         this.from = from;
         this.to = to;
         this.transportType = transportType;
+        this.distance = distance;
+        this.estimatedTime = estimatedTime;
+        this.routeInformation = routeInformation;
     }
 
     @Override

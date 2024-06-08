@@ -5,6 +5,9 @@ module org.technikum.tourplaner {
     requires java.sql;
     requires jakarta.persistence;
     requires org.hibernate.orm.core;
+    requires java.net.http;
+    requires com.fasterxml.jackson.databind;
+    requires java.desktop;
 
     opens org.technikum.tourplaner to javafx.fxml;
     exports org.technikum.tourplaner;

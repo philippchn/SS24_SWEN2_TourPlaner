@@ -16,6 +16,7 @@ import org.technikum.tourplaner.MainApplication;
 import org.technikum.tourplaner.controller.ModifyTourPopupController;
 import org.technikum.tourplaner.models.TourLogModel;
 import org.technikum.tourplaner.models.TourModel;
+import org.technikum.tourplaner.openrouteservice.OpenRouteServiceClient;
 import org.technikum.tourplaner.repositories.TourRepository;
 
 import java.io.IOException;
@@ -25,6 +26,7 @@ import java.util.regex.Pattern;
 
 public class TourViewModel {
     private final TourRepository tourRepository;
+    private final OpenRouteServiceClient openRouteServiceClient;
 
     @Getter
     private ObservableList<TourModel> tours = FXCollections.observableArrayList();
@@ -108,8 +110,9 @@ public class TourViewModel {
         return selectedTourLogModelProperty.get();
     }
 
-    public TourViewModel(TourRepository tourRepository) {
+    public TourViewModel(TourRepository tourRepository, OpenRouteServiceClient openRouteServiceClient) {
         this.tourRepository = tourRepository;
+        this.openRouteServiceClient = openRouteServiceClient;
         loadTours();
     }
 
@@ -121,19 +124,27 @@ public class TourViewModel {
     }
 
     public void addTour() {
-        if (isValidInput()) {
-            TourModel newTour = new TourModel(
-                    nameProperty.get().trim(),
-                    descriptionProperty.get().trim(),
-                    fromProperty.get().trim(),
-                    toProperty.get().trim(),
-                    transportTypeProperty.get().trim()
-            );
+//        if (!isValidInput()){ // TODO MUSS ANGEPASST WERDEN
+//            return;
+//        }
 
-            tours.add(newTour);
-            tourRepository.save(newTour);
-            clearInputFields();
-        }
+        String routeInformation = openRouteServiceClient.getTourInformation(fromProperty.get(), toProperty.get(), "driving-car"); // TODO ENUM FOR TRANSPORT TYPES AND CHANGE GUI SO ONLY THOSE CAN BE SELECTED
+        // TODO Distance und duration aus routeInformation rauslesen
+
+        TourModel newTour = new TourModel(
+                nameProperty.get().trim(),
+                descriptionProperty.get().trim(),
+                fromProperty.get().trim(),
+                toProperty.get().trim(),
+                transportTypeProperty.get().trim(),
+                "",
+                "",
+                "" // TODO routeInformation ist zu lang. Länge muss in DB angepasst werden.
+        );
+
+        tours.add(newTour);
+        tourRepository.save(newTour);
+        clearInputFields();
     }
 
     private boolean isValidInput() {
