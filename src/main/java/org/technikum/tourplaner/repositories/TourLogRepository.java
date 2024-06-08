@@ -1,10 +1,9 @@
 package org.technikum.tourplaner.repositories;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Persistence;
+import jakarta.persistence.*;
 import org.technikum.tourplaner.models.TourLogModel;
+
+import java.util.List;
 
 public class TourLogRepository {
     private final EntityManagerFactory entityManagerFactory;
@@ -54,9 +53,11 @@ public class TourLogRepository {
         }
     }
 
-    public TourLogModel getUpdatedTourLog(Long id) {
+    public List<TourLogModel> getTourLogsByTourId(String tourId) {
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
-            return entityManager.find(TourLogModel.class, id);
+            Query query = entityManager.createQuery("SELECT t FROM TourLogModel t WHERE t.tourId = :tourId");
+            query.setParameter("tourId", tourId);
+            return query.getResultList();
         }
     }
 

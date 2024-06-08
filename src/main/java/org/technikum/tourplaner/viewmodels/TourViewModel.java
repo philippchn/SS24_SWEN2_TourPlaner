@@ -19,6 +19,7 @@ import org.technikum.tourplaner.models.TourModel;
 import org.technikum.tourplaner.repositories.TourRepository;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -113,8 +114,12 @@ public class TourViewModel {
     }
 
     private void loadTours() {
-        //TODO
+        tours.clear(); // Clear existing tours
+
+        List<TourModel> tourList = tourRepository.getAllTours();
+        tours.addAll(tourList);
     }
+
 
     public void addTour() {
         if (isValidInput()) {
