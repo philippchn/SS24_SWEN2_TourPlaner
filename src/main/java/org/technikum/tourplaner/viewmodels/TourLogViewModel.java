@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-
 @Getter
 public class TourLogViewModel {
     private final TourLogRepository tourLogRepository;
@@ -177,21 +176,24 @@ public class TourLogViewModel {
         updateDetailView(selectedTourLogModelProperty.get());
     }
 
-    public void updateTourLog(TourLogModel updatedTourLog) {
-        for (int i = 0; i < tourLogModelList.size(); i++) {
-            TourLogModel tourLog = tourLogModelList.get(i);
-            if (tourLog.getComment().equals(updatedTourLog.getComment())) { // used comment here for some unique feature but we will use id when we implement the db
-                tourLogModelList.set(i, updatedTourLog);
-                break;
-            }
-        }
-    }
-
     public void deleteTourLog() {
         TourLogModel selectedTourLog = selectedTourLogModelProperty.get();
         if (selectedTourLog != null) {
+            tourLogRepository.deleteById(selectedTourLog.getId());
             tourLogModelList.remove(selectedTourLog);
             clearDetailView();
+        } else {
+            showAlert("No tour log selected", "Please select a tour log to delete.");
+        }
+    }
+
+    public void updateTourLog(TourLogModel updatedTourLog) {
+        for (int i = 0; i < tourLogModelList.size(); i++) {
+            TourLogModel tourLog = tourLogModelList.get(i);
+            if (tourLog.getId().equals(updatedTourLog.getId())) {
+                tourLogModelList.set(i, updatedTourLog);
+                break;
+            }
         }
     }
 
@@ -205,15 +207,22 @@ public class TourLogViewModel {
                 ModifyTourLogsPopupController controller = loader.getController();
                 Stage stage = new Stage();
                 stage.initModality(Modality.APPLICATION_MODAL);
+
                 controller.initData(selectedTourLog, stage, this);
 
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
                 stage.showAndWait();
+
+                tourLogRepository.updateById(selectedTourLog.getId(), selectedTourLog);
+
                 logsTable.refresh();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        } else {
+            showAlert("No tour log selected", "Please select a tour log to modify.");
         }
     }
 
@@ -245,6 +254,14 @@ public class TourLogViewModel {
         alert.setTitle("Error");
         alert.setHeaderText(null);
         alert.setContentText(missingTextField + " must not be empty");
+        alert.showAndWait();
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
         alert.showAndWait();
     }
 

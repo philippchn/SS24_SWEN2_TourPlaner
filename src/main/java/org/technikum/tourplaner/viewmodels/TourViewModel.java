@@ -109,6 +109,11 @@ public class TourViewModel {
 
     public TourViewModel(TourRepository tourRepository) {
         this.tourRepository = tourRepository;
+        loadTours();
+    }
+
+    private void loadTours() {
+        //TODO
     }
 
     public void addTour() {
@@ -176,7 +181,6 @@ public class TourViewModel {
         if (selectedTourModelProperty.get() == null) {
             return;
         }
-        System.out.println("Selected: " + selectedTourModelProperty.get() + " from list");
         setDetailView(selectedTourModelProperty.get());
     }
 
@@ -193,8 +197,10 @@ public class TourViewModel {
     }
 
     public void deleteTour() {
-        if (selectedTourModelProperty.get() != null) {
-            tours.remove(selectedTourModelProperty.get());
+        TourModel selectedTour = selectedTourModelProperty.get();
+        if (selectedTour != null) {
+            tourRepository.deleteById(selectedTour.getId());
+            tours.remove(selectedTour);
         }
     }
 
@@ -213,17 +219,21 @@ public class TourViewModel {
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
                 stage.showAndWait();
+
+                // After modifying, update the tour in the repository
+                tourRepository.updateById(selectedTour.getId(), selectedTour);
+
+                updateDisplayedTourList(selectedTour);
+                setDetailView(selectedTour);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        updateDisplayedTourList(selectedTour);
-        setDetailView(selectedTour);
     }
 
     private void updateDisplayedTourList(TourModel selectedTour) {
         for (int i = 0; i < tours.size(); i++) {
-            if (tours.get(i).getName().equals(selectedTour.getName())) {
+            if (tours.get(i).getId().equals(selectedTour.getId())) {
                 tours.set(i, selectedTour);
                 break;
             }

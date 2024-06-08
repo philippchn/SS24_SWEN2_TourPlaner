@@ -46,6 +46,13 @@ public class ModifyTourLogsPopupController {
         this.selectedTourLog = selectedTourLog;
         this.stage = stage;
         this.tourLogViewModel = tourLogViewModel;
+
+        dateProperty.set(selectedTourLog.getDate());
+        commentProperty.set(selectedTourLog.getComment());
+        difficultyProperty.set(selectedTourLog.getDifficulty());
+        totalDistanceProperty.set(selectedTourLog.getTotalDistance());
+        totalTimeProperty.set(selectedTourLog.getTotalTime());
+        ratingProperty.set(selectedTourLog.getRating());
     }
 
     private void bindProperties() {
