@@ -33,7 +33,6 @@ public class TourRepository {
             transaction.begin();
             TourModel existingTour = entityManager.find(TourModel.class, id);
             if (existingTour != null) {
-                // Update fields
                 existingTour.setName(updatedTour.getName());
                 existingTour.setTourDescription(updatedTour.getTourDescription());
                 existingTour.setFrom(updatedTour.getFrom());
@@ -42,7 +41,7 @@ public class TourRepository {
                 existingTour.setDistance(updatedTour.getDistance());
                 existingTour.setEstimatedTime(updatedTour.getEstimatedTime());
                 existingTour.setRouteInformation(updatedTour.getRouteInformation());
-                existingTour.setTourLogsMap(updatedTour.getTourLogsMap()); // Transient but useful
+                existingTour.setTourLogsMap(updatedTour.getTourLogsMap());
 
                 entityManager.merge(existingTour);
             }
@@ -72,5 +71,4 @@ public class TourRepository {
             return entityManager.createQuery(criteriaQuery).getResultList();
         }
     }
-
 }

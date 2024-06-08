@@ -114,12 +114,11 @@ public class TourViewModel {
     }
 
     private void loadTours() {
-        tours.clear(); // Clear existing tours
+        tours.clear();
 
         List<TourModel> tourList = tourRepository.getAllTours();
         tours.addAll(tourList);
     }
-
 
     public void addTour() {
         if (isValidInput()) {
@@ -225,7 +224,6 @@ public class TourViewModel {
                 stage.setScene(scene);
                 stage.showAndWait();
 
-                // After modifying, update the tour in the repository
                 tourRepository.updateById(selectedTour.getId(), selectedTour);
 
                 updateDisplayedTourList(selectedTour);

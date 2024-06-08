@@ -60,5 +60,4 @@ public class TourLogRepository {
             return query.getResultList();
         }
     }
-
 }
