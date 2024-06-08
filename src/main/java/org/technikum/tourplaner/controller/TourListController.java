@@ -62,11 +62,11 @@ public class TourListController {
     private void initialize() {
         bindProperties();
 
-        saveButton.setOnAction(event -> saveTour());
-        tourListView.setOnMouseClicked(event -> tableRowClicked());
-        deleteButton.setOnAction(event -> deleteTour());
+        saveButton.setOnAction(event -> tourViewModel.addTour());
+        tourListView.setOnMouseClicked(event -> tourViewModel.setCurrentlyClickedTour(tourListView.getSelectionModel().selectedItemProperty().get()));
+        deleteButton.setOnAction(event ->tourViewModel.deleteTour());
         tourListView.setItems(tourViewModel.getTours());
-        modifyButton.setOnAction(event -> openModifyTourPopup());
+        modifyButton.setOnAction(event -> tourViewModel.updateTour());
     }
 
     private void bindProperties() {
@@ -81,23 +81,5 @@ public class TourListController {
         detailViewTo.textProperty().bindBidirectional(tourViewModel.detailViewToProperty());
         detailViewTransportType.textProperty().bindBidirectional(tourViewModel.detailViewTransportTypeProperty());
         detailViewImage.imageProperty().bindBidirectional(tourViewModel.detailViewMapImageProperty());
-
-        tourViewModel.selectedTourModelProperty().bind(tourListView.getSelectionModel().selectedItemProperty());
-    }
-
-    private void saveTour() {
-        tourViewModel.addTour();
-    }
-
-    private void tableRowClicked() {
-        tourViewModel.setCurrentlyClickedTour();
-    }
-
-    private void deleteTour() {
-        tourViewModel.deleteTour();
-    }
-
-    private void openModifyTourPopup() {
-        tourViewModel.updateTour();
     }
 }

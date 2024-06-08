@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import org.technikum.tourplaner.models.TourLogModel;
+import org.technikum.tourplaner.repositories.TourLogRepository;
 import org.technikum.tourplaner.viewmodels.TourLogViewModel;
 import org.technikum.tourplaner.viewmodels.TourViewModel;
 
@@ -45,8 +46,8 @@ public class TourLogsController {
 
     private final TourLogViewModel tourLogViewModel;
 
-    public TourLogsController(TourViewModel tourViewModel) {
-        this.tourLogViewModel = new TourLogViewModel(tourViewModel);
+    public TourLogsController(TourViewModel tourViewModel, TourLogRepository tourLogRepository) {
+        this.tourLogViewModel = new TourLogViewModel(tourLogRepository, tourViewModel);
     }
 
     @FXML

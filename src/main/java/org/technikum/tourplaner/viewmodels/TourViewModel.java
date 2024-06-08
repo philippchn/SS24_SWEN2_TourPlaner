@@ -16,12 +16,16 @@ import org.technikum.tourplaner.MainApplication;
 import org.technikum.tourplaner.controller.ModifyTourPopupController;
 import org.technikum.tourplaner.models.TourLogModel;
 import org.technikum.tourplaner.models.TourModel;
+import org.technikum.tourplaner.repositories.TourRepository;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TourViewModel {
+    private final TourRepository tourRepository;
+
     @Getter
     private ObservableList<TourModel> tours = FXCollections.observableArrayList();
     private final ObjectProperty<TourModel> selectedTourModelProperty = new SimpleObjectProperty<>();
@@ -104,6 +108,18 @@ public class TourViewModel {
         return selectedTourLogModelProperty.get();
     }
 
+    public TourViewModel(TourRepository tourRepository) {
+        this.tourRepository = tourRepository;
+        loadTours();
+    }
+
+    private void loadTours() {
+        tours.clear();
+
+        List<TourModel> tourList = tourRepository.getAllTours();
+        tours.addAll(tourList);
+    }
+
     public void addTour() {
         if (isValidInput()) {
             TourModel newTour = new TourModel(
@@ -115,6 +131,7 @@ public class TourViewModel {
             );
 
             tours.add(newTour);
+            tourRepository.save(newTour);
             clearInputFields();
         }
     }
@@ -163,11 +180,11 @@ public class TourViewModel {
         statusMessageProperty.set("Create new tour:");
     }
 
-    public void setCurrentlyClickedTour() {
+    public void setCurrentlyClickedTour(TourModel tourModel) {
+        selectedTourModelProperty.set(tourModel);
         if (selectedTourModelProperty.get() == null) {
             return;
         }
-        System.out.println("Selected: " + selectedTourModelProperty.get() + " from list");
         setDetailView(selectedTourModelProperty.get());
     }
 
@@ -175,17 +192,19 @@ public class TourViewModel {
         if (selectedItem == null) {
             return;
         }
-        detailViewNameProperty.set("Name: " + selectedItem.getName().get());
-        detailViewDescriptionProperty.set("Description: " + selectedItem.getTourDescription().get());
-        detailViewFromProperty.set("From: " + selectedItem.getFrom().get());
-        detailViewToProperty.set("To: " + selectedItem.getTo().get());
-        detailViewTransportTypeProperty.set("Transport type: " + selectedItem.getTransportType().get());
+        detailViewNameProperty.set("Name: " + selectedItem.getName());
+        detailViewDescriptionProperty.set("Description: " + selectedItem.getTourDescription());
+        detailViewFromProperty.set("From: " + selectedItem.getFrom());
+        detailViewToProperty.set("To: " + selectedItem.getTo());
+        detailViewTransportTypeProperty.set("Transport type: " + selectedItem.getTransportType());
         detailViewMapImageProperty.set(new Image(getClass().getResource("/org/technikum/tourplaner/img/mapPlaceholder.jpg").toExternalForm()));
     }
 
     public void deleteTour() {
-        if (selectedTourModelProperty.get() != null) {
-            tours.remove(selectedTourModelProperty.get());
+        TourModel selectedTour = selectedTourModelProperty.get();
+        if (selectedTour != null) {
+            tourRepository.deleteById(selectedTour.getId());
+            tours.remove(selectedTour);
         }
     }
 
@@ -204,17 +223,20 @@ public class TourViewModel {
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
                 stage.showAndWait();
+
+                tourRepository.updateById(selectedTour.getId(), selectedTour);
+
+                updateDisplayedTourList(selectedTour);
+                setDetailView(selectedTour);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        updateDisplayedTourList(selectedTour);
-        setDetailView(selectedTour);
     }
 
     private void updateDisplayedTourList(TourModel selectedTour) {
         for (int i = 0; i < tours.size(); i++) {
-            if (tours.get(i).getName().equals(selectedTour.getName())) {
+            if (tours.get(i).getId().equals(selectedTour.getId())) {
                 tours.set(i, selectedTour);
                 break;
             }

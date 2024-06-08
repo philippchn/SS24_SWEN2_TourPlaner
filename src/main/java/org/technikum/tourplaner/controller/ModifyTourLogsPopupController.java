@@ -46,6 +46,13 @@ public class ModifyTourLogsPopupController {
         this.selectedTourLog = selectedTourLog;
         this.stage = stage;
         this.tourLogViewModel = tourLogViewModel;
+
+        dateProperty.set(selectedTourLog.getDate());
+        commentProperty.set(selectedTourLog.getComment());
+        difficultyProperty.set(selectedTourLog.getDifficulty());
+        totalDistanceProperty.set(selectedTourLog.getTotalDistance());
+        totalTimeProperty.set(selectedTourLog.getTotalTime());
+        ratingProperty.set(selectedTourLog.getRating());
     }
 
     private void bindProperties() {
@@ -59,12 +66,12 @@ public class ModifyTourLogsPopupController {
 
     @FXML
     private void saveTourLog() {
-        selectedTourLog.setDate(dateProperty);
-        selectedTourLog.setComment(commentProperty);
-        selectedTourLog.setDifficulty(difficultyProperty);
-        selectedTourLog.setTotalDistance(totalDistanceProperty);
-        selectedTourLog.setTotalTime(totalTimeProperty);
-        selectedTourLog.setRating(ratingProperty);
+        selectedTourLog.setDate(dateProperty.get());
+        selectedTourLog.setComment(commentProperty.get());
+        selectedTourLog.setDifficulty(difficultyProperty.get());
+        selectedTourLog.setTotalDistance(totalDistanceProperty.get());
+        selectedTourLog.setTotalTime(totalTimeProperty.get());
+        selectedTourLog.setRating(ratingProperty.get());
 
         tourLogViewModel.updateTourLog(selectedTourLog);
 

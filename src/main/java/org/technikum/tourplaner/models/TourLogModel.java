@@ -1,31 +1,52 @@
 package org.technikum.tourplaner.models;
 
+import jakarta.persistence.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
+@Setter
+@Entity
+@Table(name = "t_tourLogs")
 public class TourLogModel {
-    @Setter
-    private StringProperty date;
-    @Setter
-    private StringProperty comment;
-    @Setter
-    private StringProperty difficulty;
-    @Setter
-    private StringProperty totalDistance;;
-    @Setter
-    private StringProperty totalTime;
-    @Setter
-    private StringProperty rating;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    public TourLogModel(String date, String comment, String difficulty, String totalDistance, String totalTime, String rating) {
-        this.date = new SimpleStringProperty(date);
-        this.comment = new SimpleStringProperty(comment);
-        this.difficulty = new SimpleStringProperty(difficulty);
-        this.totalDistance = new SimpleStringProperty(totalDistance);
-        this.totalTime = new SimpleStringProperty(totalTime);
-        this.rating = new SimpleStringProperty(rating);
+    @Column(name = "date")
+    private String date;
+
+    @Column(name = "comment")
+    private String comment;
+
+    @Column(name = "difficulty")
+    private String difficulty;
+
+    @Column(name = "total_distance")
+    private String totalDistance;
+
+    @Column(name = "total_time")
+    private String totalTime;
+
+    @Column(name = "rating")
+    private String rating;
+
+    @Column(name = "fk_tour")
+    private Long tourId;
+
+    TourLogModel() {
+
+    }
+
+    public TourLogModel(String date, String comment, String difficulty, String totalDistance, String totalTime, String rating, Long tourId) {
+        this.date = date;
+        this.comment = comment;
+        this.difficulty = difficulty;
+        this.totalDistance = totalDistance;
+        this.totalTime = totalTime;
+        this.rating = rating;
+        this.tourId = tourId;
     }
 }
