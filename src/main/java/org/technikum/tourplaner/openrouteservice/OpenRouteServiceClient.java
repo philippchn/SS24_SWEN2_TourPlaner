@@ -1,22 +1,27 @@
 package org.technikum.tourplaner.openrouteservice;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.awt.Desktop;
+import java.nio.file.FileSystemException;
 
 public class OpenRouteServiceClient {
     private static final String API_URL_SEARCH = "https://api.openrouteservice.org/geocode/search";
     private static final String API_URL_DIRECTIONS = "https://api.openrouteservice.org/v2/directions/";
-    private static final String API_KEY = "5b3ce3597851110001cf6248100ea82416bb4259b7387ad2777a08cb";
+    private static final String API_KEY = "5b3ce3597851110001cf6248100ea82416bb4259b7387ad2777a08cb"; // TODO REPLACE WHEN MAKING REPO PUBLIC
 
     public String getTourInformation(String startAddress, String endAddress, String transportType){
         AddressData startAddressData = getAddressDataFromApi(startAddress);
@@ -42,6 +47,10 @@ public class OpenRouteServiceClient {
 
             JsonNode rootNode = objectMapper.readTree(response.body());
 
+            if(rootNode.path("features").isEmpty()){
+                throw new IllegalArgumentException("To/From destination " + address + " not found!");
+            }
+
             JsonNode coordinatesNode = rootNode.path("features").get(0).path("geometry").path("coordinates");
             Double longitude = coordinatesNode.get(0).asDouble();
             Double latitude = coordinatesNode.get(1).asDouble();
@@ -51,10 +60,9 @@ public class OpenRouteServiceClient {
                     latitude
             );
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException | InterruptedException | URISyntaxException e) {
+            throw new IllegalArgumentException("Error while parsing Address");
         }
-        return null;
     }
 
     private String getDirectionsFromApi(AddressData startAddressData, AddressData endAddressData, String transportType) {
@@ -72,9 +80,8 @@ public class OpenRouteServiceClient {
             client.close();
             return response.body();
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error while trying to get directions");
         }
-        return "";
     }
 
     public void openTourMapInBrowser(String directions) {
@@ -121,7 +128,7 @@ public class OpenRouteServiceClient {
                 System.err.println("Desktop browsing not supported");
             }
         }catch (Exception e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Error while creating HTML Leaflet File");
         }
     }
 }

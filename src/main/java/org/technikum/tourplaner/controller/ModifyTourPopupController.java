@@ -52,7 +52,6 @@ public class ModifyTourPopupController {
         fromProperty.set(selectedTour.getFrom());
         toProperty.set(selectedTour.getTo());
         transportTypeProperty.set(selectedTour.getTransportType());
-
     }
 
     private void bindProperties() {

@@ -89,5 +89,4 @@ public class TourListController {
         detailViewEstimatedTime.textProperty().bindBidirectional(tourViewModel.detailViewEstimatedTimeProperty());
         detailViewImage.imageProperty().bindBidirectional(tourViewModel.detailViewMapImageProperty());
     }
-
 }
