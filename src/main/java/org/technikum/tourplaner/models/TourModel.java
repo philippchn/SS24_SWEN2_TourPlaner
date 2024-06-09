@@ -45,7 +45,7 @@ public class TourModel {
     @Transient
     private Map<String, List<TourLogModel>> tourLogsMap = new HashMap<>();
 
-    TourModel(){
+    public TourModel(){
 
     }
 

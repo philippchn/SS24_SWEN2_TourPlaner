@@ -56,6 +56,7 @@ public class TourListController {
 
     public TourListController(TourViewModel tourViewModel) {
         this.tourViewModel = tourViewModel;
+        tourViewModel.loadToursFromDatabase();
     }
 
     @FXML
@@ -66,7 +67,11 @@ public class TourListController {
         tourListView.setOnMouseClicked(event -> tourViewModel.setCurrentlyClickedTour(tourListView.getSelectionModel().selectedItemProperty().get()));
         deleteButton.setOnAction(event ->tourViewModel.deleteTour());
         tourListView.setItems(tourViewModel.getTours());
-        modifyButton.setOnAction(event -> tourViewModel.updateTour());
+        tourListView.setItems(tourViewModel.getTours());
+        modifyButton.setOnAction(event -> {
+            tourViewModel.updateTour();
+            tourViewModel.loadToursFromDatabase();
+        });
     }
 
     private void bindProperties() {
@@ -80,6 +85,9 @@ public class TourListController {
         detailViewFrom.textProperty().bindBidirectional(tourViewModel.detailViewFromProperty());
         detailViewTo.textProperty().bindBidirectional(tourViewModel.detailViewToProperty());
         detailViewTransportType.textProperty().bindBidirectional(tourViewModel.detailViewTransportTypeProperty());
+        detailViewDistance.textProperty().bindBidirectional(tourViewModel.detailViewDistanceProperty());
+        detailViewEstimatedTime.textProperty().bindBidirectional(tourViewModel.detailViewEstimatedTimeProperty());
         detailViewImage.imageProperty().bindBidirectional(tourViewModel.detailViewMapImageProperty());
     }
+
 }

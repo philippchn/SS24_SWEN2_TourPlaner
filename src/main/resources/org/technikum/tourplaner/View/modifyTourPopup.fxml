@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="org.technikum.tourplaner.controller.ModifyTourPopupController">
+<VBox xmlns:fx="http://javafx.com/fxml">
     <children>
         <Label text="Modify Tour" />
         <TextField fx:id="nameTextField" promptText="Name" />

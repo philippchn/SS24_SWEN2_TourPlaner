@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class OpenRouteServiceClientTest {
     @Test
     void openTourMap() {
-        String start = "AT, 1230 Vienna, Rößlergasse";
+        String start = "AT, 1220 Vienna, Markweg";
         String end = "AT, 1220 Vienna, Farngasse";
 
         OpenRouteServiceClient openRouteServiceClient = new OpenRouteServiceClient();
