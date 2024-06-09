@@ -13,6 +13,6 @@ class OpenRouteServiceClientTest {
         OpenRouteServiceClient openRouteServiceClient = new OpenRouteServiceClient();
         String directions = openRouteServiceClient.getTourInformation(start, end, "driving-car");
 
-        openRouteServiceClient.openTourMapInBrowser(directions);
+        OpenRouteServiceClient.openTourMapInBrowser(directions);
     }
 }

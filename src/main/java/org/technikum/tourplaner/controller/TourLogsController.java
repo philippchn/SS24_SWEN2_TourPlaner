@@ -10,6 +10,8 @@ import org.technikum.tourplaner.viewmodels.TourViewModel;
 
 public class TourLogsController {
     @FXML
+    private Button leafletButton;
+    @FXML
     private Text infoText;
     @FXML
     private TableView<TourLogModel> logsTable;
@@ -58,6 +60,7 @@ public class TourLogsController {
         logsTable.setOnMouseClicked(event -> tourLogViewModel.selectTourLog());
         deleteButton.setOnAction(event -> tourLogViewModel.deleteTourLog());
         modifyButton.setOnAction(event -> tourLogViewModel.openModifyTourLogPopup(logsTable));
+        leafletButton.setOnAction(event -> tourLogViewModel.openLeafletMap());
 
         logsTable.setItems(tourLogViewModel.getTourLogs());
         tourLogViewModel.initializeLogsTableColumns(logsTable);

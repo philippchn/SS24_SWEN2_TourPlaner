@@ -20,6 +20,7 @@ import org.technikum.tourplaner.MainApplication;
 import org.technikum.tourplaner.controller.ModifyTourLogsPopupController;
 import org.technikum.tourplaner.models.TourLogModel;
 import org.technikum.tourplaner.models.TourModel;
+import org.technikum.tourplaner.openrouteservice.OpenRouteServiceClient;
 import org.technikum.tourplaner.repositories.TourLogRepository;
 
 import java.io.IOException;
@@ -33,7 +34,6 @@ public class TourLogViewModel {
 
     private final TourViewModel tourViewModel;
     private final ObservableList<TourLogModel> tourLogModelList = FXCollections.observableArrayList();
-    private final ObjectProperty<TourModel> selectedTourModelProperty = new SimpleObjectProperty<>();
     private final ObjectProperty<TourLogModel> selectedTourLogModelProperty = new SimpleObjectProperty<>();
 
     private final SimpleStringProperty dateProperty = new SimpleStringProperty();
@@ -290,5 +290,9 @@ public class TourLogViewModel {
         totalDistanceProperty.set("");
         totalTimeProperty.set("");
         ratingProperty.set("");
+    }
+
+    public void openLeafletMap() {
+        OpenRouteServiceClient.openTourMapInBrowser(tourViewModel.selectedTourModelProperty().get().getRouteInformation());
     }
 }

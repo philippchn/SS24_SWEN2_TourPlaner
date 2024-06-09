@@ -84,7 +84,7 @@ public class OpenRouteServiceClient {
         }
     }
 
-    public void openTourMapInBrowser(String directions) {
+    public static void openTourMapInBrowser(String directions) {
         String htmlContent = String.format("""
             <!DOCTYPE html>
             <html lang="en">
