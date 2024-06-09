@@ -39,7 +39,7 @@ public class TourModel {
     @Column(name = "estimated_time")
     private String estimatedTime;
 
-    @Column(name = "route_information")
+    @Column(name = "route_information", columnDefinition = "TEXT")
     private String routeInformation;
 
     @Transient

@@ -139,7 +139,7 @@ public class TourViewModel {
                 transportTypeProperty.get().trim(),
                 "",
                 "",
-                "" // TODO routeInformation ist zu lang. Länge muss in DB angepasst werden.
+                routeInformation
         );
 
         tours.add(newTour);
