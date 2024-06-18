@@ -1,11 +1,15 @@
 package org.technikum.tourplaner.repositories;
 
 import jakarta.persistence.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.technikum.tourplaner.models.TourLogModel;
 
 import java.util.List;
 
 public class TourLogRepository {
+    private static final Logger logger = LogManager.getLogger(TourLogRepository.class);
+
     private final EntityManagerFactory entityManagerFactory;
 
     public TourLogRepository() {
@@ -18,6 +22,7 @@ public class TourLogRepository {
             transaction.begin();
             entityManager.persist(tourLog);
             transaction.commit();
+            logger.info("Saved tourLog to DB: " + tourLog.getObjectStringView());
         }
     }
 
@@ -38,6 +43,7 @@ public class TourLogRepository {
                 entityManager.merge(existingTourLog);
             }
             transaction.commit();
+            logger.info("TourLog with id " + id + " updated to " + updatedTourLog.getObjectStringView());
         }
     }
 
@@ -50,6 +56,7 @@ public class TourLogRepository {
                 entityManager.remove(tourLog);
             }
             transaction.commit();
+            logger.info("TourLog with id " + id + " deleted");
         }
     }
 
@@ -57,6 +64,7 @@ public class TourLogRepository {
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             Query query = entityManager.createQuery("SELECT t FROM TourLogModel t WHERE t.tourId = :tourId");
             query.setParameter("tourId", tourId);
+            logger.info("TourLog with id " + tourId + " found");
             return query.getResultList();
         }
     }

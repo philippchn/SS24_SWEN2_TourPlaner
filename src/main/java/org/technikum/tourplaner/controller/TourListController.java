@@ -67,7 +67,6 @@ public class TourListController {
         tourListView.setOnMouseClicked(event -> tourViewModel.setCurrentlyClickedTour(tourListView.getSelectionModel().selectedItemProperty().get()));
         deleteButton.setOnAction(event ->tourViewModel.deleteTour());
         tourListView.setItems(tourViewModel.getTours());
-        tourListView.setItems(tourViewModel.getTours());
         modifyButton.setOnAction(event -> {
             tourViewModel.updateTour();
             tourViewModel.loadToursFromDatabase();

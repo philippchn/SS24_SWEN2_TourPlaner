@@ -16,6 +16,8 @@ import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Getter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.technikum.tourplaner.EViews;
 import org.technikum.tourplaner.MainApplication;
 import org.technikum.tourplaner.controller.ModifyTourPopupController;
@@ -28,6 +30,8 @@ import java.io.IOException;
 import java.util.List;
 
 public class TourViewModel {
+    private static final Logger logger = LogManager.getLogger(TourViewModel.class);
+
     private final TourRepository tourRepository;
     private final OpenRouteServiceClient openRouteServiceClient;
 
@@ -153,26 +157,31 @@ public class TourViewModel {
             tours.add(newTour);
             tourRepository.save(newTour);
             clearInputFields();
-        } catch (IllegalArgumentException | IOException e) {
-            showErrorMessage("Failed to add tour: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            showErrorMessage("Failed to add tour. Check log file for details");
         }
     }
 
     private boolean allFieldsSet() {
         if (nameProperty.get() == null || nameProperty.get().isBlank()) {
             showErrorMessage("Name must not be empty");
+            logger.info("Input field 'name' is empty");
             return false;
         } else if (descriptionProperty.get() == null || descriptionProperty.get().isBlank()) {
             showErrorMessage("Description must not be empty");
+            logger.info("Input field 'Description' was empty");
             return false;
         } else if (fromProperty.get() == null || fromProperty.get().isBlank()) {
             showErrorMessage("From must not be empty");
+            logger.info("Input field 'From' was empty");
             return false;
         } else if (toProperty.get() == null || toProperty.get().isBlank()) {
             showErrorMessage("To must not be empty");
+            logger.info("Input field 'To' was empty");
             return false;
         } else if (transportTypeProperty.get() == null || transportTypeProperty.get().isBlank()) {
             showErrorMessage("Transport type must not be empty");
+            logger.info("Input field 'Transport type' was empty");
             return false;
         }
 
@@ -260,8 +269,8 @@ public class TourViewModel {
                 updateDisplayedTourList(updatedTour);
 
                 setDetailView(updatedTour);
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException | IllegalArgumentException e) {
+                logger.warn(e.getMessage());
             }
         }
     }
@@ -275,14 +284,15 @@ public class TourViewModel {
         }
     }
 
-    public TourModel parseRouteResponse(String jsonResponse, String name, String description, String from, String to, String transportType) throws IOException {
+    public TourModel parseRouteResponse(String jsonResponse, String name, String description, String from, String to, String transportType){
         try {
             ObjectMapper objectMapper = new ObjectMapper();
 
             JsonNode rootNode = objectMapper.readTree(jsonResponse);
 
             if (rootNode.path("features").isEmpty()){
-                throw new IllegalArgumentException("Error parsing distance and duration from tour information");
+                logger.warn("Error parsing distance and duration from tour information from: " + from + " to: " + to);
+                throw new IllegalArgumentException();
             }
 
             JsonNode summaryNode = rootNode.path("features").get(0).path("properties").path("summary");
@@ -301,8 +311,8 @@ public class TourViewModel {
                     jsonResponse
             );
         } catch (IOException e) {
-            e.printStackTrace();
-            throw new IOException("Error parsing route response: " + e.getMessage());
+            logger.warn("Error reading jsonResponse: " + e.getMessage());
+            throw new IllegalArgumentException();
         }
     }
 }

@@ -7,11 +7,15 @@ import jakarta.persistence.Persistence;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.technikum.tourplaner.models.TourModel;
 
 import java.util.List;
 
 public class TourRepository {
+    private static final Logger logger = LogManager.getLogger(TourRepository.class);
+
     private final EntityManagerFactory entityManagerFactory;
 
     public TourRepository() {
@@ -24,6 +28,7 @@ public class TourRepository {
             transaction.begin();
             entityManager.persist(tour);
             transaction.commit();
+            logger.info("Saved tour to db: " + tour.getObjectStringView());
         }
     }
 
@@ -46,6 +51,7 @@ public class TourRepository {
                 entityManager.merge(existingTour);
             }
             transaction.commit();
+            logger.info("Tour with id " + id + " updated to " + updatedTour.getObjectStringView());
         }
     }
 
@@ -58,6 +64,7 @@ public class TourRepository {
                 entityManager.remove(tour);
             }
             transaction.commit();
+            logger.info("Tour with id " + id + " deleted");
         }
     }
 
