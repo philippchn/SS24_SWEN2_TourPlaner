@@ -1,6 +1,11 @@
 package org.technikum.tourplaner.viewmodels;
 
-import javafx.beans.property.*;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -16,15 +21,15 @@ import org.technikum.tourplaner.MainApplication;
 import org.technikum.tourplaner.controller.ModifyTourPopupController;
 import org.technikum.tourplaner.models.TourLogModel;
 import org.technikum.tourplaner.models.TourModel;
+import org.technikum.tourplaner.openrouteservice.OpenRouteServiceClient;
 import org.technikum.tourplaner.repositories.TourRepository;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class TourViewModel {
     private final TourRepository tourRepository;
+    private final OpenRouteServiceClient openRouteServiceClient;
 
     @Getter
     private ObservableList<TourModel> tours = FXCollections.observableArrayList();
@@ -41,6 +46,8 @@ public class TourViewModel {
     private final SimpleStringProperty detailViewDescriptionProperty = new SimpleStringProperty("Description:");
     private final SimpleStringProperty detailViewFromProperty = new SimpleStringProperty("From:");
     private final SimpleStringProperty detailViewToProperty = new SimpleStringProperty("To:");
+    private final SimpleStringProperty detailViewDistanceProperty = new SimpleStringProperty("Distance:");
+    private final SimpleStringProperty detailViewEstimatedTimeProperty = new SimpleStringProperty("Estimated time:");
     private final SimpleStringProperty detailViewTransportTypeProperty = new SimpleStringProperty("Transport type:");
     private final ObjectProperty<Image> detailViewMapImageProperty = new SimpleObjectProperty<>();
 
@@ -66,6 +73,14 @@ public class TourViewModel {
 
     public StringProperty toProperty() {
         return toProperty;
+    }
+
+    public StringProperty detailViewDistanceProperty() {
+        return detailViewDistanceProperty;
+    }
+
+    public StringProperty detailViewEstimatedTimeProperty() {
+        return detailViewEstimatedTimeProperty;
     }
 
     public StringProperty statusMessageProperty() {
@@ -108,66 +123,67 @@ public class TourViewModel {
         return selectedTourLogModelProperty.get();
     }
 
-    public TourViewModel(TourRepository tourRepository) {
+    public TourViewModel(TourRepository tourRepository, OpenRouteServiceClient openRouteServiceClient) {
         this.tourRepository = tourRepository;
-        loadTours();
+        this.openRouteServiceClient = openRouteServiceClient;
+        loadToursFromDatabase();
     }
 
-    private void loadTours() {
+    public void loadToursFromDatabase() {
         tours.clear();
-
         List<TourModel> tourList = tourRepository.getAllTours();
         tours.addAll(tourList);
     }
 
     public void addTour() {
-        if (isValidInput()) {
-            TourModel newTour = new TourModel(
-                    nameProperty.get().trim(),
-                    descriptionProperty.get().trim(),
-                    fromProperty.get().trim(),
-                    toProperty.get().trim(),
-                    transportTypeProperty.get().trim()
-            );
+        if (!allFieldsSet()) {
+            return;
+        }
+
+        try {
+            String name = nameProperty.get();
+            String description = descriptionProperty.get();
+            String from = fromProperty.get();
+            String to = toProperty.get();
+            String transportType = transportTypeProperty.get();
+
+            String routeInformation = openRouteServiceClient.getTourInformation(from, to, "driving-car");
+            TourModel newTour = parseRouteResponse(routeInformation, name, description, from, to, transportType);
 
             tours.add(newTour);
             tourRepository.save(newTour);
             clearInputFields();
+        } catch (IllegalArgumentException | IOException e) {
+            showErrorMessage("Failed to add tour: " + e.getMessage());
         }
     }
 
-    private boolean isValidInput() {
+    private boolean allFieldsSet() {
         if (nameProperty.get() == null || nameProperty.get().isBlank()) {
-            showErrorMessage("Name");
+            showErrorMessage("Name must not be empty");
+            return false;
+        } else if (descriptionProperty.get() == null || descriptionProperty.get().isBlank()) {
+            showErrorMessage("Description must not be empty");
             return false;
         } else if (fromProperty.get() == null || fromProperty.get().isBlank()) {
-            showErrorMessage("From");
+            showErrorMessage("From must not be empty");
             return false;
         } else if (toProperty.get() == null || toProperty.get().isBlank()) {
-            showErrorMessage("To");
+            showErrorMessage("To must not be empty");
             return false;
         } else if (transportTypeProperty.get() == null || transportTypeProperty.get().isBlank()) {
-            showErrorMessage("Transport type");
-            return false;
-        }
-
-        Pattern pattern = Pattern.compile("^[a-zA-ZäÄöÖüÜ]+$");
-        Matcher validateFrom = pattern.matcher(fromProperty.get().trim());
-        Matcher validateTo = pattern.matcher(toProperty.get().trim());
-
-        if (!(validateFrom.matches() && validateTo.matches())) {
-            statusMessageProperty().set("From and To must not contain numbers or special characters");
+            showErrorMessage("Transport type must not be empty");
             return false;
         }
 
         return true;
     }
 
-    private void showErrorMessage(String missingTextField) {
+    private void showErrorMessage(String errorMsg) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(null);
-        alert.setContentText(missingTextField + " must not be empty");
+        alert.setContentText(errorMsg);
         alert.showAndWait();
     }
 
@@ -197,6 +213,8 @@ public class TourViewModel {
         detailViewFromProperty.set("From: " + selectedItem.getFrom());
         detailViewToProperty.set("To: " + selectedItem.getTo());
         detailViewTransportTypeProperty.set("Transport type: " + selectedItem.getTransportType());
+        detailViewDistanceProperty.set("Distance: " + selectedItem.getDistance());
+        detailViewEstimatedTimeProperty.set("Estimated Time: " + selectedItem.getEstimatedTime());
         detailViewMapImageProperty.set(new Image(getClass().getResource("/org/technikum/tourplaner/img/mapPlaceholder.jpg").toExternalForm()));
     }
 
@@ -213,33 +231,78 @@ public class TourViewModel {
         if (selectedTour != null) {
             try {
                 FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource(EViews.modifyTourPopup.getFilePath()));
+                ModifyTourPopupController controller = new ModifyTourPopupController(this);
+                loader.setController(controller);
+
                 Parent root = loader.load();
 
-                ModifyTourPopupController controller = loader.getController();
                 Stage stage = new Stage();
                 stage.initModality(Modality.APPLICATION_MODAL);
-                controller.initData(selectedTour, stage, this);
+
+                controller.initData(selectedTour, stage);
 
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
                 stage.showAndWait();
 
-                tourRepository.updateById(selectedTour.getId(), selectedTour);
+                String updatedName = nameProperty.get();
+                String updatedDescription = descriptionProperty.get();
+                String updatedFrom = fromProperty.get();
+                String updatedTo = toProperty.get();
 
-                updateDisplayedTourList(selectedTour);
-                setDetailView(selectedTour);
+                String updatedTransportType = transportTypeProperty.get();
+
+                String routeInformation = openRouteServiceClient.getTourInformation(updatedFrom, updatedTo, "driving-car");
+                TourModel updatedTour = parseRouteResponse(routeInformation, updatedName, updatedDescription, updatedFrom, updatedTo, updatedTransportType);
+
+                tourRepository.updateById(selectedTour.getId(), updatedTour);
+
+                updateDisplayedTourList(updatedTour);
+
+                setDetailView(updatedTour);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private void updateDisplayedTourList(TourModel selectedTour) {
+    private void updateDisplayedTourList(TourModel updatedTour) {
         for (int i = 0; i < tours.size(); i++) {
-            if (tours.get(i).getId().equals(selectedTour.getId())) {
-                tours.set(i, selectedTour);
+            if (tours.get(i).getId().equals(updatedTour.getId())) {
+                tours.set(i, updatedTour);
                 break;
             }
+        }
+    }
+
+    public TourModel parseRouteResponse(String jsonResponse, String name, String description, String from, String to, String transportType) throws IOException {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            JsonNode rootNode = objectMapper.readTree(jsonResponse);
+
+            if (rootNode.path("features").isEmpty()){
+                throw new IllegalArgumentException("Error parsing distance and duration from tour information");
+            }
+
+            JsonNode summaryNode = rootNode.path("features").get(0).path("properties").path("summary");
+
+            double distance = summaryNode.path("distance").asDouble();
+            double duration = summaryNode.path("duration").asDouble();
+
+            return new TourModel(
+                    name.trim(),
+                    description.trim(),
+                    from.trim(),
+                    to.trim(),
+                    transportType.trim(),
+                    String.valueOf(distance),
+                    String.valueOf(duration),
+                    jsonResponse
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new IOException("Error parsing route response: " + e.getMessage());
         }
     }
 }

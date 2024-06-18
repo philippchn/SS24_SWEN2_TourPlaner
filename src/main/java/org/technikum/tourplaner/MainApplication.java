@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import org.technikum.tourplaner.controller.TourListController;
 import org.technikum.tourplaner.controller.TourLogsController;
+import org.technikum.tourplaner.openrouteservice.OpenRouteServiceClient;
 import org.technikum.tourplaner.repositories.TourLogRepository;
 import org.technikum.tourplaner.repositories.TourRepository;
 import org.technikum.tourplaner.viewmodels.TourViewModel;
@@ -46,7 +47,8 @@ public class MainApplication extends Application {
     private void addTourSubView(Parent mainView) throws IOException
     {
         TourRepository tourRepository = new TourRepository();
-        TourViewModel tourViewModel = new TourViewModel(tourRepository);
+        OpenRouteServiceClient openRouteServiceClient = new OpenRouteServiceClient();
+        TourViewModel tourViewModel = new TourViewModel(tourRepository, openRouteServiceClient);
 
         FXMLLoader tourListLoader = new FXMLLoader(getClass().getResource(EViews.tourList.getFilePath()));
         TourListController tourListController = new TourListController(tourViewModel);

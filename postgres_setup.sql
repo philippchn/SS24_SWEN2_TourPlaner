@@ -14,7 +14,7 @@ CREATE TABLE t_tours (
     "transport_type" VARCHAR(255),
     "distance" VARCHAR(255),
     "estimated_time" VARCHAR(255),
-    "route_information" VARCHAR(255)
+    "route_information" TEXT
 );
 
 CREATE TABLE t_tourLogs (

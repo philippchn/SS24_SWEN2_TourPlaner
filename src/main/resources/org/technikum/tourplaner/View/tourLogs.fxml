@@ -19,7 +19,10 @@
             <tabs>
                 <Tab text="General">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <Button fx:id="leafletButton" layoutX="158.0" layoutY="87.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="234.0" text="Show Tour in Leaflet" />
+                     </children></AnchorPane>
                     </content>
                 </Tab>
                 <Tab text="Route">

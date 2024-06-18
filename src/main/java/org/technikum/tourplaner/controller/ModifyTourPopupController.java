@@ -33,24 +33,33 @@ public class ModifyTourPopupController {
     private StringProperty toProperty = new SimpleStringProperty();
     private StringProperty transportTypeProperty = new SimpleStringProperty();
 
+    public ModifyTourPopupController(TourViewModel tourViewModel) {
+        this.tourViewModel = tourViewModel;
+    }
+
     @FXML
     private void initialize() {
         bindProperties();
         saveButton.setOnAction(event -> saveTour());
     }
 
-    public void initData(TourModel selectedTour, Stage stage, TourViewModel tourViewModel) {
+    public void initData(TourModel selectedTour, Stage stage) {
         this.selectedTour = selectedTour;
         this.stage = stage;
-        this.tourViewModel = tourViewModel;
+
+        nameProperty.set(selectedTour.getName());
+        descriptionProperty.set(selectedTour.getTourDescription());
+        fromProperty.set(selectedTour.getFrom());
+        toProperty.set(selectedTour.getTo());
+        transportTypeProperty.set(selectedTour.getTransportType());
     }
 
     private void bindProperties() {
-        nameTextField.textProperty().bindBidirectional(nameProperty);
-        descriptionTextField.textProperty().bindBidirectional(descriptionProperty);
-        fromTextField.textProperty().bindBidirectional(fromProperty);
-        toTextField.textProperty().bindBidirectional(toProperty);
-        transportTypeTextField.textProperty().bindBidirectional(transportTypeProperty);
+        nameTextField.textProperty().bindBidirectional(tourViewModel.nameProperty());
+        descriptionTextField.textProperty().bindBidirectional(tourViewModel.descriptionProperty());
+        fromTextField.textProperty().bindBidirectional(tourViewModel.fromProperty());
+        toTextField.textProperty().bindBidirectional(tourViewModel.toProperty());
+        transportTypeTextField.textProperty().bindBidirectional(tourViewModel.transportTypeProperty());
     }
 
     @FXML
