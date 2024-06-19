@@ -20,11 +20,13 @@ import org.apache.logging.log4j.Logger;
 import org.technikum.tourplaner.EViews;
 import org.technikum.tourplaner.MainApplication;
 import org.technikum.tourplaner.controller.ModifyTourLogsPopupController;
+import org.technikum.tourplaner.iText7.PdfGenerator;
 import org.technikum.tourplaner.models.TourLogModel;
 import org.technikum.tourplaner.models.TourModel;
 import org.technikum.tourplaner.openrouteservice.OpenRouteServiceClient;
 import org.technikum.tourplaner.repositories.TourLogRepository;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -302,5 +304,22 @@ public class TourLogViewModel {
             return;
         }
         OpenRouteServiceClient.openTourMapInBrowser(tourViewModel.selectedTourModelProperty().get().getRouteInformation());
+    }
+
+    public void generatePdf() {
+        if (tourViewModel.selectedTourModelProperty().get() == null) {
+            logger.info("User tried to generade pdf without selecting a Tour");
+            return;
+        }
+        try{
+            PdfGenerator.generatePdf(tourViewModel.selectedTourModelProperty().get(), tourLogModelList);
+        } catch (FileNotFoundException e) {
+            logger.warn("PDF Generation failed");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("PDF Generation failed");
+            alert.showAndWait();
+        }
     }
 }
