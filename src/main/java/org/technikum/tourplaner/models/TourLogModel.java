@@ -1,8 +1,6 @@
 package org.technikum.tourplaner.models;
 
 import jakarta.persistence.*;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -48,5 +46,18 @@ public class TourLogModel {
         this.totalTime = totalTime;
         this.rating = rating;
         this.tourId = tourId;
+    }
+
+    public String getObjectStringView () {
+        return "TourLogModel{" +
+                "id=" + id +
+                ", date='" + date + '\'' +
+                ", comment='" + comment + '\'' +
+                ", difficulty='" + difficulty + '\'' +
+                ", totalDistance='" + totalDistance + '\'' +
+                ", totalTime='" + totalTime + '\'' +
+                ", rating='" + rating + '\'' +
+                ", tourId=" + tourId +
+                '}';
     }
 }

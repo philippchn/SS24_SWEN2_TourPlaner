@@ -15,6 +15,8 @@ import javafx.scene.control.TableView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.Getter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.technikum.tourplaner.EViews;
 import org.technikum.tourplaner.MainApplication;
 import org.technikum.tourplaner.controller.ModifyTourLogsPopupController;
@@ -30,6 +32,8 @@ import java.util.stream.Collectors;
 
 @Getter
 public class TourLogViewModel {
+    private static final Logger logger = LogManager.getLogger(TourLogViewModel.class);
+
     private final TourLogRepository tourLogRepository;
 
     private final TourViewModel tourViewModel;
@@ -219,7 +223,7 @@ public class TourLogViewModel {
                 logsTable.refresh();
 
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.fatal("Error while opening modify tourLog popup");
             }
         } else {
             showAlert("No tour log selected", "Please select a tour log to modify.");
@@ -293,6 +297,10 @@ public class TourLogViewModel {
     }
 
     public void openLeafletMap() {
+        if (tourViewModel.selectedTourModelProperty().get() == null) {
+            logger.info("User tried to open a Leaflet map without selecting a Tour");
+            return;
+        }
         OpenRouteServiceClient.openTourMapInBrowser(tourViewModel.selectedTourModelProperty().get().getRouteInformation());
     }
 }

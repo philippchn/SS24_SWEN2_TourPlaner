@@ -8,6 +8,8 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import lombok.Getter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.technikum.tourplaner.controller.TourListController;
 import org.technikum.tourplaner.controller.TourLogsController;
 import org.technikum.tourplaner.openrouteservice.OpenRouteServiceClient;
@@ -19,11 +21,14 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class MainApplication extends Application {
+    private static final Logger logger = LogManager.getLogger(MainApplication.class);
+
     @Getter
     private static Stage stg;
 
     @Override
     public void start(Stage stage) {
+        logger.info("Application started");
         try {
             stg = stage;
             FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource(EViews.mainView.getFilePath()));
@@ -40,7 +45,7 @@ public class MainApplication extends Application {
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace(); // Replace with log4j
+            logger.fatal("Error while starting application");
         }
     }
 
@@ -63,14 +68,6 @@ public class MainApplication extends Application {
 
         HBox subView = (HBox) mainView.lookup("#subView");
         subView.getChildren().addAll(tourListView, tourLogsView);
-    }
-
-    public void changeScene(String fxml) {
-        try {
-            stg.getScene().setRoot(FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxml))));
-        } catch (IOException e) {
-            e.printStackTrace(); // Replace with log4j
-        }
     }
 
     public static void main(String[] args) {

@@ -60,6 +60,21 @@ public class TourModel {
         this.routeInformation = routeInformation;
     }
 
+    public String getObjectStringView() {
+        return "TourModel{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", tourDescription='" + tourDescription + '\'' +
+                ", from='" + from + '\'' +
+                ", to='" + to + '\'' +
+                ", transportType='" + transportType + '\'' +
+                ", distance='" + distance + '\'' +
+                ", estimatedTime='" + estimatedTime + '\'' +
+                ", routeInformation='" + routeInformation + '\'' +
+                ", tourLogsMap=" + tourLogsMap +
+                '}';
+    }
+
     @Override
     public String toString()
     {
