@@ -4,9 +4,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.technikum.tourplaner.models.TourModel;
+import org.technikum.tourplaner.openrouteservice.ETransportType;
 import org.technikum.tourplaner.viewmodels.TourViewModel;
 
 public class ModifyTourPopupController {
@@ -19,7 +21,7 @@ public class ModifyTourPopupController {
     @FXML
     private TextField toTextField;
     @FXML
-    private TextField transportTypeTextField;
+    private ComboBox<ETransportType> transportTypeBox;
     @FXML
     private Button saveButton;
 
@@ -41,6 +43,7 @@ public class ModifyTourPopupController {
     private void initialize() {
         bindProperties();
         saveButton.setOnAction(event -> saveTour());
+        transportTypeBox.getItems().addAll(ETransportType.values());
     }
 
     public void initData(TourModel selectedTour, Stage stage) {
@@ -59,7 +62,7 @@ public class ModifyTourPopupController {
         descriptionTextField.textProperty().bindBidirectional(tourViewModel.descriptionProperty());
         fromTextField.textProperty().bindBidirectional(tourViewModel.fromProperty());
         toTextField.textProperty().bindBidirectional(tourViewModel.toProperty());
-        transportTypeTextField.textProperty().bindBidirectional(tourViewModel.transportTypeProperty());
+        transportTypeBox.valueProperty().bindBidirectional(tourViewModel.transportTypeProperty());
     }
 
     @FXML

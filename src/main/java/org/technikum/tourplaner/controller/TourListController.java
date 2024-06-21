@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.technikum.tourplaner.models.TourModel;
+import org.technikum.tourplaner.openrouteservice.ETransportType;
 import org.technikum.tourplaner.viewmodels.TourViewModel;
 
 public class TourListController {
@@ -22,7 +23,7 @@ public class TourListController {
     @FXML
     private TextField toTextField;
     @FXML
-    private TextField transportTypeTextField;
+    private ComboBox<ETransportType> transportTypeBox;
     @FXML
     private Button saveButton;
     @FXML
@@ -71,6 +72,7 @@ public class TourListController {
             tourViewModel.updateTour();
             tourViewModel.loadToursFromDatabase();
         });
+        transportTypeBox.getItems().addAll(ETransportType.values());
     }
 
     private void bindProperties() {
@@ -78,7 +80,8 @@ public class TourListController {
         descriptionTextField.textProperty().bindBidirectional(tourViewModel.descriptionProperty());
         fromTextField.textProperty().bindBidirectional(tourViewModel.fromProperty());
         toTextField.textProperty().bindBidirectional(tourViewModel.toProperty());
-        transportTypeTextField.textProperty().bindBidirectional(tourViewModel.transportTypeProperty());
+        transportTypeBox.valueProperty().bindBidirectional(tourViewModel.transportTypeProperty());
+
         detailViewName.textProperty().bindBidirectional(tourViewModel.detailViewNameProperty());
         detailViewDescription.textProperty().bindBidirectional(tourViewModel.detailViewDescriptionProperty());
         detailViewFrom.textProperty().bindBidirectional(tourViewModel.detailViewFromProperty());

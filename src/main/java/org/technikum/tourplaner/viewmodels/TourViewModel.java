@@ -23,6 +23,7 @@ import org.technikum.tourplaner.MainApplication;
 import org.technikum.tourplaner.controller.ModifyTourPopupController;
 import org.technikum.tourplaner.models.TourLogModel;
 import org.technikum.tourplaner.models.TourModel;
+import org.technikum.tourplaner.openrouteservice.ETransportType;
 import org.technikum.tourplaner.openrouteservice.OpenRouteServiceClient;
 import org.technikum.tourplaner.repositories.TourRepository;
 
@@ -44,7 +45,7 @@ public class TourViewModel {
     private final SimpleStringProperty descriptionProperty = new SimpleStringProperty();
     private final SimpleStringProperty fromProperty = new SimpleStringProperty();
     private final SimpleStringProperty toProperty = new SimpleStringProperty();
-    private final SimpleStringProperty transportTypeProperty = new SimpleStringProperty();
+    private final ObjectProperty<ETransportType> transportTypeProperty = new SimpleObjectProperty<ETransportType>();
     private final SimpleStringProperty statusMessageProperty = new SimpleStringProperty();
     private final SimpleStringProperty detailViewNameProperty = new SimpleStringProperty("Name:");
     private final SimpleStringProperty detailViewDescriptionProperty = new SimpleStringProperty("Description:");
@@ -91,7 +92,7 @@ public class TourViewModel {
         return statusMessageProperty;
     }
 
-    public StringProperty transportTypeProperty() {
+    public ObjectProperty<ETransportType> transportTypeProperty() {
         return transportTypeProperty;
     }
 
@@ -149,9 +150,9 @@ public class TourViewModel {
             String description = descriptionProperty.get();
             String from = fromProperty.get();
             String to = toProperty.get();
-            String transportType = transportTypeProperty.get();
+            ETransportType transportType = transportTypeProperty.get();
 
-            String routeInformation = openRouteServiceClient.getTourInformation(from, to, "driving-car");
+            String routeInformation = openRouteServiceClient.getTourInformation(from, to, transportType);
             TourModel newTour = parseRouteResponse(routeInformation, name, description, from, to, transportType);
 
             tours.add(newTour);
@@ -179,7 +180,7 @@ public class TourViewModel {
             showErrorMessage("To must not be empty");
             logger.info("Input field 'To' was empty");
             return false;
-        } else if (transportTypeProperty.get() == null || transportTypeProperty.get().isBlank()) {
+        } else if (transportTypeProperty.get() == null) {
             showErrorMessage("Transport type must not be empty");
             logger.info("Input field 'Transport type' was empty");
             return false;
@@ -201,7 +202,6 @@ public class TourViewModel {
         descriptionProperty.set("");
         fromProperty.set("");
         toProperty.set("");
-        transportTypeProperty.set("");
         statusMessageProperty.set("Create new tour:");
     }
 
@@ -259,9 +259,9 @@ public class TourViewModel {
                 String updatedFrom = fromProperty.get();
                 String updatedTo = toProperty.get();
 
-                String updatedTransportType = transportTypeProperty.get();
+                ETransportType updatedTransportType = transportTypeProperty.get();
 
-                String routeInformation = openRouteServiceClient.getTourInformation(updatedFrom, updatedTo, "driving-car");
+                String routeInformation = openRouteServiceClient.getTourInformation(updatedFrom, updatedTo, updatedTransportType);
                 TourModel updatedTour = parseRouteResponse(routeInformation, updatedName, updatedDescription, updatedFrom, updatedTo, updatedTransportType);
 
                 tourRepository.updateById(selectedTour.getId(), updatedTour);
@@ -269,8 +269,9 @@ public class TourViewModel {
                 updateDisplayedTourList(updatedTour);
 
                 setDetailView(updatedTour);
+                clearInputFields();
             } catch (IOException | IllegalArgumentException e) {
-                logger.warn(e.getMessage());
+                logger.warn("Error updating tour: " + e.getMessage());
             }
         }
     }
@@ -284,7 +285,7 @@ public class TourViewModel {
         }
     }
 
-    public TourModel parseRouteResponse(String jsonResponse, String name, String description, String from, String to, String transportType){
+    public TourModel parseRouteResponse(String jsonResponse, String name, String description, String from, String to, ETransportType transportType){
         try {
             ObjectMapper objectMapper = new ObjectMapper();
 
@@ -305,7 +306,7 @@ public class TourViewModel {
                     description.trim(),
                     from.trim(),
                     to.trim(),
-                    transportType.trim(),
+                    transportType.getApiParameter(),
                     String.valueOf(distance),
                     String.valueOf(duration),
                     jsonResponse
