@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.exception.JDBCConnectionException;
 import org.technikum.tourplaner.controller.TourListController;
 import org.technikum.tourplaner.controller.TourLogsController;
 import org.technikum.tourplaner.openrouteservice.OpenRouteServiceClient;
@@ -45,7 +46,11 @@ public class MainApplication extends Application {
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
-            logger.fatal("Error while starting application");
+            logger.fatal("Error while starting application: " + e.getMessage());
+        } catch (JDBCConnectionException e) {
+            logger.fatal("Database connection failed: " + e.getMessage());
+        } catch (Exception e) {
+            logger.fatal("An unexpected error occurred: " + e.getMessage());
         }
     }
 

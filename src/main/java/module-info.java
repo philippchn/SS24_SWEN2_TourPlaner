@@ -9,6 +9,8 @@ module org.technikum.tourplaner {
     requires com.fasterxml.jackson.databind;
     requires java.desktop;
     requires org.apache.logging.log4j;
+    requires kernel;
+    requires layout;
 
     opens org.technikum.tourplaner to javafx.fxml;
     exports org.technikum.tourplaner;
