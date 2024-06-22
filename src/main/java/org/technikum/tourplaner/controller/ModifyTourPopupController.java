@@ -67,11 +67,17 @@ public class ModifyTourPopupController {
 
     @FXML
     private void saveTour() {
+
+        if(!tourViewModel.allFieldsSet()) {
+            return;
+        }
+
         selectedTour.setName(nameProperty.get());
         selectedTour.setTourDescription(descriptionProperty.get());
         selectedTour.setFrom(fromProperty.get());
         selectedTour.setTo(toProperty.get());
         selectedTour.setTransportType(transportTypeProperty.get());
+
 
         stage.close();
     }
