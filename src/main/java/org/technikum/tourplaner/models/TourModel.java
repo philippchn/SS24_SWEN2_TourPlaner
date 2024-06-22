@@ -1,5 +1,6 @@
 package org.technikum.tourplaner.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -60,6 +61,7 @@ public class TourModel {
         this.routeInformation = routeInformation;
     }
 
+    @JsonIgnore
     public String getObjectStringView() {
         return "TourModel{" +
                 "id=" + id +

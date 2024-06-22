@@ -13,8 +13,9 @@ module org.technikum.tourplaner {
     requires layout;
 
     opens org.technikum.tourplaner to javafx.fxml;
+    opens org.technikum.tourplaner.controller to javafx.fxml;
+    opens org.technikum.tourplaner.models to org.hibernate.orm.core, com.fasterxml.jackson.databind;
     exports org.technikum.tourplaner;
     exports org.technikum.tourplaner.controller;
-    opens org.technikum.tourplaner.controller to javafx.fxml;
-    opens org.technikum.tourplaner.models to org.hibernate.orm.core;
+    exports org.technikum.tourplaner.models;
 }
