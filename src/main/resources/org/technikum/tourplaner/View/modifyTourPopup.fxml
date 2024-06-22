@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
-<VBox xmlns:fx="http://javafx.com/fxml">
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21">
     <children>
         <Label text="Modify Tour" />
         <TextField fx:id="nameTextField" promptText="Name" />
         <TextField fx:id="descriptionTextField" promptText="Description" />
         <TextField fx:id="fromTextField" promptText="From" />
         <TextField fx:id="toTextField" promptText="To" />
-        <TextField fx:id="transportTypeTextField" promptText="Transport Type" />
+      <ComboBox fx:id="transportTypeBox" prefHeight="25.0" prefWidth="267.0" promptText="Transport Type" />
         <Button fx:id="saveButton" text="Save" />
     </children>
 </VBox>

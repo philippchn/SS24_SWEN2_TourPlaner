@@ -24,7 +24,11 @@ public class OpenRouteServiceClient {
     private static final String API_URL_DIRECTIONS = "https://api.openrouteservice.org/v2/directions/";
     private static final String API_KEY = "5b3ce3597851110001cf6248100ea82416bb4259b7387ad2777a08cb"; // TODO REPLACE WHEN MAKING REPO PUBLIC
 
-    public String getTourInformation(String startAddress, String endAddress, String transportType){
+    public String getTourInformation(String startAddress, String endAddress, ETransportType transportType){
+        if (transportType == null) {
+            logger.warn("Transport type is empty");
+            throw new IllegalArgumentException();
+        }
         AddressData startAddressData = getAddressDataFromApi(startAddress);
         AddressData endAddressData = getAddressDataFromApi(endAddress);
 
@@ -68,10 +72,10 @@ public class OpenRouteServiceClient {
         }
     }
 
-    private String getDirectionsFromApi(AddressData startAddressData, AddressData endAddressData, String transportType) {
+    private String getDirectionsFromApi(AddressData startAddressData, AddressData endAddressData, ETransportType transportType) {
         try{
             HttpClient client = HttpClient.newHttpClient();
-            URI uri = new URI(API_URL_DIRECTIONS + transportType
+            URI uri = new URI(API_URL_DIRECTIONS + transportType.getApiParameter()
                     + "?api_key=" + API_KEY
                     + "&start=" + startAddressData.longitude + "," + startAddressData.latitude
                     + "&end=" + endAddressData.longitude + "," + endAddressData.latitude);
