@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Entity
@@ -15,22 +18,22 @@ public class TourLogModel {
     private Long id;
 
     @Column(name = "date")
-    private String date;
+    private LocalDate date;
 
     @Column(name = "comment")
     private String comment;
 
     @Column(name = "difficulty")
-    private String difficulty;
+    private Integer difficulty;
 
     @Column(name = "total_distance")
-    private String totalDistance;
+    private Double totalDistance;
 
     @Column(name = "total_time")
-    private String totalTime;
+    private Long totalTime;
 
     @Column(name = "rating")
-    private String rating;
+    private Integer rating;
 
     @Column(name = "fk_tour")
     private Long tourId;
@@ -39,7 +42,7 @@ public class TourLogModel {
 
     }
 
-    public TourLogModel(String date, String comment, String difficulty, String totalDistance, String totalTime, String rating, Long tourId) {
+    public TourLogModel(LocalDate date, String comment, Integer difficulty, Double totalDistance, Long totalTime, Integer rating, Long tourId) {
         this.date = date;
         this.comment = comment;
         this.difficulty = difficulty;

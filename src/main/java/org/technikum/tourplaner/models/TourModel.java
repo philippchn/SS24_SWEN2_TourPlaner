@@ -35,10 +35,10 @@ public class TourModel {
     private String transportType;
 
     @Column(name = "distance")
-    private String distance;
+    private Double distance;
 
     @Column(name = "estimated_time")
-    private String estimatedTime;
+    private Long estimatedTime;
 
     @Column(name = "route_information", columnDefinition = "TEXT")
     private String routeInformation;
@@ -50,7 +50,7 @@ public class TourModel {
 
     }
 
-    public TourModel(String name, String tourDescription, String from, String to, String transportType, String distance, String estimatedTime, String routeInformation) {
+    public TourModel(String name, String tourDescription, String from, String to, String transportType, Double distance, Long estimatedTime, String routeInformation) {
         this.name = name;
         this.tourDescription = tourDescription;
         this.from = from;

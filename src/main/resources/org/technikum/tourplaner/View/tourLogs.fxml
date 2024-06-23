@@ -90,7 +90,7 @@
                                 <VBox prefHeight="240.0" prefWidth="370.0" VBox.vgrow="ALWAYS">
                                     <children>
                                         <Text fx:id="infoText" strokeType="OUTSIDE" strokeWidth="0.0" text="Create new tour log" textAlignment="CENTER" wrappingWidth="450.697265625" />
-                                        <TextField fx:id="dateTextField" alignment="TOP_CENTER" promptText="Date" />
+                                        <DatePicker fx:id="datePicker" promptText="Date" />
                                         <TextField fx:id="commentTextField" alignment="TOP_CENTER" promptText="Comment" />
                                         <TextField fx:id="difficultyTextField" alignment="TOP_CENTER" layoutX="10.0" layoutY="35.0" promptText="Difficulty" />
                                         <TextField fx:id="totalDistanceTextField" alignment="TOP_CENTER" layoutX="10.0" layoutY="60.0" promptText="Total distance" />

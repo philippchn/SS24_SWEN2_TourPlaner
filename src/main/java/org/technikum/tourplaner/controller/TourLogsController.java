@@ -1,7 +1,9 @@
 package org.technikum.tourplaner.controller;
 
+import javafx.beans.property.Property;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
@@ -27,7 +29,7 @@ public class TourLogsController {
     @FXML
     private Button saveButton;
     @FXML
-    private TextField dateTextField;
+    private DatePicker datePicker;
     @FXML
     private TextField commentTextField;
     @FXML
@@ -79,7 +81,7 @@ public class TourLogsController {
     }
 
     private void bindProperties() {
-        dateTextField.textProperty().bindBidirectional(tourLogViewModel.dateProperty());
+        datePicker.valueProperty().bindBidirectional(tourLogViewModel.dateProperty());
         commentTextField.textProperty().bindBidirectional(tourLogViewModel.commentProperty());
         difficultyTextField.textProperty().bindBidirectional(tourLogViewModel.difficultyProperty());
         totalDistanceTextField.textProperty().bindBidirectional(tourLogViewModel.totalDistanceProperty());
