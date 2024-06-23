@@ -1,6 +1,9 @@
 package org.technikum.tourplaner.viewmodels;
 
-import javafx.beans.property.*;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -26,14 +29,9 @@ import org.technikum.tourplaner.repositories.TourLogRepository;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static java.lang.Double.parseDouble;
-import static java.lang.Integer.parseInt;
-import static java.lang.Long.parseLong;
 
 
 @Getter
@@ -46,7 +44,6 @@ public class TourLogViewModel {
     private final ObservableList<TourLogModel> tourLogModelList = FXCollections.observableArrayList();
     private final ObjectProperty<TourLogModel> selectedTourLogModelProperty = new SimpleObjectProperty<>();
 
-    // Use ObjectProperty<LocalDate> for the date
     private final ObjectProperty<LocalDate> dateProperty = new SimpleObjectProperty<>();
     private final SimpleStringProperty commentProperty = new SimpleStringProperty();
     private final SimpleStringProperty difficultyProperty = new SimpleStringProperty();
@@ -180,7 +177,6 @@ public class TourLogViewModel {
             tourLogRepository.save(tourLogModel);
             clearTextFields();
         } catch (NumberFormatException e) {
-            // Handle invalid number format
             showAlert("Invalid Input", "Please enter valid numbers for Difficulty, Total Distance, Total Time, and Rating.");
         }
     }
@@ -205,7 +201,7 @@ public class TourLogViewModel {
 
     public void updateTourLog(TourLogModel updatedTourLog) {
         tourLogRepository.updateById(updatedTourLog.getId(), updatedTourLog);
-        tourLogModelList.replaceAll(log -> log.getId().equals(updatedTourLog.getId()) ? updatedTourLog : log); // Update in observable list
+        tourLogModelList.replaceAll(log -> log.getId().equals(updatedTourLog.getId()) ? updatedTourLog : log);
     }
 
     public void openModifyTourLogPopup(TableView<TourLogModel> logsTable) {
@@ -356,6 +352,4 @@ public class TourLogViewModel {
             alert.showAndWait();
         }
     }
-
-
 }

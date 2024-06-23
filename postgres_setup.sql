@@ -19,11 +19,11 @@ CREATE TABLE t_tours (
 
 CREATE TABLE t_tourLogs (
     id SERIAL PRIMARY KEY,
-    date DATE, -- Use DATE type to store LocalDate
+    date DATE,
     comment VARCHAR(255),
-    difficulty INTEGER, -- Use INTEGER to store Integer
-    total_distance DOUBLE PRECISION, -- Use DOUBLE PRECISION to store Double
-    total_time BIGINT, -- Use BIGINT to store Long
-    rating INTEGER, -- Use INTEGER to store Integer
+    difficulty INTEGER,
+    total_distance DOUBLE PRECISION,
+    total_time BIGINT,
+    rating INTEGER,
     fk_tour INTEGER REFERENCES t_tours(id)
 );

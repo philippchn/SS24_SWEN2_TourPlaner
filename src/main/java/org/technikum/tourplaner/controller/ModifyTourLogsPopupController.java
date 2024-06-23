@@ -17,7 +17,7 @@ import java.time.LocalDate;
 
 public class ModifyTourLogsPopupController {
     @FXML
-    private DatePicker datePicker; // Changed from TextField to DatePicker
+    private DatePicker datePicker;
     @FXML
     private TextField commentTextField;
     @FXML
@@ -35,7 +35,6 @@ public class ModifyTourLogsPopupController {
     private Stage stage;
     private TourLogViewModel tourLogViewModel;
 
-    // Use ObjectProperty<LocalDate> for the date
     private final ObjectProperty<LocalDate> dateProperty = new SimpleObjectProperty<>();
     private final StringProperty commentProperty = new SimpleStringProperty();
     private final StringProperty difficultyProperty = new SimpleStringProperty();
@@ -54,7 +53,6 @@ public class ModifyTourLogsPopupController {
         this.stage = stage;
         this.tourLogViewModel = tourLogViewModel;
 
-        // Initialize properties with selected tour log values
         dateProperty.set(LocalDate.from(selectedTourLog.getDate()));
         commentProperty.set(selectedTourLog.getComment());
         difficultyProperty.set(String.valueOf(selectedTourLog.getDifficulty()));
@@ -64,10 +62,8 @@ public class ModifyTourLogsPopupController {
     }
 
     private void bindProperties() {
-        // Bind the DatePicker to the dateProperty
         datePicker.valueProperty().bindBidirectional(dateProperty);
 
-        // Bind the TextFields to their respective properties
         commentTextField.textProperty().bindBidirectional(commentProperty);
         difficultyTextField.textProperty().bindBidirectional(difficultyProperty);
         totalDistanceTextField.textProperty().bindBidirectional(totalDistanceProperty);
@@ -81,7 +77,6 @@ public class ModifyTourLogsPopupController {
             return;
         }
 
-        // Update the selected tour log with the modified values
         selectedTourLog.setDate(LocalDate.from(dateProperty.get()));
         selectedTourLog.setComment(commentProperty.get());
         selectedTourLog.setDifficulty(Integer.valueOf(difficultyProperty.get()));
@@ -89,14 +84,12 @@ public class ModifyTourLogsPopupController {
         selectedTourLog.setTotalTime(Long.valueOf(totalTimeProperty.get()));
         selectedTourLog.setRating(Integer.valueOf(ratingProperty.get()));
 
-        // Notify the view model of the update
         tourLogViewModel.updateTourLog(selectedTourLog);
 
-        // Close the stage (popup window)
         stage.close();
     }
 
-    private boolean isValidInput() { //maybe auslagern to viewmodel
+    private boolean isValidInput() {
         String errorMessage = "";
 
         if (datePicker.getValue() == null) {

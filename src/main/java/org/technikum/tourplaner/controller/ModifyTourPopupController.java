@@ -78,7 +78,6 @@ public class ModifyTourPopupController {
         selectedTour.setTo(toProperty.get());
         selectedTour.setTransportType(transportTypeProperty.get());
 
-
         stage.close();
     }
 }
