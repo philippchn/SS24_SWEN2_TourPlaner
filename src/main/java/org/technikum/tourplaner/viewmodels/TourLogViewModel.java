@@ -28,21 +28,23 @@ import org.technikum.tourplaner.repositories.TourLogRepository;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 
 @Getter
 public class TourLogViewModel {
     private static final Logger logger = LogManager.getLogger(TourLogViewModel.class);
 
     private final TourLogRepository tourLogRepository;
-
     private final TourViewModel tourViewModel;
+
     private final ObservableList<TourLogModel> tourLogModelList = FXCollections.observableArrayList();
     private final ObjectProperty<TourLogModel> selectedTourLogModelProperty = new SimpleObjectProperty<>();
 
-    private final SimpleStringProperty dateProperty = new SimpleStringProperty();
+    private final ObjectProperty<LocalDate> dateProperty = new SimpleObjectProperty<>();
     private final SimpleStringProperty commentProperty = new SimpleStringProperty();
     private final SimpleStringProperty difficultyProperty = new SimpleStringProperty();
     private final SimpleStringProperty totalDistanceProperty = new SimpleStringProperty();
@@ -62,7 +64,7 @@ public class TourLogViewModel {
         tourViewModel.selectedTourModelProperty().addListener((observable, oldValue, newValue) -> loadTourLogs(newValue));
     }
 
-    public StringProperty dateProperty() {
+    public ObjectProperty<LocalDate> dateProperty() {
         return dateProperty;
     }
 
@@ -116,13 +118,13 @@ public class TourLogViewModel {
 
     public void initializeLogsTableColumns(TableView<TourLogModel> logsTable) {
         TableColumn<TourLogModel, String> dateColumn = new TableColumn<>("Date");
-        dateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDate()));
+        dateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDate().toString()));
 
         TableColumn<TourLogModel, String> durationColumn = new TableColumn<>("Duration");
-        durationColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTotalTime()));
+        durationColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTotalTime().toString()));
 
         TableColumn<TourLogModel, String> distanceColumn = new TableColumn<>("Distance");
-        distanceColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTotalDistance()));
+        distanceColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTotalDistance().toString()));
 
         logsTable.getColumns().setAll(dateColumn, durationColumn, distanceColumn);
     }
@@ -144,35 +146,39 @@ public class TourLogViewModel {
     }
 
     public void addTourLog() {
-        TourLogModel tourLogModel = new TourLogModel(
-                dateProperty.get(),
-                commentProperty.get(),
-                difficultyProperty.get(),
-                totalDistanceProperty.get(),
-                totalTimeProperty.get(),
-                ratingProperty.get(),
-                tourViewModel.getSelectedTourModel().getId()
-        );
+        try {
+            if (!isValidInput()) {
+                return;
+            }
 
-        TourModel selectedTour = tourViewModel.getSelectedTourModel();
+            TourLogModel tourLogModel = new TourLogModel(
+                    dateProperty.get(),
+                    commentProperty.get(),
+                    Integer.parseInt(difficultyProperty.get()),
+                    Double.parseDouble(totalDistanceProperty.get()),
+                    Long.parseLong(totalTimeProperty.get()),
+                    Integer.parseInt(ratingProperty.get()),
+                    tourViewModel.getSelectedTourModel().getId()
+            );
 
-        if (selectedTour == null) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.setContentText("Please create/select a tour first");
-            alert.showAndWait();
-            return;
+            TourModel selectedTour = tourViewModel.getSelectedTourModel();
+
+            if (selectedTour == null) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Please create/select a tour first");
+                alert.showAndWait();
+                return;
+            }
+
+            selectedTour.addTourLog(selectedTour.getName(), tourLogModel);
+            tourLogModelList.add(tourLogModel);
+            tourLogRepository.save(tourLogModel);
+            clearTextFields();
+        } catch (NumberFormatException e) {
+            showAlert("Invalid Input", "Please enter valid numbers for Difficulty, Total Distance, Total Time, and Rating.");
         }
-
-        if (!isValidInput()) {
-            return;
-        }
-
-        selectedTour.addTourLog(selectedTour.getName(), tourLogModel);
-        tourLogModelList.add(tourLogModel);
-        tourLogRepository.save(tourLogModel);
-        clearTextFields();
     }
 
     public void selectTourLog() {
@@ -194,13 +200,8 @@ public class TourLogViewModel {
     }
 
     public void updateTourLog(TourLogModel updatedTourLog) {
-        for (int i = 0; i < tourLogModelList.size(); i++) {
-            TourLogModel tourLog = tourLogModelList.get(i);
-            if (tourLog.getId().equals(updatedTourLog.getId())) {
-                tourLogModelList.set(i, updatedTourLog);
-                break;
-            }
-        }
+        tourLogRepository.updateById(updatedTourLog.getId(), updatedTourLog);
+        tourLogModelList.replaceAll(log -> log.getId().equals(updatedTourLog.getId()) ? updatedTourLog : log);
     }
 
     public void openModifyTourLogPopup(TableView<TourLogModel> logsTable) {
@@ -232,36 +233,65 @@ public class TourLogViewModel {
         }
     }
 
-    private boolean isValidInput() {
-        if (dateProperty.get() == null || dateProperty.get().isBlank()) {
-            showErrorMessage("Date");
-            return false;
-        } else if (commentProperty.get() == null || commentProperty.get().isBlank()) {
-            showErrorMessage("Comment");
-            return false;
-        } else if(difficultyProperty.get() == null || difficultyProperty.get().isBlank()) {
-            showErrorMessage("Difficulty");
-            return false;
-        } else if(totalDistanceProperty.get() == null || totalDistanceProperty.get().isBlank()) {
-            showErrorMessage("Total distance");
-            return false;
-        } else if(totalTimeProperty.get() == null || totalTimeProperty.get().isBlank()) {
-            showErrorMessage("Total time");
-            return false;
-        } else if(ratingProperty.get() == null || ratingProperty.get().isBlank()) {
-            showErrorMessage("Rating");
+    public boolean isValidInput() {
+        try {
+            if (dateProperty.get() == null) {
+                throw new IllegalArgumentException("Date must not be null");
+            }
+            if (commentProperty.get() == null || commentProperty.get().isBlank()) {
+                throw new IllegalArgumentException("Comment must not be empty");
+            }
+            int difficulty;
+            try {
+                difficulty = Integer.parseInt(difficultyProperty.get());
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("Difficulty must be a valid integer");
+            }
+            if (difficulty <= 0 || difficulty > 10) {
+                throw new IllegalArgumentException("Difficulty must be between 1 and 10");
+            }
+            double totalDistance;
+            try {
+                totalDistance = Double.parseDouble(totalDistanceProperty.get());
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("Total distance must be a valid number");
+            }
+            if (totalDistance < 0) {
+                throw new IllegalArgumentException("Total distance must be a non-negative number");
+            }
+            long totalTime;
+            try {
+                totalTime = Long.parseLong(totalTimeProperty.get());
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("Total time must be a valid number");
+            }
+            if (totalTime < 0) {
+                throw new IllegalArgumentException("Total time must be a non-negative number");
+            }
+            int rating;
+            try {
+                rating = Integer.parseInt(ratingProperty.get());
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("Rating must be a valid integer");
+            }
+            if (rating < 0) {
+                throw new IllegalArgumentException("Rating must be a non-negative number");
+            }
+            return true;
+        } catch (IllegalArgumentException e) {
+            showErrorMessage(e.getMessage());
             return false;
         }
-        return true;
     }
 
-    private void showErrorMessage(String missingTextField) {
+    private void showErrorMessage(String errorMessage) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(null);
-        alert.setContentText(missingTextField + " must not be empty");
+        alert.setContentText(errorMessage);
         alert.showAndWait();
     }
+
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -290,7 +320,7 @@ public class TourLogViewModel {
     }
 
     private void clearTextFields() {
-        dateProperty.set("");
+        dateProperty.set(null);
         commentProperty.set("");
         difficultyProperty.set("");
         totalDistanceProperty.set("");

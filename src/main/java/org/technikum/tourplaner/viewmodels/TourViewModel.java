@@ -163,7 +163,7 @@ public class TourViewModel {
         }
     }
 
-    private boolean allFieldsSet() {
+    public boolean allFieldsSet() {
         if (nameProperty.get() == null || nameProperty.get().isBlank()) {
             showErrorMessage("Name must not be empty");
             logger.info("Input field 'name' is empty");
@@ -299,7 +299,7 @@ public class TourViewModel {
             JsonNode summaryNode = rootNode.path("features").get(0).path("properties").path("summary");
 
             double distance = summaryNode.path("distance").asDouble();
-            double duration = summaryNode.path("duration").asDouble();
+            Long duration = summaryNode.path("duration").asLong();
 
             return new TourModel(
                     name.trim(),
@@ -307,8 +307,8 @@ public class TourViewModel {
                     from.trim(),
                     to.trim(),
                     transportType.getApiParameter(),
-                    String.valueOf(distance),
-                    String.valueOf(duration),
+                    distance,
+                    duration,
                     jsonResponse
             );
         } catch (IOException e) {
