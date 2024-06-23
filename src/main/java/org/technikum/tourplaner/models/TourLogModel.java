@@ -1,5 +1,6 @@
 package org.technikum.tourplaner.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -51,6 +52,7 @@ public class TourLogModel {
         this.tourId = tourId;
     }
 
+    @JsonIgnore
     public String getObjectStringView () {
         return "TourLogModel{" +
                 "id=" + id +

@@ -67,7 +67,7 @@ public class MainApplication extends Application {
 
         FXMLLoader tourLogsLoader = new FXMLLoader(getClass().getResource(EViews.tourLogs.getFilePath()));
         TourLogRepository tourLogRepository = new TourLogRepository();
-        TourLogsController tourLogsController = new TourLogsController(tourViewModel, tourLogRepository);
+        TourLogsController tourLogsController = new TourLogsController(tourRepository, tourViewModel, tourLogRepository);
         tourLogsLoader.setController(tourLogsController);
         Parent tourLogsView = tourLogsLoader.load();
 

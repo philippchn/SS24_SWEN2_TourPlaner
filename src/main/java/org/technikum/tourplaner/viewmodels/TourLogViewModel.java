@@ -21,10 +21,13 @@ import org.technikum.tourplaner.EViews;
 import org.technikum.tourplaner.MainApplication;
 import org.technikum.tourplaner.controller.ModifyTourLogsPopupController;
 import org.technikum.tourplaner.iText7.PdfGenerator;
+import org.technikum.tourplaner.models.ExportUtil;
+import org.technikum.tourplaner.models.ImportUtil;
 import org.technikum.tourplaner.models.TourLogModel;
 import org.technikum.tourplaner.models.TourModel;
 import org.technikum.tourplaner.openrouteservice.OpenRouteServiceClient;
 import org.technikum.tourplaner.repositories.TourLogRepository;
+import org.technikum.tourplaner.repositories.TourRepository;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -38,6 +41,7 @@ import java.util.stream.Collectors;
 public class TourLogViewModel {
     private static final Logger logger = LogManager.getLogger(TourLogViewModel.class);
 
+    private final TourRepository tourRepository;
     private final TourLogRepository tourLogRepository;
     private final TourViewModel tourViewModel;
 
@@ -58,7 +62,8 @@ public class TourLogViewModel {
     private final SimpleStringProperty detailViewTotalTimeProperty = new SimpleStringProperty("Total time: ");
     private final SimpleStringProperty detailViewRatingProperty = new SimpleStringProperty("Rating: ");
 
-    public TourLogViewModel(TourLogRepository tourLogRepository, TourViewModel tourViewModel) {
+    public TourLogViewModel(TourRepository tourRepository, TourLogRepository tourLogRepository, TourViewModel tourViewModel) {
+        this.tourRepository = tourRepository;
         this.tourLogRepository = tourLogRepository;
         this.tourViewModel = tourViewModel;
         tourViewModel.selectedTourModelProperty().addListener((observable, oldValue, newValue) -> loadTourLogs(newValue));
@@ -351,5 +356,15 @@ public class TourLogViewModel {
             alert.setContentText("PDF Generation failed");
             alert.showAndWait();
         }
+    }
+
+    public void importTour() {
+        ImportUtil importUtil = new ImportUtil(tourRepository, tourLogRepository);
+        importUtil.importTourData();
+    }
+
+    public void exportTour() {
+        ExportUtil exportUtil = new ExportUtil();
+        exportUtil.exportTourData(tourViewModel.selectedTourModelProperty().get(), tourLogModelList);
     }
 }

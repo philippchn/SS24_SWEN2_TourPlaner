@@ -22,13 +22,14 @@ public class TourRepository {
         entityManagerFactory = Persistence.createEntityManagerFactory("hibernate_tour");
     }
 
-    public void save(TourModel tour) {
+    public Long save(TourModel tour) {
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             EntityTransaction transaction = entityManager.getTransaction();
             transaction.begin();
             entityManager.persist(tour);
             transaction.commit();
             logger.info("Saved tour to db: " + tour.getObjectStringView());
+            return tour.getId();
         }
     }
 

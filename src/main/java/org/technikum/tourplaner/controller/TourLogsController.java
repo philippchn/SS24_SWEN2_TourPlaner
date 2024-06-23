@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import org.technikum.tourplaner.models.TourLogModel;
 import org.technikum.tourplaner.repositories.TourLogRepository;
+import org.technikum.tourplaner.repositories.TourRepository;
 import org.technikum.tourplaner.viewmodels.TourLogViewModel;
 import org.technikum.tourplaner.viewmodels.TourViewModel;
 
@@ -17,6 +18,10 @@ public class TourLogsController {
     private Button pdfButton;
     @FXML
     private Button leafletButton;
+    @FXML
+    private Button importButton;
+    @FXML
+    private Button exportButton;
     @FXML
     private Text infoText;
     @FXML
@@ -54,8 +59,8 @@ public class TourLogsController {
 
     private final TourLogViewModel tourLogViewModel;
 
-    public TourLogsController(TourViewModel tourViewModel, TourLogRepository tourLogRepository) {
-        this.tourLogViewModel = new TourLogViewModel(tourLogRepository, tourViewModel);
+    public TourLogsController(TourRepository tourRepository, TourViewModel tourViewModel, TourLogRepository tourLogRepository) {
+        this.tourLogViewModel = new TourLogViewModel(tourRepository, tourLogRepository, tourViewModel);
     }
 
     @FXML
@@ -68,6 +73,8 @@ public class TourLogsController {
         modifyButton.setOnAction(event -> tourLogViewModel.openModifyTourLogPopup(logsTable));
         leafletButton.setOnAction(event -> tourLogViewModel.openLeafletMap());
         pdfButton.setOnAction(event -> tourLogViewModel.generatePdf());
+        importButton.setOnAction(event -> tourLogViewModel.importTour());
+        exportButton.setOnAction(actionEvent -> tourLogViewModel.exportTour());
 
         logsTable.setItems(tourLogViewModel.getTourLogs());
         tourLogViewModel.initializeLogsTableColumns(logsTable);
