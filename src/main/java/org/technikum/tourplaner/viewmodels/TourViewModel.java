@@ -316,4 +316,10 @@ public class TourViewModel {
             throw new IllegalArgumentException();
         }
     }
+
+    public void searchTours(String query) {
+        List<TourModel> searchResults = tourRepository.searchTours(query);
+        tours.setAll(searchResults);
+    }
+
 }

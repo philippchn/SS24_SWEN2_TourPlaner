@@ -68,4 +68,31 @@ public class TourLogRepository {
             return query.getResultList();
         }
     }
+
+    public List<TourLogModel> searchTourLogs(String query) {
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            String searchQuery = "%" + query.toLowerCase() + "%";
+            Query q = entityManager.createQuery(
+                    "SELECT t FROM TourLogModel t " +
+                            "WHERE LOWER(t.date) LIKE :query " +
+                            "OR LOWER(t.comment) LIKE :query " +
+                            "OR LOWER(t.difficulty) LIKE :query " +
+                            "OR LOWER(t.totalDistance) LIKE :query " +
+                            "OR LOWER(t.totalTime) LIKE :query " +
+                            "OR LOWER(t.rating) LIKE :query"
+            );
+            q.setParameter("query", searchQuery);
+            logger.info("Search for TourLogs with query: " + query);
+            return q.getResultList();
+        }
+    }
+
+    public List<TourLogModel> getAllTourLogs() {
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            Query query = entityManager.createQuery("SELECT t FROM TourLogModel t");
+            logger.info("Fetching all TourLogs from the database");
+            return query.getResultList();
+        }
+    }
+
 }

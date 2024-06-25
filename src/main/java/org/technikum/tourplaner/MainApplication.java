@@ -6,16 +6,20 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.exception.JDBCConnectionException;
+import org.technikum.tourplaner.controller.SearchBarController;
 import org.technikum.tourplaner.controller.TourListController;
 import org.technikum.tourplaner.controller.TourLogsController;
 import org.technikum.tourplaner.openrouteservice.OpenRouteServiceClient;
 import org.technikum.tourplaner.repositories.TourLogRepository;
 import org.technikum.tourplaner.repositories.TourRepository;
+import org.technikum.tourplaner.viewmodels.SearchViewModel;
+import org.technikum.tourplaner.viewmodels.TourLogViewModel;
 import org.technikum.tourplaner.viewmodels.TourViewModel;
 
 import java.io.IOException;
@@ -47,6 +51,7 @@ public class MainApplication extends Application {
             stage.show();
         } catch (IOException e) {
             logger.fatal("Error while starting application: " + e.getMessage());
+            e.printStackTrace();
         } catch (JDBCConnectionException e) {
             logger.fatal("Database connection failed: " + e.getMessage());
         } catch (Exception e) {
@@ -68,11 +73,21 @@ public class MainApplication extends Application {
         FXMLLoader tourLogsLoader = new FXMLLoader(getClass().getResource(EViews.tourLogs.getFilePath()));
         TourLogRepository tourLogRepository = new TourLogRepository();
         TourLogsController tourLogsController = new TourLogsController(tourRepository, tourViewModel, tourLogRepository);
+        TourLogViewModel tourLogViewModel = new TourLogViewModel(tourRepository,tourLogRepository,tourViewModel);
         tourLogsLoader.setController(tourLogsController);
         Parent tourLogsView = tourLogsLoader.load();
 
         HBox subView = (HBox) mainView.lookup("#subView");
         subView.getChildren().addAll(tourListView, tourLogsView);
+
+        FXMLLoader searchBarLoader = new FXMLLoader(getClass().getResource(EViews.searchBar.getFilePath()));
+        Parent searchBar = searchBarLoader.load();
+        SearchBarController searchBarController = searchBarLoader.getController();
+        SearchViewModel searchViewModel = new SearchViewModel(tourViewModel, tourLogViewModel);
+        searchBarController.setSearchViewModel(searchViewModel);
+
+        VBox root = (VBox) mainView;
+        root.getChildren().add(1, searchBar);
     }
 
     public static void main(String[] args) {

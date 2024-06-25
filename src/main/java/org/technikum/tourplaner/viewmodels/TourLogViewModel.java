@@ -367,4 +367,10 @@ public class TourLogViewModel {
         ExportUtil exportUtil = new ExportUtil();
         exportUtil.exportTourData(tourViewModel.selectedTourModelProperty().get(), tourLogModelList);
     }
+
+    public void searchTourLogs(String query) {
+        List<TourLogModel> searchResults = tourLogRepository.searchTourLogs(query);
+        tourLogModelList.setAll(searchResults);
+    }
+
 }

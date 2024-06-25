@@ -6,11 +6,13 @@ import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.technikum.tourplaner.models.TourModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TourRepository {
@@ -75,6 +77,26 @@ public class TourRepository {
             CriteriaQuery<TourModel> criteriaQuery = criteriaBuilder.createQuery(TourModel.class);
             Root<TourModel> root = criteriaQuery.from(TourModel.class);
             criteriaQuery.select(root);
+
+            return entityManager.createQuery(criteriaQuery).getResultList();
+        }
+    }
+
+    public List<TourModel> searchTours(String query) {
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<TourModel> criteriaQuery = criteriaBuilder.createQuery(TourModel.class);
+            Root<TourModel> root = criteriaQuery.from(TourModel.class);
+
+            // Define search predicates
+            String searchPattern = "%" + query.toLowerCase() + "%";
+            List<Predicate> predicates = new ArrayList<>();
+            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), searchPattern));
+            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("tourDescription")), searchPattern));
+            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("from")), searchPattern));
+            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("to")), searchPattern));
+
+            criteriaQuery.where(criteriaBuilder.or(predicates.toArray(new Predicate[0])));
 
             return entityManager.createQuery(criteriaQuery).getResultList();
         }
