@@ -56,8 +56,9 @@ public class MainApplication extends Application {
 
     private void addTourSubView(Parent mainView) throws IOException {
         TourRepository tourRepository = new TourRepository();
+        TourLogRepository tourLogRepository = new TourLogRepository();
         OpenRouteServiceClient openRouteServiceClient = new OpenRouteServiceClient();
-        TourViewModel tourViewModel = new TourViewModel(tourRepository, openRouteServiceClient);
+        TourViewModel tourViewModel = new TourViewModel(tourRepository, tourLogRepository, openRouteServiceClient);
 
         FXMLLoader tourListLoader = new FXMLLoader(getClass().getResource(EViews.tourList.getFilePath()));
         TourListController tourListController = new TourListController(tourViewModel);
@@ -65,7 +66,6 @@ public class MainApplication extends Application {
         Parent tourListView = tourListLoader.load();
 
         FXMLLoader tourLogsLoader = new FXMLLoader(getClass().getResource(EViews.tourLogs.getFilePath()));
-        TourLogRepository tourLogRepository = new TourLogRepository();
         TourLogsController tourLogsController = new TourLogsController(tourRepository, tourViewModel, tourLogRepository);
         tourLogsLoader.setController(tourLogsController);
         Parent tourLogsView = tourLogsLoader.load();

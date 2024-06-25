@@ -68,4 +68,18 @@ public class TourLogRepository {
             return query.getResultList();
         }
     }
+
+    public void deleteByFK(Long fkId){
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            EntityTransaction transaction = entityManager.getTransaction();
+            transaction.begin();
+
+            String jpql = "DELETE FROM TourLogModel  t WHERE t.tourId = :fkId";
+            Query query = entityManager.createQuery(jpql);
+            query.setParameter("fkId", fkId);
+            int deletedCount = query.executeUpdate();
+            transaction.commit();
+            logger.info("TourLog with FK " + fkId + " deleted. Total Logs deleted: " + deletedCount);
+        }
+    }
 }
