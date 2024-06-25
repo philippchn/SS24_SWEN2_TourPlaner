@@ -1,4 +1,4 @@
-package org.technikum.tourplaner.controller;
+package org.technikum.tourplaner.BL.controller;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -10,8 +10,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.technikum.tourplaner.models.TourLogModel;
-import org.technikum.tourplaner.viewmodels.TourLogViewModel;
+import org.technikum.tourplaner.BL.models.TourLogModel;
+import org.technikum.tourplaner.BL.viewmodels.TourLogViewModel;
 
 import java.time.LocalDate;
 

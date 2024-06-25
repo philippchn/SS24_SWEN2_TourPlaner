@@ -1,9 +1,9 @@
-package org.technikum.tourplaner.repositories;
+package org.technikum.tourplaner.DAL.repositories;
 
 import jakarta.persistence.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.technikum.tourplaner.models.TourLogModel;
+import org.technikum.tourplaner.BL.models.TourLogModel;
 
 import java.util.List;
 

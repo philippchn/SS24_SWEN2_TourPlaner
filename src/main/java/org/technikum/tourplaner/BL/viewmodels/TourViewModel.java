@@ -1,4 +1,4 @@
-package org.technikum.tourplaner.viewmodels;
+package org.technikum.tourplaner.BL.viewmodels;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,14 +18,14 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.technikum.tourplaner.BL.controller.ModifyTourPopupController;
+import org.technikum.tourplaner.BL.models.TourLogModel;
+import org.technikum.tourplaner.BL.models.TourModel;
+import org.technikum.tourplaner.DAL.openrouteservice.ETransportType;
+import org.technikum.tourplaner.DAL.openrouteservice.OpenRouteServiceClient;
+import org.technikum.tourplaner.DAL.repositories.TourRepository;
 import org.technikum.tourplaner.EViews;
 import org.technikum.tourplaner.MainApplication;
-import org.technikum.tourplaner.controller.ModifyTourPopupController;
-import org.technikum.tourplaner.models.TourLogModel;
-import org.technikum.tourplaner.models.TourModel;
-import org.technikum.tourplaner.openrouteservice.ETransportType;
-import org.technikum.tourplaner.openrouteservice.OpenRouteServiceClient;
-import org.technikum.tourplaner.repositories.TourRepository;
 
 import java.io.IOException;
 import java.util.List;

@@ -1,4 +1,4 @@
-package org.technikum.tourplaner.repositories;
+package org.technikum.tourplaner.DAL.repositories;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -9,7 +9,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.technikum.tourplaner.models.TourModel;
+import org.technikum.tourplaner.BL.models.TourModel;
 
 import java.util.List;
 

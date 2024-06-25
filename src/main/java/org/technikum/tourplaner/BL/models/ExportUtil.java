@@ -1,10 +1,10 @@
-package org.technikum.tourplaner.models;
+package org.technikum.tourplaner.BL.models;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.technikum.tourplaner.viewmodels.TourLogViewModel;
+import org.technikum.tourplaner.BL.viewmodels.TourLogViewModel;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;

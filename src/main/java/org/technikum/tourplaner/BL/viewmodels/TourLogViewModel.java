@@ -1,4 +1,4 @@
-package org.technikum.tourplaner.viewmodels;
+package org.technikum.tourplaner.BL.viewmodels;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -17,17 +17,17 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.technikum.tourplaner.BL.controller.ModifyTourLogsPopupController;
+import org.technikum.tourplaner.BL.iText7.PdfGenerator;
+import org.technikum.tourplaner.BL.models.ExportUtil;
+import org.technikum.tourplaner.BL.models.ImportUtil;
+import org.technikum.tourplaner.BL.models.TourLogModel;
+import org.technikum.tourplaner.BL.models.TourModel;
+import org.technikum.tourplaner.DAL.openrouteservice.OpenRouteServiceClient;
+import org.technikum.tourplaner.DAL.repositories.TourLogRepository;
+import org.technikum.tourplaner.DAL.repositories.TourRepository;
 import org.technikum.tourplaner.EViews;
 import org.technikum.tourplaner.MainApplication;
-import org.technikum.tourplaner.controller.ModifyTourLogsPopupController;
-import org.technikum.tourplaner.iText7.PdfGenerator;
-import org.technikum.tourplaner.models.ExportUtil;
-import org.technikum.tourplaner.models.ImportUtil;
-import org.technikum.tourplaner.models.TourLogModel;
-import org.technikum.tourplaner.models.TourModel;
-import org.technikum.tourplaner.openrouteservice.OpenRouteServiceClient;
-import org.technikum.tourplaner.repositories.TourLogRepository;
-import org.technikum.tourplaner.repositories.TourRepository;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

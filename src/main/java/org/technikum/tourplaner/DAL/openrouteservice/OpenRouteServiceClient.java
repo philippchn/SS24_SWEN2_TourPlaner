@@ -1,4 +1,4 @@
-package org.technikum.tourplaner.openrouteservice;
+package org.technikum.tourplaner.DAL.openrouteservice;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

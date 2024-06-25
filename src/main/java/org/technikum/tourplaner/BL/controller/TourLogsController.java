@@ -1,17 +1,16 @@
-package org.technikum.tourplaner.controller;
+package org.technikum.tourplaner.BL.controller;
 
-import javafx.beans.property.Property;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
-import org.technikum.tourplaner.models.TourLogModel;
-import org.technikum.tourplaner.repositories.TourLogRepository;
-import org.technikum.tourplaner.repositories.TourRepository;
-import org.technikum.tourplaner.viewmodels.TourLogViewModel;
-import org.technikum.tourplaner.viewmodels.TourViewModel;
+import org.technikum.tourplaner.BL.models.TourLogModel;
+import org.technikum.tourplaner.BL.viewmodels.TourLogViewModel;
+import org.technikum.tourplaner.BL.viewmodels.TourViewModel;
+import org.technikum.tourplaner.DAL.repositories.TourLogRepository;
+import org.technikum.tourplaner.DAL.repositories.TourRepository;
 
 public class TourLogsController {
     @FXML

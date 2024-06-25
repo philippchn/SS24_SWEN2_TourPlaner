@@ -1,4 +1,4 @@
-package org.technikum.tourplaner.openrouteservice;
+package org.technikum.tourplaner.DAL.openrouteservice;
 
 class AddressData{
     public String name;
