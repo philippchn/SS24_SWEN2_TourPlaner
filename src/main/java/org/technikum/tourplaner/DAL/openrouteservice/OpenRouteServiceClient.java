@@ -16,13 +16,19 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.util.ResourceBundle;
 
 public class OpenRouteServiceClient {
     private static final Logger logger = LogManager.getLogger(OpenRouteServiceClient.class);
 
     private static final String API_URL_SEARCH = "https://api.openrouteservice.org/geocode/search";
     private static final String API_URL_DIRECTIONS = "https://api.openrouteservice.org/v2/directions/";
-    private static final String API_KEY = "5b3ce3597851110001cf6248100ea82416bb4259b7387ad2777a08cb"; // TODO REPLACE WHEN MAKING REPO PUBLIC
+    private final String API_KEY;
+
+    public OpenRouteServiceClient() {
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("cfg");
+        this.API_KEY = resourceBundle.getString("openRouteServiceAPIKey");
+    }
 
     public String getTourInformation(String startAddress, String endAddress, ETransportType transportType){
         if (transportType == null) {
