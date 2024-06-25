@@ -88,7 +88,6 @@ public class TourRepository {
             CriteriaQuery<TourModel> criteriaQuery = criteriaBuilder.createQuery(TourModel.class);
             Root<TourModel> root = criteriaQuery.from(TourModel.class);
 
-            // Define search predicates
             String searchPattern = "%" + query.toLowerCase() + "%";
             List<Predicate> predicates = new ArrayList<>();
             predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), searchPattern));
@@ -101,4 +100,30 @@ public class TourRepository {
             return entityManager.createQuery(criteriaQuery).getResultList();
         }
     }
+
+    public List<TourModel> getToursByIds(List<Integer> ids) {
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<TourModel> criteriaQuery = criteriaBuilder.createQuery(TourModel.class);
+            Root<TourModel> root = criteriaQuery.from(TourModel.class);
+            criteriaQuery.where(root.get("id").in(ids));
+
+            List<TourModel> tours = entityManager.createQuery(criteriaQuery).getResultList();
+
+            if (tours.isEmpty()) {
+                logger.info("No tours found for the given IDs: " + ids);
+            } else {
+                logger.info("Found " + tours.size() + " tours for the given IDs: " + ids);
+                for (TourModel tour : tours) {
+                    logger.info("Found Tour ID: " + tour.getId() + ", Tour Name: " + tour.getName());
+                }
+            }
+
+            return tours;
+        } catch (Exception e) {
+            logger.error("Error while fetching tours by IDs", e);
+            return List.of(); // Return empty list in case of error
+        }
+    }
+
 }

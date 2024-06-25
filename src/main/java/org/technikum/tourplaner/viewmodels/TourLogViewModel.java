@@ -368,9 +368,30 @@ public class TourLogViewModel {
         exportUtil.exportTourData(tourViewModel.selectedTourModelProperty().get(), tourLogModelList);
     }
 
-    public void searchTourLogs(String query) {
-        List<TourLogModel> searchResults = tourLogRepository.searchTourLogs(query);
-        tourLogModelList.setAll(searchResults);
+    public boolean searchTourLogs(String query) {
+        try {
+            List<TourLogModel> searchResults = tourLogRepository.searchTourLogs(query);
+
+            if (searchResults.isEmpty()) {
+                return false;
+            } else {
+                tourLogModelList.setAll(searchResults);
+
+                // Update the tour list based on the found logs
+                List<Integer> matchingTourIds = searchResults.stream()
+                        .map(TourLogModel::getTourId)
+                        .distinct()
+                        .map(Long::intValue) // Convert Long to Integer
+                        .collect(Collectors.toList());
+
+                List<TourModel> matchingTours = tourRepository.getToursByIds(matchingTourIds);
+                tourViewModel.setTours(FXCollections.observableArrayList(matchingTours));
+            }
+        } catch (Exception e) {
+            logger.error("Error searching tour logs: ", e);
+            showAlert("Error", "An error occurred while searching for tour logs.");
+        }
+        return true;
     }
 
 }

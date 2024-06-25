@@ -128,6 +128,10 @@ public class TourViewModel {
         return selectedTourLogModelProperty.get();
     }
 
+    public void setTours(ObservableList<TourModel> toursList) {
+        tours.setAll(toursList);
+    }
+
     public TourViewModel(TourRepository tourRepository, OpenRouteServiceClient openRouteServiceClient) {
         this.tourRepository = tourRepository;
         this.openRouteServiceClient = openRouteServiceClient;
@@ -317,9 +321,15 @@ public class TourViewModel {
         }
     }
 
-    public void searchTours(String query) {
+    public boolean searchTours(String query) {
         List<TourModel> searchResults = tourRepository.searchTours(query);
-        tours.setAll(searchResults);
+
+        if (searchResults.isEmpty()) {
+            return false;
+        } else {
+            tours.setAll(searchResults);
+        }
+        return true;
     }
 
 }

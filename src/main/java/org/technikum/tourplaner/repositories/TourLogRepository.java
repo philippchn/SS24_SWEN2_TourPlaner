@@ -1,11 +1,18 @@
 package org.technikum.tourplaner.repositories;
 
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.technikum.tourplaner.models.TourLogModel;
+import org.technikum.tourplaner.models.TourModel;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TourLogRepository {
     private static final Logger logger = LogManager.getLogger(TourLogRepository.class);
@@ -69,29 +76,50 @@ public class TourLogRepository {
         }
     }
 
-    public List<TourLogModel> searchTourLogs(String query) {
-        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
-            String searchQuery = "%" + query.toLowerCase() + "%";
-            Query q = entityManager.createQuery(
-                    "SELECT t FROM TourLogModel t " +
-                            "WHERE LOWER(t.date) LIKE :query " +
-                            "OR LOWER(t.comment) LIKE :query " +
-                            "OR LOWER(t.difficulty) LIKE :query " +
-                            "OR LOWER(t.totalDistance) LIKE :query " +
-                            "OR LOWER(t.totalTime) LIKE :query " +
-                            "OR LOWER(t.rating) LIKE :query"
-            );
-            q.setParameter("query", searchQuery);
-            logger.info("Search for TourLogs with query: " + query);
-            return q.getResultList();
-        }
-    }
+
 
     public List<TourLogModel> getAllTourLogs() {
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
             Query query = entityManager.createQuery("SELECT t FROM TourLogModel t");
             logger.info("Fetching all TourLogs from the database");
             return query.getResultList();
+        }
+    }
+
+    public List<TourLogModel> searchTourLogs(String query) {
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<TourLogModel> criteriaQuery = criteriaBuilder.createQuery(TourLogModel.class);
+            Root<TourLogModel> root = criteriaQuery.from(TourLogModel.class);
+
+            String searchPattern = "%" + query.toLowerCase() + "%";
+            List<Predicate> predicates = new ArrayList<>();
+            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("comment")), searchPattern));
+
+            // Check if query can be parsed as an integer or double for numeric fields
+            try {
+                int intQuery = Integer.parseInt(query);
+                predicates.add(criteriaBuilder.equal(root.get("difficulty"), intQuery));
+                predicates.add(criteriaBuilder.equal(root.get("rating"), intQuery));
+            } catch (NumberFormatException e) {
+                // Query is not an integer, do nothing
+            }
+
+            try {
+                double doubleQuery = Double.parseDouble(query);
+                predicates.add(criteriaBuilder.equal(root.get("totalDistance"), doubleQuery));
+                predicates.add(criteriaBuilder.equal(root.get("totalTime"), (long) doubleQuery));
+            } catch (NumberFormatException e) {
+                // Query is not a double, do nothing
+            }
+
+            criteriaQuery.where(criteriaBuilder.or(predicates.toArray(new Predicate[0])));
+
+            List<TourLogModel> tourLogs = entityManager.createQuery(criteriaQuery).getResultList();
+
+            logger.info("Found " + tourLogs.size() + " TourLogs for query: " + query);
+
+            return tourLogs;
         }
     }
 
