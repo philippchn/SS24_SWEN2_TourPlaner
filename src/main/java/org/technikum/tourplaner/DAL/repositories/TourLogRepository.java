@@ -1,6 +1,9 @@
 package org.technikum.tourplaner.DAL.repositories;
 
-import jakarta.persistence.*;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Query;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.technikum.tourplaner.BL.models.TourLogModel;
@@ -13,7 +16,7 @@ public class TourLogRepository {
     private final EntityManagerFactory entityManagerFactory;
 
     public TourLogRepository() {
-        entityManagerFactory = Persistence.createEntityManagerFactory("hibernate_tourLog");
+        entityManagerFactory = EntityManagerFactoryProvider.getTourLogEntityManagerFactory();
     }
 
     public void save(TourLogModel tourLog) {

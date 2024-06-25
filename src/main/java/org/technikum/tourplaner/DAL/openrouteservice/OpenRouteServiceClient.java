@@ -23,11 +23,11 @@ public class OpenRouteServiceClient {
 
     private static final String API_URL_SEARCH = "https://api.openrouteservice.org/geocode/search";
     private static final String API_URL_DIRECTIONS = "https://api.openrouteservice.org/v2/directions/";
-    private final String API_KEY;
+    private final String apiKey;
 
     public OpenRouteServiceClient() {
         ResourceBundle resourceBundle = ResourceBundle.getBundle("cfg");
-        this.API_KEY = resourceBundle.getString("openRouteServiceAPIKey");
+        this.apiKey = resourceBundle.getString("openRouteServiceAPIKey");
     }
 
     public String getTourInformation(String startAddress, String endAddress, ETransportType transportType){
@@ -47,7 +47,7 @@ public class OpenRouteServiceClient {
         try {
             HttpClient client = HttpClient.newHttpClient();
             String encodedText = URLEncoder.encode(address, StandardCharsets.UTF_8);
-            URI uri = new URI(API_URL_SEARCH + "?api_key=" + API_KEY + "&text=" + encodedText);
+            URI uri = new URI(API_URL_SEARCH + "?api_key=" + apiKey + "&text=" + encodedText);
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(uri)
                     .GET()
@@ -82,7 +82,7 @@ public class OpenRouteServiceClient {
         try{
             HttpClient client = HttpClient.newHttpClient();
             URI uri = new URI(API_URL_DIRECTIONS + transportType.getApiParameter()
-                    + "?api_key=" + API_KEY
+                    + "?api_key=" + apiKey
                     + "&start=" + startAddressData.longitude + "," + startAddressData.latitude
                     + "&end=" + endAddressData.longitude + "," + endAddressData.latitude);
             HttpRequest request = HttpRequest.newBuilder()

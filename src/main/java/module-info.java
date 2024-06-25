@@ -19,4 +19,6 @@ module org.technikum.tourplaner {
     exports org.technikum.tourplaner;
     exports org.technikum.tourplaner.BL.controller;
     exports org.technikum.tourplaner.BL.models;
+    exports org.technikum.tourplaner.DAL.repositories;
+    opens org.technikum.tourplaner.DAL.repositories to javafx.fxml;
 }

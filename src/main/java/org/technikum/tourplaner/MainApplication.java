@@ -15,11 +15,14 @@ import org.technikum.tourplaner.BL.controller.TourListController;
 import org.technikum.tourplaner.BL.controller.TourLogsController;
 import org.technikum.tourplaner.BL.viewmodels.TourViewModel;
 import org.technikum.tourplaner.DAL.openrouteservice.OpenRouteServiceClient;
+import org.technikum.tourplaner.DAL.repositories.EntityManagerFactoryProvider;
 import org.technikum.tourplaner.DAL.repositories.TourLogRepository;
 import org.technikum.tourplaner.DAL.repositories.TourRepository;
 
 import java.io.IOException;
+import java.util.MissingResourceException;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 public class MainApplication extends Application {
     private static final Logger logger = LogManager.getLogger(MainApplication.class);
@@ -29,6 +32,11 @@ public class MainApplication extends Application {
 
     @Override
     public void start(Stage stage) {
+        if (!propertiesFileIsValid()){
+            logger.info("Application start aborted");
+            return;
+        }
+
         logger.info("Application started");
         try {
             stg = stage;
@@ -52,6 +60,29 @@ public class MainApplication extends Application {
         } catch (Exception e) {
             logger.fatal("An unexpected error occurred: " + e.getMessage());
         }
+        EntityManagerFactoryProvider.closeEntityManagerFactories();
+    }
+
+    private boolean propertiesFileIsValid() {
+        try{
+            ResourceBundle resourceBundle = ResourceBundle.getBundle("cfg");
+            if (resourceBundle.getString("openRouteServiceAPIKey").isEmpty()){
+                logger.fatal("cfg.properties not properly set up: Please define an API Key");
+                return false;
+            }
+            if (resourceBundle.getString("dbUser").isEmpty()){
+                logger.fatal("cfg.properties not properly set up: Please define a dbUser");
+                return false;
+            }
+            if (resourceBundle.getString("dbPassword").isEmpty()){
+                logger.fatal("cfg.properties not properly set up: Please define a dbPassword");
+                return false;
+            }
+        }catch (MissingResourceException e){
+            logger.fatal("cfg.properties not properly set up: " + e.getMessage());
+            return false;
+        }
+        return true;
     }
 
     private void addTourSubView(Parent mainView) throws IOException {

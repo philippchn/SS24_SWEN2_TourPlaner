@@ -3,7 +3,6 @@ package org.technikum.tourplaner.DAL.repositories;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Persistence;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
@@ -19,7 +18,7 @@ public class TourRepository {
     private final EntityManagerFactory entityManagerFactory;
 
     public TourRepository() {
-        entityManagerFactory = Persistence.createEntityManagerFactory("hibernate_tour");
+        entityManagerFactory = EntityManagerFactoryProvider.getTourEntityManagerFactory();
     }
 
     public Long save(TourModel tour) {

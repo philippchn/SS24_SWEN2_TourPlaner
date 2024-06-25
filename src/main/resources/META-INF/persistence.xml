@@ -6,24 +6,10 @@
     <persistence-unit name="hibernate_tour">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <class>org.technikum.tourplaner.BL.models.TourModel</class>
-        <properties>
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/db_tourplanner"/>
-            <property name="jakarta.persistence.jdbc.user" value="pguser"/>
-            <property name="jakarta.persistence.jdbc.password" value="pgpassword"/>
-            <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
-        </properties>
     </persistence-unit>
 
     <persistence-unit name="hibernate_tourLog">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <class>org.technikum.tourplaner.BL.models.TourLogModel</class>
-        <properties>
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/db_tourplanner"/>
-            <property name="jakarta.persistence.jdbc.user" value="pguser"/>
-            <property name="jakarta.persistence.jdbc.password" value="pgpassword"/>
-            <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
-        </properties>
     </persistence-unit>
 </persistence>
