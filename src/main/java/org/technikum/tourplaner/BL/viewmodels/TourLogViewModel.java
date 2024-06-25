@@ -32,9 +32,6 @@ import org.technikum.tourplaner.MainApplication;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 
 @Getter
@@ -143,11 +140,6 @@ public class TourLogViewModel {
             tourLogModelList.clear();
             tourLogModelList.addAll(tourLogRepository.getTourLogsByTourId(String.valueOf(selectedTour.getId())));
         }
-    }
-
-    private List<TourLogModel> getTourLogs(TourModel selectedTour) {
-        Map<String, List<TourLogModel>> tourLogsMap = selectedTour.getTourLogsMap();
-        return tourLogsMap.values().stream().flatMap(List::stream).collect(Collectors.toList());
     }
 
     public void addTourLog() {
@@ -347,13 +339,28 @@ public class TourLogViewModel {
         OpenRouteServiceClient.openTourMapInBrowser(tourViewModel.selectedTourModelProperty().get().getRouteInformation());
     }
 
-    public void generatePdf() {
+    public void generateTourReportPdf() {
         if (tourViewModel.selectedTourModelProperty().get() == null) {
             logger.info("User tried to generade pdf without selecting a Tour");
+            showAlert("Error", "Please choose a Tour first!");
             return;
         }
         try{
-            PdfGenerator.generatePdf(tourViewModel.selectedTourModelProperty().get(), tourLogModelList);
+            PdfGenerator.generateTourReport(tourViewModel.selectedTourModelProperty().get(), tourLogModelList);
+        } catch (FileNotFoundException e) {
+            logger.warn("PDF Generation failed");
+            showAlert("Error", "PDF Generation failed");
+        }
+    }
+
+    public void generateSummarizePdf() {
+        if (tourViewModel.selectedTourModelProperty().get() == null) {
+            logger.info("User tried to generade pdf without selecting a Tour");
+            showAlert("Error", "Please choose a Tour first!");
+            return;
+        }
+        try{
+            PdfGenerator.generateSummarizeReport(tourViewModel.selectedTourModelProperty().get(), tourLogModelList);
         } catch (FileNotFoundException e) {
             logger.warn("PDF Generation failed");
             showAlert("Error", "PDF Generation failed");

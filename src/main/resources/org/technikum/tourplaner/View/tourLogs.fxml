@@ -10,7 +10,7 @@
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="153.0" prefWidth="550.0" VBox.vgrow="ALWAYS">
          <children>
             <Button fx:id="leafletButton" layoutX="394.0" layoutY="15.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="142.0" text="Show Tour in Leaflet" />
-            <Button fx:id="pdfButton" layoutX="394.0" layoutY="80.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="142.0" text="Generate Report" />
+            <Button fx:id="reportPdfButton" layoutX="394.0" layoutY="80.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="142.0" text="Tour Report" />
             <Button fx:id="exportButton" layoutX="14.0" layoutY="80.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="142.0" text="Export tour and logs" />
             <Button fx:id="importButton" layoutX="14.0" layoutY="15.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="142.0" text="Import tour and logs" />
             <ImageView fitHeight="110.0" fitWidth="97.0" layoutX="227.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
@@ -18,6 +18,7 @@
                   <Image url="@../img/favicon.png" />
                </image>
             </ImageView>
+            <Button fx:id="summarizePdfButton" layoutX="394.0" layoutY="110.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="142.0" text="Summarize Report" />
          </children>
       </AnchorPane>
         <TabPane prefHeight="404.0" prefWidth="550.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">

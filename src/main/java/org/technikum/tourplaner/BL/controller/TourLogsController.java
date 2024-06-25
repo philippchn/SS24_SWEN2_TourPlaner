@@ -14,7 +14,9 @@ import org.technikum.tourplaner.DAL.repositories.TourRepository;
 
 public class TourLogsController {
     @FXML
-    private Button pdfButton;
+    private Button reportPdfButton;
+    @FXML
+    private Button summarizePdfButton;
     @FXML
     private Button leafletButton;
     @FXML
@@ -71,7 +73,8 @@ public class TourLogsController {
         deleteButton.setOnAction(event -> tourLogViewModel.deleteTourLog());
         modifyButton.setOnAction(event -> tourLogViewModel.openModifyTourLogPopup(logsTable));
         leafletButton.setOnAction(event -> tourLogViewModel.openLeafletMap());
-        pdfButton.setOnAction(event -> tourLogViewModel.generatePdf());
+        reportPdfButton.setOnAction(event -> tourLogViewModel.generateTourReportPdf());
+        summarizePdfButton.setOnAction(event ->tourLogViewModel.generateSummarizePdf());
         importButton.setOnAction(event -> tourLogViewModel.importTour());
         exportButton.setOnAction(actionEvent -> tourLogViewModel.exportTour());
 
