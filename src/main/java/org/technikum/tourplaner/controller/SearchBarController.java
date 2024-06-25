@@ -13,23 +13,35 @@ public class SearchBarController {
     private TextField searchTextField;
     @FXML
     private Button searchButton;
+    @FXML
+    private Button refreshButton;
 
     @Setter
     private SearchViewModel searchViewModel;
 
-    public SearchBarController() {
-        // No-args constructor for FXMLLoader
+    @Setter
+    private TourViewModel tourViewModel;
+
+    public SearchBarController(TourViewModel tourViewModel) {
+        this.tourViewModel = tourViewModel;
     }
 
     @FXML
     private void initialize() {
         searchButton.setOnAction(event -> performSearch());
-        searchTextField.setOnAction(event -> performSearch()); // Trigger search on Enter key
+        searchTextField.setOnAction(event -> performSearch());
+        refreshButton.setOnAction(event -> refresh());
     }
 
     private void performSearch() {
         String query = searchTextField.getText();
-        searchViewModel.performSearch(query);
+        if (query != null && !query.trim().isEmpty()) {
+            searchViewModel.performSearch(query.trim());
+        }
     }
 
+    private void refresh() {
+        searchTextField.clear();
+        tourViewModel.loadToursFromDatabase();
+    }
 }

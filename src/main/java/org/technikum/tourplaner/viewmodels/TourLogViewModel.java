@@ -375,9 +375,9 @@ public class TourLogViewModel {
             if (searchResults.isEmpty()) {
                 return false;
             } else {
+                System.out.println(searchResults);
                 tourLogModelList.setAll(searchResults);
 
-                // Update the tour list based on the found logs
                 List<Integer> matchingTourIds = searchResults.stream()
                         .map(TourLogModel::getTourId)
                         .distinct()

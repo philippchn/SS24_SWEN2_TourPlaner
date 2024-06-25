@@ -81,10 +81,10 @@ public class MainApplication extends Application {
         subView.getChildren().addAll(tourListView, tourLogsView);
 
         FXMLLoader searchBarLoader = new FXMLLoader(getClass().getResource(EViews.searchBar.getFilePath()));
+        SearchBarController searchBarController = new SearchBarController(tourViewModel);
+        searchBarLoader.setController(searchBarController);
         Parent searchBar = searchBarLoader.load();
-        SearchBarController searchBarController = searchBarLoader.getController();
-        SearchViewModel searchViewModel = new SearchViewModel(tourViewModel, tourLogViewModel);
-        searchBarController.setSearchViewModel(searchViewModel);
+        searchBarController.setSearchViewModel(new SearchViewModel(tourViewModel, tourLogViewModel));
 
         VBox root = (VBox) mainView;
         root.getChildren().add(1, searchBar);

@@ -96,13 +96,12 @@ public class TourLogRepository {
             List<Predicate> predicates = new ArrayList<>();
             predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("comment")), searchPattern));
 
-            // Check if query can be parsed as an integer or double for numeric fields
             try {
                 int intQuery = Integer.parseInt(query);
                 predicates.add(criteriaBuilder.equal(root.get("difficulty"), intQuery));
                 predicates.add(criteriaBuilder.equal(root.get("rating"), intQuery));
             } catch (NumberFormatException e) {
-                // Query is not an integer, do nothing
+                logger.warn("Query '{}' is not a valid integer: {}", query, e.getMessage());
             }
 
             try {
@@ -110,7 +109,7 @@ public class TourLogRepository {
                 predicates.add(criteriaBuilder.equal(root.get("totalDistance"), doubleQuery));
                 predicates.add(criteriaBuilder.equal(root.get("totalTime"), (long) doubleQuery));
             } catch (NumberFormatException e) {
-                // Query is not a double, do nothing
+                logger.warn("Query '{}' is not a valid double: {}", query, e.getMessage());
             }
 
             criteriaQuery.where(criteriaBuilder.or(predicates.toArray(new Predicate[0])));

@@ -247,6 +247,7 @@ public class TourViewModel {
                 ModifyTourPopupController controller = new ModifyTourPopupController(this);
                 loader.setController(controller);
 
+
                 Parent root = loader.load();
 
                 Stage stage = new Stage();
