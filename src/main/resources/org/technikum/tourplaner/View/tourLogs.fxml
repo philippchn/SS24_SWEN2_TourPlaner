@@ -1,42 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <VBox id="root" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="561.0" prefWidth="550.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <TabPane prefHeight="255.0" prefWidth="451.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
-            <tabs>
-                <Tab text="General">
-                    <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
-                     <children>
-                        <Button fx:id="leafletButton" layoutX="158.0" layoutY="14.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="234.0" text="Show Tour in Leaflet" />
-                        <Button fx:id="pdfButton" layoutX="158.0" layoutY="87.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="234.0" text="Generate Report" />
-                        <Button fx:id="exportButton" layoutX="41.0" layoutY="159.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="234.0" text="Export tour and logs" />
-                        <Button fx:id="importButton" layoutX="302.0" layoutY="159.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="234.0" text="Import tour and logs" />
-                     </children></AnchorPane>
-                    </content>
-                </Tab>
-                <Tab text="Route">
-                    <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-                    </content>
-                </Tab>
-                <Tab text="Misc">
-                    <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-                    </content>
-                </Tab>
-            </tabs>
-        </TabPane>
-        <TabPane prefHeight="291.0" prefWidth="451.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="153.0" prefWidth="550.0" VBox.vgrow="ALWAYS">
+         <children>
+            <Button fx:id="leafletButton" layoutX="394.0" layoutY="15.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="142.0" text="Show Tour in Leaflet" />
+            <Button fx:id="pdfButton" layoutX="394.0" layoutY="80.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="142.0" text="Generate Report" />
+            <Button fx:id="exportButton" layoutX="14.0" layoutY="80.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="142.0" text="Export tour and logs" />
+            <Button fx:id="importButton" layoutX="14.0" layoutY="15.0" mnemonicParsing="false" prefHeight="61.0" prefWidth="142.0" text="Import tour and logs" />
+            <ImageView fitHeight="110.0" fitWidth="97.0" layoutX="227.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../img/favicon.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+        <TabPane prefHeight="404.0" prefWidth="550.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
             <tabs>
                 <Tab text="Tour Logs">
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                             <children>
-                                <VBox prefHeight="264.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
+                                <VBox prefHeight="322.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
                                     <children>
                                         <TableView fx:id="logsTable" centerShape="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="200.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
                                             <columns>
@@ -51,13 +41,13 @@
                                                 <Button fx:id="deleteButton" text="Delete Tour Log" />
                                             </children>
                                         </HBox>
-                                        <VBox prefHeight="160.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
+                                        <VBox prefHeight="174.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
                                             <children>
                                                 <Accordion prefHeight="126.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
                                                     <panes>
-                                                        <TitledPane animated="false" text="Detail View" VBox.vgrow="ALWAYS">
+                                                        <TitledPane animated="false" prefHeight="213.0" prefWidth="600.0" text="Detail View" VBox.vgrow="ALWAYS">
                                                             <content>
-                                                                <AnchorPane prefHeight="74.0" VBox.vgrow="ALWAYS">
+                                                                <AnchorPane prefHeight="101.0" prefWidth="598.0" VBox.vgrow="ALWAYS">
                                                                     <children>
                                                                         <VBox prefHeight="101.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
                                                                             <children>
@@ -101,16 +91,6 @@
                                 </VBox>
                             </children>
                         </AnchorPane>
-                    </content>
-                </Tab>
-                <Tab text="-">
-                    <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-                    </content>
-                </Tab>
-                <Tab text="...">
-                    <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                     </content>
                 </Tab>
             </tabs>

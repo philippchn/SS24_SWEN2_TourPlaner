@@ -54,8 +54,7 @@ public class MainApplication extends Application {
         }
     }
 
-    private void addTourSubView(Parent mainView) throws IOException
-    {
+    private void addTourSubView(Parent mainView) throws IOException {
         TourRepository tourRepository = new TourRepository();
         OpenRouteServiceClient openRouteServiceClient = new OpenRouteServiceClient();
         TourViewModel tourViewModel = new TourViewModel(tourRepository, openRouteServiceClient);

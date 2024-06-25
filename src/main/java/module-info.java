@@ -11,6 +11,7 @@ module org.technikum.tourplaner {
     requires org.apache.logging.log4j;
     requires kernel;
     requires layout;
+    requires com.fasterxml.jackson.datatype.jsr310;
 
     opens org.technikum.tourplaner to javafx.fxml;
     opens org.technikum.tourplaner.BL.controller to javafx.fxml;

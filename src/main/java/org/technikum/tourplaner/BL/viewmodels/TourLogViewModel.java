@@ -151,39 +151,31 @@ public class TourLogViewModel {
     }
 
     public void addTourLog() {
-        try {
-            if (!isValidInput()) {
-                return;
-            }
-
-            TourLogModel tourLogModel = new TourLogModel(
-                    dateProperty.get(),
-                    commentProperty.get(),
-                    Integer.parseInt(difficultyProperty.get()),
-                    Double.parseDouble(totalDistanceProperty.get()),
-                    Long.parseLong(totalTimeProperty.get()),
-                    Integer.parseInt(ratingProperty.get()),
-                    tourViewModel.getSelectedTourModel().getId()
-            );
-
-            TourModel selectedTour = tourViewModel.getSelectedTourModel();
-
-            if (selectedTour == null) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText("Please create/select a tour first");
-                alert.showAndWait();
-                return;
-            }
-
-            selectedTour.addTourLog(selectedTour.getName(), tourLogModel);
-            tourLogModelList.add(tourLogModel);
-            tourLogRepository.save(tourLogModel);
-            clearTextFields();
-        } catch (NumberFormatException e) {
-            showAlert("Invalid Input", "Please enter valid numbers for Difficulty, Total Distance, Total Time, and Rating.");
+        if (tourViewModel.getSelectedTourModel() == null){
+            showAlert("Error", "Please choose a Tour first!");
+            return;
         }
+
+        if (!isValidInput()) {
+            return;
+        }
+
+        TourLogModel tourLogModel = new TourLogModel(
+                dateProperty.get(),
+                commentProperty.get(),
+                Integer.parseInt(difficultyProperty.get()),
+                Double.parseDouble(totalDistanceProperty.get()),
+                Long.parseLong(totalTimeProperty.get()),
+                Integer.parseInt(ratingProperty.get()),
+                tourViewModel.getSelectedTourModel().getId()
+        );
+
+        TourModel selectedTour = tourViewModel.getSelectedTourModel();
+
+        selectedTour.addTourLog(selectedTour.getName(), tourLogModel);
+        tourLogModelList.add(tourLogModel);
+        tourLogRepository.save(tourLogModel);
+        clearTextFields();
     }
 
     public void selectTourLog() {
@@ -211,92 +203,105 @@ public class TourLogViewModel {
 
     public void openModifyTourLogPopup(TableView<TourLogModel> logsTable) {
         TourLogModel selectedTourLog = selectedTourLogModelProperty.get();
-        if (selectedTourLog != null) {
-            try {
-                FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource(EViews.modifyTourLogPopup.getFilePath()));
-                Parent root = loader.load();
-
-                ModifyTourLogsPopupController controller = loader.getController();
-                Stage stage = new Stage();
-                stage.initModality(Modality.APPLICATION_MODAL);
-
-                controller.initData(selectedTourLog, stage, this);
-
-                Scene scene = new Scene(root);
-                stage.setScene(scene);
-                stage.showAndWait();
-
-                tourLogRepository.updateById(selectedTourLog.getId(), selectedTourLog);
-
-                logsTable.refresh();
-
-            } catch (IOException e) {
-                logger.fatal("Error while opening modify tourLog popup");
-            }
-        } else {
+        if (selectedTourLog == null){
             showAlert("No tour log selected", "Please select a tour log to modify.");
+            return;
+        }
+        try {
+            FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource(EViews.modifyTourLogPopup.getFilePath()));
+            Parent root = loader.load();
+
+            ModifyTourLogsPopupController controller = loader.getController();
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+
+            controller.initData(selectedTourLog, stage, this);
+
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.showAndWait();
+
+            tourLogRepository.updateById(selectedTourLog.getId(), selectedTourLog);
+
+            logsTable.refresh();
+
+        } catch (IOException e) {
+            logger.fatal("Error while opening modify tourLog popup");
         }
     }
 
     public boolean isValidInput() {
-        try {
-            if (dateProperty.get() == null) {
-                throw new IllegalArgumentException("Date must not be null");
-            }
-            if (commentProperty.get() == null || commentProperty.get().isBlank()) {
-                throw new IllegalArgumentException("Comment must not be empty");
-            }
-            int difficulty;
-            try {
-                difficulty = Integer.parseInt(difficultyProperty.get());
-            } catch (NumberFormatException e) {
-                throw new IllegalArgumentException("Difficulty must be a valid integer");
-            }
-            if (difficulty <= 0 || difficulty > 10) {
-                throw new IllegalArgumentException("Difficulty must be between 1 and 10");
-            }
-            double totalDistance;
-            try {
-                totalDistance = Double.parseDouble(totalDistanceProperty.get());
-            } catch (NumberFormatException e) {
-                throw new IllegalArgumentException("Total distance must be a valid number");
-            }
-            if (totalDistance < 0) {
-                throw new IllegalArgumentException("Total distance must be a non-negative number");
-            }
-            long totalTime;
-            try {
-                totalTime = Long.parseLong(totalTimeProperty.get());
-            } catch (NumberFormatException e) {
-                throw new IllegalArgumentException("Total time must be a valid number");
-            }
-            if (totalTime < 0) {
-                throw new IllegalArgumentException("Total time must be a non-negative number");
-            }
-            int rating;
-            try {
-                rating = Integer.parseInt(ratingProperty.get());
-            } catch (NumberFormatException e) {
-                throw new IllegalArgumentException("Rating must be a valid integer");
-            }
-            if (rating < 0) {
-                throw new IllegalArgumentException("Rating must be a non-negative number");
-            }
-            return true;
-        } catch (IllegalArgumentException e) {
-            showErrorMessage(e.getMessage());
+        if (dateProperty.get() == null) {
+            showAlert("error", "Date must not be null");
             return false;
         }
-    }
+        if (commentProperty.get() == null || commentProperty.get().isBlank()) {
+            showAlert("error", "Comment must not be empty");
+            return false;
+        }
+        if (difficultyProperty.get() == null || difficultyProperty.get().isBlank()) {
+            showAlert("error", "Difficulty must not be empty");
+            return false;
+        }
+        if (totalDistanceProperty.get() == null || totalDistanceProperty.get().isBlank()){
+            showAlert("error", "Total distance must not be empty");
+            return false;
+        }
+        if (totalTimeProperty.get() == null || totalTimeProperty.get().isBlank()){
+            showAlert("error", "Total time must not be empty");
+            return false;
+        }
+        if (ratingProperty.get() == null || ratingProperty.get().isBlank()){
+            showAlert("error", "Rating must not be empty");
+            return false;
+        }
 
-    private void showErrorMessage(String errorMessage) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText(null);
-        alert.setContentText(errorMessage);
-        alert.showAndWait();
-    }
+        try {
+            int difficulty = Integer.parseInt(difficultyProperty.get());
+            if (difficulty <= 0 || difficulty > 10) {
+                showAlert("error", "Difficulty must be between 1 and 10");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            showAlert("error", "Difficulty must be a valid integer");
+            return false;
+        }
 
+        try {
+            double totalDistance = Double.parseDouble(totalDistanceProperty.get());
+            if (totalDistance < 0) {
+                showAlert("error", "Total distance must be a non-negative number");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            showAlert("error", "Total distance must be a non-negative number");
+            return false;
+        }
+
+        try {
+            long totalTime = Long.parseLong(totalTimeProperty.get());
+            if (totalTime < 0) {
+                showAlert("error", "Total time must be a non-negative number");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            showAlert("error", "Total time must be a valid number");
+            return false;
+        }
+
+        try {
+            int rating = Integer.parseInt(ratingProperty.get());
+            if (rating < 0) {
+                showAlert("error", "Rating must be a non-negative number");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            showAlert("error", "Rating must be a valid integer");
+            return false;
+        }
+
+        return true;
+    }
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -336,6 +341,7 @@ public class TourLogViewModel {
     public void openLeafletMap() {
         if (tourViewModel.selectedTourModelProperty().get() == null) {
             logger.info("User tried to open a Leaflet map without selecting a Tour");
+            showAlert("Error", "Please choose a Tour first!");
             return;
         }
         OpenRouteServiceClient.openTourMapInBrowser(tourViewModel.selectedTourModelProperty().get().getRouteInformation());
@@ -350,20 +356,27 @@ public class TourLogViewModel {
             PdfGenerator.generatePdf(tourViewModel.selectedTourModelProperty().get(), tourLogModelList);
         } catch (FileNotFoundException e) {
             logger.warn("PDF Generation failed");
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.setContentText("PDF Generation failed");
-            alert.showAndWait();
+            showAlert("Error", "PDF Generation failed");
         }
     }
 
     public void importTour() {
         ImportUtil importUtil = new ImportUtil(tourRepository, tourLogRepository);
-        importUtil.importTourData();
+        try{
+            importUtil.importTourData();
+        } catch (IOException e) {
+            logger.warn("Error while trying to import tour: " + e.getMessage());
+            return;
+        }
+        tourViewModel.loadToursFromDatabase();
     }
 
     public void exportTour() {
+        if (tourViewModel.selectedTourModelProperty().get() == null){
+            showAlert("Error", "Please choose a Tour first!");
+            logger.info("User tried to export without choosing a tour");
+            return;
+        }
         ExportUtil exportUtil = new ExportUtil();
         exportUtil.exportTourData(tourViewModel.selectedTourModelProperty().get(), tourLogModelList);
     }
