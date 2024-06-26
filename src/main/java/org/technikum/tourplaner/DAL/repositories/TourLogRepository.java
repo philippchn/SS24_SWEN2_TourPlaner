@@ -4,10 +4,15 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.technikum.tourplaner.BL.models.TourLogModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TourLogRepository implements Repository{
@@ -83,6 +88,50 @@ public class TourLogRepository implements Repository{
             int deletedCount = query.executeUpdate();
             transaction.commit();
             logger.info("TourLog with FK " + fkId + " deleted. Total Logs deleted: " + deletedCount);
+        }
+    }
+
+    public List<TourLogModel> getAllTourLogs() {
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            Query query = entityManager.createQuery("SELECT t FROM TourLogModel t");
+            logger.info("Fetching all TourLogs from the database");
+            return query.getResultList();
+        }
+    }
+
+    public List<TourLogModel> searchTourLogs(String query) {
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<TourLogModel> criteriaQuery = criteriaBuilder.createQuery(TourLogModel.class);
+            Root<TourLogModel> root = criteriaQuery.from(TourLogModel.class);
+
+            String searchPattern = "%" + query.toLowerCase() + "%";
+            List<Predicate> predicates = new ArrayList<>();
+            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("comment")), searchPattern));
+
+            try {
+                int intQuery = Integer.parseInt(query);
+                predicates.add(criteriaBuilder.equal(root.get("difficulty"), intQuery));
+                predicates.add(criteriaBuilder.equal(root.get("rating"), intQuery));
+            } catch (NumberFormatException e) {
+                logger.warn("Query '{}' is not a valid integer: {}", query, e.getMessage());
+            }
+
+            try {
+                double doubleQuery = Double.parseDouble(query);
+                predicates.add(criteriaBuilder.equal(root.get("totalDistance"), doubleQuery));
+                predicates.add(criteriaBuilder.equal(root.get("totalTime"), (long) doubleQuery));
+            } catch (NumberFormatException e) {
+                logger.warn("Query '{}' is not a valid double: {}", query, e.getMessage());
+            }
+
+            criteriaQuery.where(criteriaBuilder.or(predicates.toArray(new Predicate[0])));
+
+            List<TourLogModel> tourLogs = entityManager.createQuery(criteriaQuery).getResultList();
+
+            logger.info("Found " + tourLogs.size() + " TourLogs for query: " + query);
+
+            return tourLogs;
         }
     }
 }

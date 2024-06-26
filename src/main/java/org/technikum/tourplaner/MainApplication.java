@@ -6,13 +6,17 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.exception.JDBCConnectionException;
+import org.technikum.tourplaner.BL.controller.SearchBarController;
 import org.technikum.tourplaner.BL.controller.TourListController;
 import org.technikum.tourplaner.BL.controller.TourLogsController;
+import org.technikum.tourplaner.BL.viewmodels.SearchViewModel;
+import org.technikum.tourplaner.BL.viewmodels.TourLogViewModel;
 import org.technikum.tourplaner.BL.viewmodels.TourViewModel;
 import org.technikum.tourplaner.DAL.openrouteservice.OpenRouteServiceClient;
 import org.technikum.tourplaner.DAL.repositories.EntityManagerFactoryProvider;
@@ -104,11 +108,21 @@ public class MainApplication extends Application {
 
         FXMLLoader tourLogsLoader = new FXMLLoader(getClass().getResource(EViews.tourLogs.getFilePath()));
         TourLogsController tourLogsController = new TourLogsController(tourRepository, tourViewModel, tourLogRepository);
+        TourLogViewModel tourLogViewModel = new TourLogViewModel(tourRepository,tourLogRepository,tourViewModel);
         tourLogsLoader.setController(tourLogsController);
         Parent tourLogsView = tourLogsLoader.load();
 
         HBox subView = (HBox) mainView.lookup("#subView");
         subView.getChildren().addAll(tourListView, tourLogsView);
+
+        FXMLLoader searchBarLoader = new FXMLLoader(getClass().getResource(EViews.searchBar.getFilePath()));
+        SearchBarController searchBarController = new SearchBarController(tourViewModel);
+        searchBarLoader.setController(searchBarController);
+        Parent searchBar = searchBarLoader.load();
+        searchBarController.setSearchViewModel(new SearchViewModel(tourViewModel, tourLogViewModel));
+
+        VBox root = (VBox) mainView;
+        root.getChildren().add(1, searchBar);
     }
 
     public static void main(String[] args) {

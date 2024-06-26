@@ -5,11 +5,14 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.technikum.tourplaner.BL.models.TourModel;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class TourRepository implements Repository{
@@ -76,6 +79,50 @@ public class TourRepository implements Repository{
             criteriaQuery.select(root);
 
             return entityManager.createQuery(criteriaQuery).getResultList();
+        }
+    }
+
+    public List<TourModel> searchTours(String query) {
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<TourModel> criteriaQuery = criteriaBuilder.createQuery(TourModel.class);
+            Root<TourModel> root = criteriaQuery.from(TourModel.class);
+
+            String searchPattern = "%" + query.toLowerCase() + "%";
+            List<Predicate> predicates = new ArrayList<>();
+            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), searchPattern));
+            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("tourDescription")), searchPattern));
+            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("from")), searchPattern));
+            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("to")), searchPattern));
+
+            criteriaQuery.where(criteriaBuilder.or(predicates.toArray(new Predicate[0])));
+
+            return entityManager.createQuery(criteriaQuery).getResultList();
+        }
+    }
+
+    public List<TourModel> getToursByIds(List<Integer> ids) {
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<TourModel> criteriaQuery = criteriaBuilder.createQuery(TourModel.class);
+            Root<TourModel> root = criteriaQuery.from(TourModel.class);
+            criteriaQuery.where(root.get("id").in(ids));
+
+            List<TourModel> tours = entityManager.createQuery(criteriaQuery).getResultList();
+
+            if (tours.isEmpty()) {
+                logger.info("No tours found for the given IDs: " + ids);
+            } else {
+                logger.info("Found " + tours.size() + " tours for the given IDs: " + ids);
+                for (TourModel tour : tours) {
+                    logger.info("Found Tour ID: " + tour.getId() + ", Tour Name: " + tour.getName());
+                }
+            }
+
+            return tours;
+        } catch (Exception e) {
+            logger.error("Error while fetching tours by IDs", e);
+            return Collections.emptyList();
         }
     }
 }

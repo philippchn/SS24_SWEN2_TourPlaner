@@ -130,6 +130,10 @@ public class TourViewModel {
         return selectedTourLogModelProperty.get();
     }
 
+    public void setTours(ObservableList<TourModel> toursList) {
+        tours.setAll(toursList);
+    }
+
     public TourViewModel(TourRepository tourRepository, TourLogRepository tourLogRepository, OpenRouteServiceClient openRouteServiceClient) {
         this.tourRepository = tourRepository;
         this.tourLogRepository = tourLogRepository;
@@ -319,5 +323,16 @@ public class TourViewModel {
             logger.warn("Error reading jsonResponse: " + e.getMessage());
             throw new IllegalArgumentException();
         }
+    }
+
+    public boolean searchTours(String query) {
+        List<TourModel> searchResults = tourRepository.searchTours(query);
+
+        if (searchResults.isEmpty()) {
+            return false;
+        } else {
+            tours.setAll(searchResults);
+        }
+        return true;
     }
 }

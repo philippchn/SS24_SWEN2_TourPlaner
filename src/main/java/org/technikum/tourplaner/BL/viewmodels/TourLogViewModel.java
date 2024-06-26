@@ -32,6 +32,8 @@ import org.technikum.tourplaner.MainApplication;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Getter
@@ -386,5 +388,31 @@ public class TourLogViewModel {
         }
         ExportUtil exportUtil = new ExportUtil();
         exportUtil.exportTourData(tourViewModel.selectedTourModelProperty().get(), tourLogModelList);
+    }
+
+    public boolean searchTourLogs(String query) {
+        try {
+            List<TourLogModel> searchResults = tourLogRepository.searchTourLogs(query);
+
+            if (searchResults.isEmpty()) {
+                return false;
+            } else {
+                System.out.println(searchResults);
+                tourLogModelList.setAll(searchResults);
+
+                List<Integer> matchingTourIds = searchResults.stream()
+                        .map(TourLogModel::getTourId)
+                        .distinct()
+                        .map(Long::intValue) // Convert Long to Integer
+                        .collect(Collectors.toList());
+
+                List<TourModel> matchingTours = tourRepository.getToursByIds(matchingTourIds);
+                tourViewModel.setTours(FXCollections.observableArrayList(matchingTours));
+            }
+        } catch (Exception e) {
+            logger.error("Error searching tour logs: ", e);
+            showAlert("Error", "An error occurred while searching for tour logs.");
+        }
+        return true;
     }
 }

@@ -67,7 +67,6 @@ public class ModifyTourPopupController {
 
     @FXML
     private void saveTour() {
-
         if(!tourViewModel.allFieldsSet()) {
             return;
         }
