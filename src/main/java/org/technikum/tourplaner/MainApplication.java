@@ -16,6 +16,7 @@ import org.technikum.tourplaner.BL.controller.TourLogsController;
 import org.technikum.tourplaner.BL.viewmodels.TourViewModel;
 import org.technikum.tourplaner.DAL.openrouteservice.OpenRouteServiceClient;
 import org.technikum.tourplaner.DAL.repositories.EntityManagerFactoryProvider;
+import org.technikum.tourplaner.DAL.repositories.RepositoryFactory;
 import org.technikum.tourplaner.DAL.repositories.TourLogRepository;
 import org.technikum.tourplaner.DAL.repositories.TourRepository;
 
@@ -60,6 +61,10 @@ public class MainApplication extends Application {
         } catch (Exception e) {
             logger.fatal("An unexpected error occurred: " + e.getMessage());
         }
+    }
+
+    @Override
+    public void stop() {
         EntityManagerFactoryProvider.closeEntityManagerFactories();
     }
 
@@ -86,8 +91,9 @@ public class MainApplication extends Application {
     }
 
     private void addTourSubView(Parent mainView) throws IOException {
-        TourRepository tourRepository = new TourRepository();
-        TourLogRepository tourLogRepository = new TourLogRepository();
+        RepositoryFactory repositoryFactory = new RepositoryFactory();
+        TourRepository tourRepository = repositoryFactory.createTourRepository();
+        TourLogRepository tourLogRepository = repositoryFactory.createTourLogRepository();
         OpenRouteServiceClient openRouteServiceClient = new OpenRouteServiceClient();
         TourViewModel tourViewModel = new TourViewModel(tourRepository, tourLogRepository, openRouteServiceClient);
 

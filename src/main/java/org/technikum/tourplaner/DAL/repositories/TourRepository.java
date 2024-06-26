@@ -12,12 +12,12 @@ import org.technikum.tourplaner.BL.models.TourModel;
 
 import java.util.List;
 
-public class TourRepository {
+public class TourRepository implements Repository{
     private static final Logger logger = LogManager.getLogger(TourRepository.class);
 
     private final EntityManagerFactory entityManagerFactory;
 
-    public TourRepository() {
+    TourRepository() {
         entityManagerFactory = EntityManagerFactoryProvider.getTourEntityManagerFactory();
     }
 
