@@ -47,7 +47,7 @@ public class OpenRouteServiceClient {
         try {
             HttpClient client = HttpClient.newHttpClient();
             String encodedText = URLEncoder.encode(address, StandardCharsets.UTF_8);
-            URI uri = new URI(API_URL_SEARCH + "?api_key=" + apiKey + "&text=" + encodedText);
+            URI uri = new URI(API_URL_SEARCH + "?api_key=" + apiKey + "&text=" + encodedText + "&boundary.country=AT");
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(uri)
                     .GET()
