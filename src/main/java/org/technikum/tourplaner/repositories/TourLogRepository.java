@@ -8,11 +8,9 @@ import jakarta.persistence.criteria.Root;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.technikum.tourplaner.models.TourLogModel;
-import org.technikum.tourplaner.models.TourModel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class TourLogRepository {
     private static final Logger logger = LogManager.getLogger(TourLogRepository.class);
@@ -121,5 +119,4 @@ public class TourLogRepository {
             return tourLogs;
         }
     }
-
 }

@@ -18,7 +18,6 @@ public class SearchViewModel {
         if (!foundInTours && !foundInTourLogs) {
             showAlert("No Results", "No matching tours or tour logs found for the query: " + query);
         }
-
     }
 
     private void showAlert(String title, String message) {

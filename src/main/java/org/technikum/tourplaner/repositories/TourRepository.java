@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import org.technikum.tourplaner.models.TourModel;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class TourRepository {
@@ -122,8 +123,7 @@ public class TourRepository {
             return tours;
         } catch (Exception e) {
             logger.error("Error while fetching tours by IDs", e);
-            return List.of(); // Return empty list in case of error
+            return Collections.emptyList();
         }
     }
-
 }

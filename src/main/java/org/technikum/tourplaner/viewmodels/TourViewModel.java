@@ -332,5 +332,4 @@ public class TourViewModel {
         }
         return true;
     }
-
 }

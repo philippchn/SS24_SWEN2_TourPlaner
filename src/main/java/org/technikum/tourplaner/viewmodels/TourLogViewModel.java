@@ -393,5 +393,4 @@ public class TourLogViewModel {
         }
         return true;
     }
-
 }
