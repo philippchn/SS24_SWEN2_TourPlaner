@@ -1,4 +1,4 @@
-package org.technikum.tourplaner.viewmodels;
+package org.technikum.tourplaner.BL.viewmodels;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,14 +18,15 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.technikum.tourplaner.BL.controller.ModifyTourPopupController;
+import org.technikum.tourplaner.BL.models.TourLogModel;
+import org.technikum.tourplaner.BL.models.TourModel;
+import org.technikum.tourplaner.DAL.openrouteservice.ETransportType;
+import org.technikum.tourplaner.DAL.openrouteservice.OpenRouteServiceClient;
+import org.technikum.tourplaner.DAL.repositories.TourLogRepository;
+import org.technikum.tourplaner.DAL.repositories.TourRepository;
 import org.technikum.tourplaner.EViews;
 import org.technikum.tourplaner.MainApplication;
-import org.technikum.tourplaner.controller.ModifyTourPopupController;
-import org.technikum.tourplaner.models.TourLogModel;
-import org.technikum.tourplaner.models.TourModel;
-import org.technikum.tourplaner.openrouteservice.ETransportType;
-import org.technikum.tourplaner.openrouteservice.OpenRouteServiceClient;
-import org.technikum.tourplaner.repositories.TourRepository;
 
 import java.io.IOException;
 import java.util.List;
@@ -34,6 +35,7 @@ public class TourViewModel {
     private static final Logger logger = LogManager.getLogger(TourViewModel.class);
 
     private final TourRepository tourRepository;
+    private final TourLogRepository tourLogRepository;
     private final OpenRouteServiceClient openRouteServiceClient;
 
     @Getter
@@ -128,8 +130,9 @@ public class TourViewModel {
         return selectedTourLogModelProperty.get();
     }
 
-    public TourViewModel(TourRepository tourRepository, OpenRouteServiceClient openRouteServiceClient) {
+    public TourViewModel(TourRepository tourRepository, TourLogRepository tourLogRepository, OpenRouteServiceClient openRouteServiceClient) {
         this.tourRepository = tourRepository;
+        this.tourLogRepository = tourLogRepository;
         this.openRouteServiceClient = openRouteServiceClient;
         loadToursFromDatabase();
     }
@@ -230,6 +233,7 @@ public class TourViewModel {
     public void deleteTour() {
         TourModel selectedTour = selectedTourModelProperty.get();
         if (selectedTour != null) {
+            tourLogRepository.deleteByFK(selectedTour.getId());
             tourRepository.deleteById(selectedTour.getId());
             tours.remove(selectedTour);
         }

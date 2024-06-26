@@ -11,15 +11,19 @@ import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.exception.JDBCConnectionException;
-import org.technikum.tourplaner.controller.TourListController;
-import org.technikum.tourplaner.controller.TourLogsController;
-import org.technikum.tourplaner.openrouteservice.OpenRouteServiceClient;
-import org.technikum.tourplaner.repositories.TourLogRepository;
-import org.technikum.tourplaner.repositories.TourRepository;
-import org.technikum.tourplaner.viewmodels.TourViewModel;
+import org.technikum.tourplaner.BL.controller.TourListController;
+import org.technikum.tourplaner.BL.controller.TourLogsController;
+import org.technikum.tourplaner.BL.viewmodels.TourViewModel;
+import org.technikum.tourplaner.DAL.openrouteservice.OpenRouteServiceClient;
+import org.technikum.tourplaner.DAL.repositories.EntityManagerFactoryProvider;
+import org.technikum.tourplaner.DAL.repositories.RepositoryFactory;
+import org.technikum.tourplaner.DAL.repositories.TourLogRepository;
+import org.technikum.tourplaner.DAL.repositories.TourRepository;
 
 import java.io.IOException;
+import java.util.MissingResourceException;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 public class MainApplication extends Application {
     private static final Logger logger = LogManager.getLogger(MainApplication.class);
@@ -29,6 +33,11 @@ public class MainApplication extends Application {
 
     @Override
     public void start(Stage stage) {
+        if (!propertiesFileIsValid()){
+            logger.info("Application start aborted");
+            return;
+        }
+
         logger.info("Application started");
         try {
             stg = stage;
@@ -54,11 +63,39 @@ public class MainApplication extends Application {
         }
     }
 
-    private void addTourSubView(Parent mainView) throws IOException
-    {
-        TourRepository tourRepository = new TourRepository();
+    @Override
+    public void stop() {
+        EntityManagerFactoryProvider.closeEntityManagerFactories();
+    }
+
+    private boolean propertiesFileIsValid() {
+        try{
+            ResourceBundle resourceBundle = ResourceBundle.getBundle("cfg");
+            if (resourceBundle.getString("openRouteServiceAPIKey").isEmpty()){
+                logger.fatal("cfg.properties not properly set up: Please define an API Key");
+                return false;
+            }
+            if (resourceBundle.getString("dbUser").isEmpty()){
+                logger.fatal("cfg.properties not properly set up: Please define a dbUser");
+                return false;
+            }
+            if (resourceBundle.getString("dbPassword").isEmpty()){
+                logger.fatal("cfg.properties not properly set up: Please define a dbPassword");
+                return false;
+            }
+        }catch (MissingResourceException e){
+            logger.fatal("cfg.properties not properly set up: " + e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    private void addTourSubView(Parent mainView) throws IOException {
+        RepositoryFactory repositoryFactory = new RepositoryFactory();
+        TourRepository tourRepository = repositoryFactory.createTourRepository();
+        TourLogRepository tourLogRepository = repositoryFactory.createTourLogRepository();
         OpenRouteServiceClient openRouteServiceClient = new OpenRouteServiceClient();
-        TourViewModel tourViewModel = new TourViewModel(tourRepository, openRouteServiceClient);
+        TourViewModel tourViewModel = new TourViewModel(tourRepository, tourLogRepository, openRouteServiceClient);
 
         FXMLLoader tourListLoader = new FXMLLoader(getClass().getResource(EViews.tourList.getFilePath()));
         TourListController tourListController = new TourListController(tourViewModel);
@@ -66,7 +103,6 @@ public class MainApplication extends Application {
         Parent tourListView = tourListLoader.load();
 
         FXMLLoader tourLogsLoader = new FXMLLoader(getClass().getResource(EViews.tourLogs.getFilePath()));
-        TourLogRepository tourLogRepository = new TourLogRepository();
         TourLogsController tourLogsController = new TourLogsController(tourRepository, tourViewModel, tourLogRepository);
         tourLogsLoader.setController(tourLogsController);
         Parent tourLogsView = tourLogsLoader.load();

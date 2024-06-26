@@ -1,4 +1,4 @@
-package org.technikum.tourplaner.openrouteservice;
+package org.technikum.tourplaner.DAL.openrouteservice;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,13 +16,19 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.util.ResourceBundle;
 
 public class OpenRouteServiceClient {
     private static final Logger logger = LogManager.getLogger(OpenRouteServiceClient.class);
 
     private static final String API_URL_SEARCH = "https://api.openrouteservice.org/geocode/search";
     private static final String API_URL_DIRECTIONS = "https://api.openrouteservice.org/v2/directions/";
-    private static final String API_KEY = "5b3ce3597851110001cf6248100ea82416bb4259b7387ad2777a08cb"; // TODO REPLACE WHEN MAKING REPO PUBLIC
+    private final String apiKey;
+
+    public OpenRouteServiceClient() {
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("cfg");
+        this.apiKey = resourceBundle.getString("openRouteServiceAPIKey");
+    }
 
     public String getTourInformation(String startAddress, String endAddress, ETransportType transportType){
         if (transportType == null) {
@@ -41,7 +47,7 @@ public class OpenRouteServiceClient {
         try {
             HttpClient client = HttpClient.newHttpClient();
             String encodedText = URLEncoder.encode(address, StandardCharsets.UTF_8);
-            URI uri = new URI(API_URL_SEARCH + "?api_key=" + API_KEY + "&text=" + encodedText);
+            URI uri = new URI(API_URL_SEARCH + "?api_key=" + apiKey + "&text=" + encodedText + "&boundary.country=AT");
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(uri)
                     .GET()
@@ -76,7 +82,7 @@ public class OpenRouteServiceClient {
         try{
             HttpClient client = HttpClient.newHttpClient();
             URI uri = new URI(API_URL_DIRECTIONS + transportType.getApiParameter()
-                    + "?api_key=" + API_KEY
+                    + "?api_key=" + apiKey
                     + "&start=" + startAddressData.longitude + "," + startAddressData.latitude
                     + "&end=" + endAddressData.longitude + "," + endAddressData.latitude);
             HttpRequest request = HttpRequest.newBuilder()

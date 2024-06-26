@@ -1,4 +1,4 @@
-package org.technikum.tourplaner.models;
+package org.technikum.tourplaner.BL.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
