@@ -1,4 +1,4 @@
-package org.technikum.tourplaner.viewmodels;
+package org.technikum.tourplaner.BL.viewmodels;
 
 import javafx.scene.control.Alert;
 

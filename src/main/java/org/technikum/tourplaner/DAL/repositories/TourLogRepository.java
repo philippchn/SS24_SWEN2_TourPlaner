@@ -1,17 +1,16 @@
-package org.technikum.tourplaner.repositories;
+package org.technikum.tourplaner.DAL.repositories;
 
-import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.technikum.tourplaner.models.TourLogModel;
+import org.technikum.tourplaner.BL.models.TourLogModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,8 +90,6 @@ public class TourLogRepository implements Repository{
             logger.info("TourLog with FK " + fkId + " deleted. Total Logs deleted: " + deletedCount);
         }
     }
-
-
 
     public List<TourLogModel> getAllTourLogs() {
         try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {

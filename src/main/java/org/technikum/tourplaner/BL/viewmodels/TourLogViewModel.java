@@ -32,6 +32,8 @@ import org.technikum.tourplaner.MainApplication;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Getter

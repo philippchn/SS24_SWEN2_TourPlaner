@@ -1,4 +1,4 @@
-package org.technikum.tourplaner.viewmodels;
+package org.technikum.tourplaner.BL.viewmodels;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -134,7 +134,6 @@ public class TourViewModel {
         tours.setAll(toursList);
     }
 
-    public TourViewModel(TourRepository tourRepository, OpenRouteServiceClient openRouteServiceClient) {
     public TourViewModel(TourRepository tourRepository, TourLogRepository tourLogRepository, OpenRouteServiceClient openRouteServiceClient) {
         this.tourRepository = tourRepository;
         this.tourLogRepository = tourLogRepository;

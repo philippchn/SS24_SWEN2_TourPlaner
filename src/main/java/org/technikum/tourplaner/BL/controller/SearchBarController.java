@@ -1,12 +1,11 @@
-package org.technikum.tourplaner.controller;
+package org.technikum.tourplaner.BL.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import lombok.Setter;
-import org.technikum.tourplaner.viewmodels.SearchViewModel;
-import org.technikum.tourplaner.viewmodels.TourLogViewModel;
-import org.technikum.tourplaner.viewmodels.TourViewModel;
+import org.technikum.tourplaner.BL.viewmodels.SearchViewModel;
+import org.technikum.tourplaner.BL.viewmodels.TourViewModel;
 
 public class SearchBarController {
     @FXML
