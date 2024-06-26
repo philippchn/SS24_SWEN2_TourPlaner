@@ -1,4 +1,4 @@
-package org.technikum.tourplaner.controller;
+package org.technikum.tourplaner.BL.controller;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -7,9 +7,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.technikum.tourplaner.models.TourModel;
-import org.technikum.tourplaner.openrouteservice.ETransportType;
-import org.technikum.tourplaner.viewmodels.TourViewModel;
+import org.technikum.tourplaner.BL.models.TourModel;
+import org.technikum.tourplaner.BL.viewmodels.TourViewModel;
+import org.technikum.tourplaner.DAL.openrouteservice.ETransportType;
 
 public class ModifyTourPopupController {
     @FXML

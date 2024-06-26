@@ -1,13 +1,13 @@
-package org.technikum.tourplaner.controller;
+package org.technikum.tourplaner.BL.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import org.technikum.tourplaner.models.TourModel;
-import org.technikum.tourplaner.openrouteservice.ETransportType;
-import org.technikum.tourplaner.viewmodels.TourViewModel;
+import org.technikum.tourplaner.BL.models.TourModel;
+import org.technikum.tourplaner.BL.viewmodels.TourViewModel;
+import org.technikum.tourplaner.DAL.openrouteservice.ETransportType;
 
 public class TourListController {
     @FXML

@@ -1,28 +1,27 @@
-package org.technikum.tourplaner.repositories;
+package org.technikum.tourplaner.DAL.repositories;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Persistence;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.technikum.tourplaner.models.TourModel;
+import org.technikum.tourplaner.BL.models.TourModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class TourRepository {
+public class TourRepository implements Repository{
     private static final Logger logger = LogManager.getLogger(TourRepository.class);
 
     private final EntityManagerFactory entityManagerFactory;
 
-    public TourRepository() {
-        entityManagerFactory = Persistence.createEntityManagerFactory("hibernate_tour");
+    TourRepository() {
+        entityManagerFactory = EntityManagerFactoryProvider.getTourEntityManagerFactory();
     }
 
     public Long save(TourModel tour) {

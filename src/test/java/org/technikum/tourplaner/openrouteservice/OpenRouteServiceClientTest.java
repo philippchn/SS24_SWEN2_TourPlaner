@@ -1,6 +1,8 @@
 package org.technikum.tourplaner.openrouteservice;
 
 import org.junit.jupiter.api.Test;
+import org.technikum.tourplaner.DAL.openrouteservice.ETransportType;
+import org.technikum.tourplaner.DAL.openrouteservice.OpenRouteServiceClient;
 
 class OpenRouteServiceClientTest {
     @Test
