@@ -25,6 +25,7 @@ import org.technikum.tourplaner.DAL.repositories.TourLogRepository;
 import org.technikum.tourplaner.DAL.repositories.TourRepository;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.MissingResourceException;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -54,16 +55,6 @@ public class MainApplication extends Application {
             addTourSubView(mainView);
 
             Scene scene = new Scene(mainView);
-
-            /*
-            URL lightModeUrl = getClass().getResource(LIGHT_MODE_CSS);
-            if (lightModeUrl != null) {
-                scene.getStylesheets().add(lightModeUrl.toExternalForm());
-            } else {
-                logger.error("Light mode CSS file not found: " + LIGHT_MODE_CSS);
-            }*/
-            //scene.getStylesheets().add(LIGHT_MODE_CSS); // Load light mode by default
-
 
             stage.setTitle("TourPlanner");
 
@@ -142,12 +133,27 @@ public class MainApplication extends Application {
     public static void switchToNightMode(boolean nightMode) {
         Scene scene = stg.getScene();
         scene.getStylesheets().clear();
-        if (nightMode) {
-            scene.getStylesheets().add(MainApplication.class.getResource(NIGHT_MODE_CSS).toExternalForm());
-        } else {
-            scene.getStylesheets().add(MainApplication.class.getResource(LIGHT_MODE_CSS).toExternalForm());
+        try {
+            if (nightMode) {
+                URL nightModeUrl = MainApplication.class.getResource(NIGHT_MODE_CSS);
+                if (nightModeUrl != null) {
+                    scene.getStylesheets().add(nightModeUrl.toExternalForm());
+                } else {
+                    logger.error("Night mode CSS file not found: " + NIGHT_MODE_CSS);
+                }
+            } else {
+                URL lightModeUrl = MainApplication.class.getResource(LIGHT_MODE_CSS);
+                if (lightModeUrl != null) {
+                    scene.getStylesheets().add(lightModeUrl.toExternalForm());
+                } else {
+                    logger.error("Light mode CSS file not found: " + LIGHT_MODE_CSS);
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Failed to switch CSS: " + e.getMessage());
         }
     }
+
 
     public static void main(String[] args) {
         launch();
