@@ -83,7 +83,7 @@
                                         <Text fx:id="infoText" strokeType="OUTSIDE" strokeWidth="0.0" text="Create new tour log" textAlignment="CENTER" wrappingWidth="450.697265625" />
                                         <DatePicker fx:id="datePicker" promptText="Date" />
                                         <TextField fx:id="commentTextField" alignment="TOP_CENTER" promptText="Comment" />
-                                        <TextField fx:id="difficultyTextField" alignment="TOP_CENTER" layoutX="10.0" layoutY="35.0" promptText="Difficulty" />
+                                        <TextField fx:id="difficultyTextField" alignment="TOP_CENTER" layoutX="10.0" layoutY="35.0" promptText="%Difficulty" />
                                         <TextField fx:id="totalDistanceTextField" alignment="TOP_CENTER" layoutX="10.0" layoutY="60.0" promptText="Total distance" />
                                         <TextField fx:id="totalTimeTextField" alignment="TOP_CENTER" layoutX="10.0" layoutY="60.0" promptText="Total time" />
                                         <TextField fx:id="ratingTextField" alignment="TOP_CENTER" layoutX="10.0" layoutY="127.0" promptText="Rating" />

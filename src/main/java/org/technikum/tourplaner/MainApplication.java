@@ -2,6 +2,7 @@ package org.technikum.tourplaner;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -25,6 +26,7 @@ import org.technikum.tourplaner.DAL.repositories.TourLogRepository;
 import org.technikum.tourplaner.DAL.repositories.TourRepository;
 
 import java.io.IOException;
+import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -35,6 +37,10 @@ public class MainApplication extends Application {
     @Getter
     private static Stage stg;
 
+    public static void main(String[] args) {
+        launch();
+    }
+
     @Override
     public void start(Stage stage) {
         if (!propertiesFileIsValid()){
@@ -43,13 +49,21 @@ public class MainApplication extends Application {
         }
 
         logger.info("Application started");
+
         try {
+            ResourceBundle resourceBundleProperties = ResourceBundle.getBundle("cfg");
+            String language = resourceBundleProperties.getString("language");
+
             stg = stage;
-            FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource(EViews.mainView.getFilePath()));
+            ResourceBundle resourceBundleLanguage = ResourceBundle.getBundle("org.technikum.tourplaner.View." + "gui_strings", createLocale(language));
+            FXMLLoader fxmlLoader = new FXMLLoader(
+                    MainApplication.class.getResource(EViews.mainView.getFilePath()),
+                    resourceBundleLanguage,
+                    new JavaFXBuilderFactory()
+            );
             Parent mainView = fxmlLoader.load();
 
-            addTourSubView(mainView);
-
+            addTourSubView(mainView, resourceBundleLanguage);
             Scene scene = new Scene(mainView);
             stage.setTitle("TourPlanner");
 
@@ -72,6 +86,15 @@ public class MainApplication extends Application {
         EntityManagerFactoryProvider.closeEntityManagerFactories();
     }
 
+    private Locale createLocale(String language) {
+        if (language.equalsIgnoreCase("ENGLISH")) {
+            return Locale.ENGLISH;
+        } else if (language.equalsIgnoreCase("GERMAN")) {
+            return Locale.GERMAN;
+        }
+        return Locale.GERMAN;
+    }
+
     private boolean propertiesFileIsValid() {
         try{
             ResourceBundle resourceBundle = ResourceBundle.getBundle("cfg");
@@ -87,6 +110,14 @@ public class MainApplication extends Application {
                 logger.fatal("cfg.properties not properly set up: Please define a dbPassword");
                 return false;
             }
+            if (resourceBundle.getString("language").isEmpty()){
+                logger.fatal("cfg.properties not properly set up: Please define a language");
+                return false;
+            }
+            if (!resourceBundle.getString("language").equalsIgnoreCase("ENGLISH") && !resourceBundle.getString("language").equalsIgnoreCase("GERMAN")){
+                logger.fatal("cfg.properties not properly set up: Please define a valid language: ENGLISH/GERMAN");
+                return false;
+            }
         }catch (MissingResourceException e){
             logger.fatal("cfg.properties not properly set up: " + e.getMessage());
             return false;
@@ -94,19 +125,27 @@ public class MainApplication extends Application {
         return true;
     }
 
-    private void addTourSubView(Parent mainView) throws IOException {
+    private void addTourSubView(Parent mainView, ResourceBundle resourceBundle) throws IOException {
         RepositoryFactory repositoryFactory = new RepositoryFactory();
         TourRepository tourRepository = repositoryFactory.createTourRepository();
         TourLogRepository tourLogRepository = repositoryFactory.createTourLogRepository();
         OpenRouteServiceClient openRouteServiceClient = new OpenRouteServiceClient();
         TourViewModel tourViewModel = new TourViewModel(tourRepository, tourLogRepository, openRouteServiceClient);
 
-        FXMLLoader tourListLoader = new FXMLLoader(getClass().getResource(EViews.tourList.getFilePath()));
+        FXMLLoader tourListLoader = new FXMLLoader(
+                getClass().getResource(EViews.tourList.getFilePath()),
+                resourceBundle,
+                new JavaFXBuilderFactory()
+        );
         TourListController tourListController = new TourListController(tourViewModel);
         tourListLoader.setController(tourListController);
         Parent tourListView = tourListLoader.load();
 
-        FXMLLoader tourLogsLoader = new FXMLLoader(getClass().getResource(EViews.tourLogs.getFilePath()));
+        FXMLLoader tourLogsLoader = new FXMLLoader(
+                getClass().getResource(EViews.tourLogs.getFilePath()),
+                resourceBundle,
+                new JavaFXBuilderFactory()
+        );
         TourLogsController tourLogsController = new TourLogsController(tourRepository, tourViewModel, tourLogRepository);
         TourLogViewModel tourLogViewModel = new TourLogViewModel(tourRepository,tourLogRepository,tourViewModel);
         tourLogsLoader.setController(tourLogsController);
@@ -115,7 +154,11 @@ public class MainApplication extends Application {
         HBox subView = (HBox) mainView.lookup("#subView");
         subView.getChildren().addAll(tourListView, tourLogsView);
 
-        FXMLLoader searchBarLoader = new FXMLLoader(getClass().getResource(EViews.searchBar.getFilePath()));
+        FXMLLoader searchBarLoader = new FXMLLoader(
+                getClass().getResource(EViews.searchBar.getFilePath()),
+                resourceBundle,
+                new JavaFXBuilderFactory()
+        );
         SearchBarController searchBarController = new SearchBarController(tourViewModel);
         searchBarLoader.setController(searchBarController);
         Parent searchBar = searchBarLoader.load();
@@ -123,9 +166,5 @@ public class MainApplication extends Application {
 
         VBox root = (VBox) mainView;
         root.getChildren().add(1, searchBar);
-    }
-
-    public static void main(String[] args) {
-        launch();
     }
 }
