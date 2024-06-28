@@ -25,15 +25,14 @@ import org.technikum.tourplaner.DAL.repositories.TourLogRepository;
 import org.technikum.tourplaner.DAL.repositories.TourRepository;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.MissingResourceException;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class MainApplication extends Application {
     private static final Logger logger = LogManager.getLogger(MainApplication.class);
-    private static final String LIGHT_MODE_CSS = "org/technikum/tourplaner/css/lightmode.css";
-    private static final String NIGHT_MODE_CSS = "org/technikum/tourplaner/css/nightmode.css";
+    private static final String LIGHT_MODE_CSS = "css/lightmode.css";
+    private static final String NIGHT_MODE_CSS = "css/nightmode.css";
 
 
     @Getter
@@ -144,9 +143,9 @@ public class MainApplication extends Application {
         Scene scene = stg.getScene();
         scene.getStylesheets().clear();
         if (nightMode) {
-            scene.getStylesheets().add(NIGHT_MODE_CSS);
+            scene.getStylesheets().add(MainApplication.class.getResource(NIGHT_MODE_CSS).toExternalForm());
         } else {
-            scene.getStylesheets().add(LIGHT_MODE_CSS);
+            scene.getStylesheets().add(MainApplication.class.getResource(LIGHT_MODE_CSS).toExternalForm());
         }
     }
 
