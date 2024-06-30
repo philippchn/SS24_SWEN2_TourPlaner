@@ -37,7 +37,7 @@ public class TourLogModel {
     @Column(name = "fk_tour")
     private Long tourId;
 
-    TourLogModel() {
+    public TourLogModel() {
 
     }
 

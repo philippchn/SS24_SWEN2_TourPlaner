@@ -137,7 +137,7 @@ public class TourLogViewModel {
         return tourLogModelList;
     }
 
-    private void loadTourLogs(TourModel selectedTour) {
+    void loadTourLogs(TourModel selectedTour) {
         if (selectedTour != null) {
             tourLogModelList.clear();
             tourLogModelList.addAll(tourLogRepository.getTourLogsByTourId(String.valueOf(selectedTour.getId())));

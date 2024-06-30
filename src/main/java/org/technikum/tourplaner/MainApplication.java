@@ -12,6 +12,7 @@ import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.exception.JDBCConnectionException;
+import org.hibernate.service.spi.ServiceException;
 import org.technikum.tourplaner.BL.controller.SearchBarController;
 import org.technikum.tourplaner.BL.controller.TourListController;
 import org.technikum.tourplaner.BL.controller.TourLogsController;
@@ -62,6 +63,8 @@ public class MainApplication extends Application {
             logger.fatal("Error while starting application: " + e.getMessage());
         } catch (JDBCConnectionException e) {
             logger.fatal("Database connection failed: " + e.getMessage());
+        } catch (ServiceException e){
+            logger.fatal("Connection to database failed. Is the Database running?: " + e.getMessage());
         } catch (Exception e) {
             logger.fatal("An unexpected error occurred: " + e.getMessage());
         }
