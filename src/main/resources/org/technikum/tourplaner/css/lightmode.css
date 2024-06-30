@@ -1,0 +1,46 @@
+.button {
+    -fx-background-color:
+        linear-gradient(to bottom, #ffd6e8, #ffc2d3); /* Even lighter rose gradient */
+    -fx-text-fill: #333333;
+}
+
+.text-field {
+    -fx-background-color: #d3dde4;
+    -fx-text-fill: #333333;
+}
+
+.label {
+    -fx-text-fill: #485a6c;
+}
+
+.anchor {
+    -fx-background-color: #c5d2db;
+    -fx-background-radius: 15px;
+    -fx-border-color: #98a7b9;
+    -fx-border-radius: 15px;
+    -fx-border-width: 1px;
+    -fx-padding: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 2, 2);
+    -fx-text-fill: #333333;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-transition: background-color 0.3s, -fx-effect 0.3s;
+}
+
+.anchor:hover {
+    -fx-background-color: #b3c0ca;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 12, 0, 3, 3);
+}
+
+.anchor:pressed {
+    -fx-background-color: #a2afb9;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 8, 0, 1, 1);
+}
+
+.vbox-root {
+    -fx-background-color: #c5d2db;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 2, 2);
+    -fx-text-fill: #333333;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
